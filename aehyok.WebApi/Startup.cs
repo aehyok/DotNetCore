@@ -40,7 +40,7 @@ namespace aehyok.WebApi
                 {
                     Version = "v1",
                     Title = "aehyok",
-                    Description = "RESTful API for My Web Application",
+                    Description = "aehyok.com Web Api Interface Manage",
                     TermsOfService = "None"
                 });
                 options.IncludeXmlComments(Path.Combine(PlatformServices.Default.Application.ApplicationBasePath,
