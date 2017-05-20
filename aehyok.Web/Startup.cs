@@ -35,7 +35,7 @@ namespace aehyok.Web
 
             app.UseStaticFiles();//使用默认文件夹wwwroot    
 
-            app.UseMvc(routes =>   //引入mvc路由
+            app.UseMvc(routes =>   //引入mvc路由  
             {
                 routes.MapRoute(
                     name: "default",
