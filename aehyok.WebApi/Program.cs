@@ -19,7 +19,6 @@ namespace aehyok.WebApi
                 .UseStartup<Startup>()
                 .UseApplicationInsights()
                 .Build();
-
             host.Run();
         }
     }
