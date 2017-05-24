@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using aehyok.Core.Data.Entity.Configurations.Blog;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,15 @@ namespace aehyok.Core.Data.Entity
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.AddConfiguration(new ArticleConfiguration());
+
+            builder.AddConfiguration(new TagConfiguration());
+
+            builder.AddConfiguration(new ArticleTagConfiguration());
+
+            builder.AddConfiguration(new CommentConfiguration());
+
         }
     }
 }

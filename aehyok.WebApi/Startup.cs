@@ -9,6 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using Microsoft.Extensions.PlatformAbstractions;
+using aehyok.Core.Data.Entity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace aehyok.WebApi
 {
@@ -33,6 +36,7 @@ namespace aehyok.WebApi
             // Add framework services.
             services.AddMvc();
 
+            //Web Api Swagger插件的引入
             services.AddSwaggerGen();
             services.ConfigureSwaggerGen(options =>
             {
@@ -48,6 +52,14 @@ namespace aehyok.WebApi
                 options.DescribeAllEnumsAsStrings();
             });
 
+            services.AddDbContext<CodeFirstDbContext>(options =>
+    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  //设置数据库链接字符串
+
+            //注册Identity
+            services.AddIdentity<IdentityUser, IdentityRole>()
+            .AddEntityFrameworkStores<CodeFirstDbContext>()
+            .AddDefaultTokenProviders();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +73,19 @@ namespace aehyok.WebApi
             app.UseSwagger();
             app.UseSwaggerUi();
             //app.Filters.Add(new WebApiExceptionFilterAttribute());
+
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetService<CodeFirstDbContext>();
+                bool HasCreated = dbContext.Database.EnsureCreated();
+                if (HasCreated)
+                {
+                    //MuscleFellowSampleDataInitializer dbInitializer = new MuscleFellowSampleDataInitializer(dbContext);
+                    //dbInitializer.LoadBasicInformationAsync().Wait();
+                    //dbInitializer.LoadSampleDataAsync().Wait();
+                }
+            }
         }
     }
 }
