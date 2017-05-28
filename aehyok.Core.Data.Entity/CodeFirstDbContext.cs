@@ -1,4 +1,5 @@
 ﻿using aehyok.Core.Data.Entity.Configurations.Blog;
+using aehyok.Model.Blog;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,12 +13,15 @@ namespace aehyok.Core.Data.Entity
     /// </summary>
     public class CodeFirstDbContext : IdentityDbContext<IdentityUser>
     {
+        public DbSet<Tag> Tag { get; set; }
+        public DbSet<ArticleTag> ArticleTag { get; set; }
+        public DbSet<Article> Article { get; set; }
+        public DbSet<Comment> Comment { get; set; }
         public CodeFirstDbContext(DbContextOptions options) :
             base(options)
         {
 
         }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -29,7 +33,6 @@ namespace aehyok.Core.Data.Entity
             builder.AddConfiguration(new ArticleTagConfiguration());
 
             builder.AddConfiguration(new CommentConfiguration());
-
         }
     }
 }

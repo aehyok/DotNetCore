@@ -12,6 +12,8 @@ using Microsoft.Extensions.PlatformAbstractions;
 using aehyok.Core.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using aehyok.Core.Data;
+using aehyok.Model.Blog;
 
 namespace aehyok.WebApi
 {
@@ -33,6 +35,9 @@ namespace aehyok.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<CodeFirstDbContext>();
+            services.AddTransient(typeof(IRepository<Tag,int>), typeof(Repository<Tag,int>));
+
             // Add framework services.
             services.AddMvc();
 
