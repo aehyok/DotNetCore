@@ -35,6 +35,7 @@ namespace aehyok.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //http://www.cnblogs.com/TomXu/p/4496440.html
             services.AddScoped<CodeFirstDbContext>();
             services.AddTransient(typeof(IRepository<Tag,int>), typeof(Repository<Tag,int>));
 
