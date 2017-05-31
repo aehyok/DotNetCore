@@ -14,10 +14,10 @@ namespace aehyok.WebApi.Controllers
     {
         private readonly CodeFirstDbContext _dbContext;
         private readonly IRepository<Tag, int> _tagRepository;
-        public ValuesController(CodeFirstDbContext dbContext)
+        public ValuesController(CodeFirstDbContext dbContext,IRepository<Tag,int> tagRepository)
         {
             _dbContext = dbContext;
-           // _tagRepository = tagRepository;
+            _tagRepository = tagRepository;
         }
 
 
