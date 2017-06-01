@@ -16,9 +16,9 @@ namespace aehyok.Core.Data.Entity.Configurations.Blog
     //    //}
     //}
 
-    internal class CommentConfiguration:DbEntityConfiguration<Comment,int>
+    internal class CommentConfiguration: EntityMappingConfiguration<Comment,int>
     {
-        public override void Configure(EntityTypeBuilder<Comment> builder)
+        public override void Map(EntityTypeBuilder<Comment> builder)
         {
             builder.HasKey(item => item.Id);
         }

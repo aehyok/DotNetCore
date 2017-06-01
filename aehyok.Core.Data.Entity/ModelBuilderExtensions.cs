@@ -2,22 +2,26 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace aehyok.Core.Data.Entity
 {
-    internal static class ModelBuilderExtensions
+    public static class ModelBuilderExtenions
     {
-        public static void AddConfiguration<TEntity, TKey>(
-          this ModelBuilder modelBuilder,
-          DbEntityConfiguration<TEntity,TKey> entityConfiguration) where TEntity : class
+        private static IEnumerable<Type> GetMappingTypes(this Assembly assembly, Type mappingInterface)
         {
-            modelBuilder.Entity<TEntity>(entityConfiguration.Configure);
+            return assembly.GetTypes().Where(x =>!x.GetTypeInfo().IsAbstract && x.GetInterfaces().Any(y => y.GetTypeInfo().IsGenericType && y.GetGenericTypeDefinition() == mappingInterface));
         }
-    }
 
-    internal abstract class DbEntityConfiguration<TEntity,TKey> where TEntity : class
-    {
-        public abstract void Configure(EntityTypeBuilder<TEntity> entity);
+        public static void AddEntityConfigurationsFromAssembly(this ModelBuilder modelBuilder, Assembly assembly)
+        {
+            var mappingTypes = assembly.GetMappingTypes(typeof(IEntityMappingConfiguration<>));
+            foreach (var config in mappingTypes.Select(Activator.CreateInstance).Cast<IEntityMappingConfiguration>())
+            {
+                config.Map(modelBuilder);
+            }
+        }
     }
 }

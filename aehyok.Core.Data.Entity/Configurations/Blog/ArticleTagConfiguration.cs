@@ -18,9 +18,9 @@ namespace aehyok.Core.Data.Entity.Configurations.Blog
     //    }
     //}
 
-    internal class ArticleTagConfiguration: DbEntityConfiguration<ArticleTag,int>
+    internal class ArticleTagConfiguration: EntityMappingConfiguration<ArticleTag,int>
     {
-        public override void Configure(EntityTypeBuilder<ArticleTag> builder)
+        public override void Map(EntityTypeBuilder<ArticleTag> builder)
         {
             builder.HasKey(item => item.Id);
         }

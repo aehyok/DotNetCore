@@ -38,6 +38,11 @@ namespace aehyok.WebApi
         public IConfigurationRoot Configuration { get; }
 
 
+        // This method gets called by the runtime. Use this method to add services to the container.
+        //public void ConfigureServices(IServiceCollection services)
+        //{
+
+        //}
 
         // 需要先删除void类型的ConfigureServices方法
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -82,13 +87,6 @@ namespace aehyok.WebApi
 
             return container.Resolve<IServiceProvider>(); //返回AutoFac实现的IServiceProvider
         }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        //public void ConfigureServices(IServiceCollection services)
-        //{
-           
-        //}
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
@@ -116,8 +114,15 @@ namespace aehyok.WebApi
         }
     }
 
+    /// <summary>
+    /// Autofac IOC
+    /// </summary>
     public class AutofacModule : Autofac.Module
     {
+        /// <summary>
+        /// 重写自动加载方法
+        /// </summary>
+        /// <param name="builder"></param>
         protected override void Load(ContainerBuilder builder)
         {
             var baseType = typeof(IDependency);
@@ -125,26 +130,17 @@ namespace aehyok.WebApi
             var url = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             var fileNames = Directory.GetFiles(url, "*.dll");
 
-            var assemblyNames = fileNames
-        .Select(AssemblyLoadContext.GetAssemblyName);
+            var assemblyNames = fileNames.Select(AssemblyLoadContext.GetAssemblyName);
 
             List<Assembly> assemblies = new List<Assembly>();
             foreach (AssemblyName assemblyName in assemblyNames)
             {
                 assemblies.Add(Assembly.Load(assemblyName));
             }
-            //this.Resolver.GetRequiredService<ILibraryManager>();
-
-            //var assenblys=AssemblyLoadContext.Default.LoadFromAssemblyPath(url);
-            //var assemblys = Assembly.GetEntryAssembly(); //AppDomain.CurrentDomain.GetReferencedAssemblies().OfType<Assembly>().ToList<Assembly>(); //AppDomain.CurrentDomain.GetAssemblies().ToList();
-            //builder.RegisterControllers(assemblys.ToArray());
 
             builder.RegisterAssemblyTypes(assemblies.ToArray())
                    .Where(t => baseType.IsAssignableFrom(t) && t != baseType)
                    .AsImplementedInterfaces().InstancePerLifetimeScope();
-            //var container = builder.Build();
-            //var configuration = GlobalConfiguration.Configuration;
-            //configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
         }
     }
 }

@@ -8,17 +8,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace aehyok.Core.Data.Entity.Configurations.Blog
 {
-    //public class TagConfiguration //:EntityConfigurationBase<Tag,int>
-    //{
-    //    //public TagConfiguration()
-    //    //{
-    //    //    Property(item => item.Name).HasMaxLength(50);
-    //    //}
-    //}
-
-    internal class TagConfiguration : DbEntityConfiguration<Tag, int>
+    /// <summary>
+    /// 标签类属性映射
+    /// </summary>
+    internal class TagConfiguration : EntityMappingConfiguration<Tag,int>
     {
-        public override void Configure(EntityTypeBuilder<Tag> builder)
+        public override void Map(EntityTypeBuilder<Tag> builder)
         {
             builder.HasKey(item => item.Id);
         }
