@@ -44,7 +44,11 @@ namespace aehyok.WebApi
 
         //}
 
-        // 需要先删除void类型的ConfigureServices方法
+        /// <summary>
+        /// 需要先删除void类型的ConfigureServices方法
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             //http://www.cnblogs.com/TomXu/p/4496440.html
@@ -87,7 +91,13 @@ namespace aehyok.WebApi
 
             return container.Resolve<IServiceProvider>(); //返回AutoFac实现的IServiceProvider
         }
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+
+        /// <summary>
+        ///  This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
+        /// <param name="loggerFactory"></param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -97,14 +107,13 @@ namespace aehyok.WebApi
 
             app.UseSwagger();
             app.UseSwaggerUi();
-            //app.Filters.Add(new WebApiExceptionFilterAttribute());
 
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetService<CodeFirstDbContext>();
                 bool HasCreated = dbContext.Database.EnsureCreated();
-                if (HasCreated)
+                if (HasCreated)   //数据库是否被创建(如果数据库第一次被创建，可进行初始化默认数据)
                 {
                     //MuscleFellowSampleDataInitializer dbInitializer = new MuscleFellowSampleDataInitializer(dbContext);
                     //dbInitializer.LoadBasicInformationAsync().Wait();

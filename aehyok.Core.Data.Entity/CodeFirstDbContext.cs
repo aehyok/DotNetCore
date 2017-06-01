@@ -18,12 +18,6 @@ namespace aehyok.Core.Data.Entity
     /// </summary>
     public class CodeFirstDbContext : IdentityDbContext<IdentityUser>, IUnitOfWork, IDependency
     {
-        //public DbSet<Tag> Tag { get; set; }
-        //public DbSet<ArticleTag> ArticleTag { get; set; }
-        //public DbSet<Article> Article { get; set; }
-        //public DbSet<Comment> Comment { get; set; }
-        public bool TransactionEnabled { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public CodeFirstDbContext(DbContextOptions options) :
             base(options)
         {
@@ -40,7 +34,9 @@ namespace aehyok.Core.Data.Entity
 
         public Task<int> SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            return base.SaveChangesAsync();
         }
+
+        public bool TransactionEnabled { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }

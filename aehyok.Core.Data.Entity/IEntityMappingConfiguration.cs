@@ -15,6 +15,10 @@ namespace aehyok.Core.Data.Entity
         void Map(ModelBuilder builder);
     }
 
+    /// <summary>
+    /// 泛型映射接口
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
     public interface IEntityMappingConfiguration<TEntity> : IEntityMappingConfiguration where TEntity : class
     {
         void Map(EntityTypeBuilder<TEntity> builder);

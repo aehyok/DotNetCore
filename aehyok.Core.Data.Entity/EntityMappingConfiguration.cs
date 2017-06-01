@@ -9,7 +9,7 @@ namespace aehyok.Core.Data.Entity
 {
     public abstract class EntityMappingConfiguration<TEntity, TKey> : IEntityMappingConfiguration<TEntity> where TEntity : EntityBase<TKey>
     {
-        public abstract void Map(EntityTypeBuilder<TEntity> b);
+        public abstract void Map(EntityTypeBuilder<TEntity> builder);
 
         public void Map(ModelBuilder builder)
         {
