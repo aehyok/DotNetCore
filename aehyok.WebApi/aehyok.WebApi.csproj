@@ -28,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\aehyok.Core.Data.Entity\aehyok.Core.Data.Entity.csproj" />
     <ProjectReference Include="..\aehyok.Core\aehyok.Core.csproj" />
+    <ProjectReference Include="..\aehyok.NLog\aehyok.NLog.csproj" />
   </ItemGroup>
 
 </Project>

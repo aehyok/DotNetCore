@@ -6,18 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 using aehyok.Core.Data.Entity;
 using aehyok.Model.Blog;
 using aehyok.Core.Data;
+using aehyok.NLog;
 
 namespace aehyok.WebApi.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        private static LogWriter LogWriter = new LogWriter();
         private readonly CodeFirstDbContext _dbContext;
         private readonly IRepository<Tag, int> _tagRepository;
         public ValuesController(CodeFirstDbContext dbContext,IRepository<Tag,int> tagRepository)
         {
             _dbContext = dbContext;
             _tagRepository = tagRepository;
+            LogWriter.Info("ValuesController");
         }
 
 
