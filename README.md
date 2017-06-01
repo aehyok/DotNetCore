@@ -1,4 +1,15 @@
 # DotNetCore
-(Asp.Net Core 1.1 MVC Web Api EntityFrameworkCore SqlServer)
-DotNetCore旨在将http://aehyok.com 迁移未Asp.Net Core 上，并部署在Centos 7.0+。
+旨在将http://aehyok.com 迁移到Asp.Net Core 上，并部署在Centos 7.0+。
+
+1、Asp.Net Core 1.1
+
+2、MVC and Web Api
+
+3、Entity Framework Core SqlServer 2012
+
+4、NLog
+
+5、AutoFac
+
+6……
 
