@@ -1,5 +1,5 @@
 # DotNetCore
-旨在将http://aehyok.com 迁移未Asp.Net Core 上，并部署在Centos 7.0+。
+旨在将http://aehyok.com 迁移到Asp.Net Core 上，并部署在Centos 7.0+。
 
 1、Asp.Net Core 1.1
 
