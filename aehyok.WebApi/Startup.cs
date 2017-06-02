@@ -60,6 +60,7 @@ namespace aehyok.WebApi
 
             //Web Api Swagger插件的引入
             services.AddSwaggerGen();
+
             services.ConfigureSwaggerGen(options =>
             {
                 options.SingleApiVersion(new Swashbuckle.Swagger.Model.Info
@@ -72,13 +73,12 @@ namespace aehyok.WebApi
                 options.IncludeXmlComments(Path.Combine(PlatformServices.Default.Application.ApplicationBasePath,
                     "aehyok.WebApi.xml")); // 注意：此处替换成所生成的XML documentation的文件名。
                 options.DescribeAllEnumsAsStrings();
-
-
-                //注册Identity
-                services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<CodeFirstDbContext>()
-                .AddDefaultTokenProviders();
             });
+
+            //注册Identity
+            services.AddIdentity<IdentityUser, IdentityRole>()
+            .AddEntityFrameworkStores<CodeFirstDbContext>()
+            .AddDefaultTokenProviders();
 
             services.AddDbContext<CodeFirstDbContext>(options =>
     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  //设置数据库链接字符串

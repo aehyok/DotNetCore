@@ -16,6 +16,11 @@ namespace aehyok.WebApi.Controllers
         private static LogWriter LogWriter = new LogWriter();
         private readonly CodeFirstDbContext _dbContext;
         private readonly IRepository<Tag, int> _tagRepository;
+        /// <summary>
+        /// 构造函数注入
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="tagRepository"></param>
         public ValuesController(CodeFirstDbContext dbContext,IRepository<Tag,int> tagRepository)
         {
             _dbContext = dbContext;
@@ -35,8 +40,10 @@ namespace aehyok.WebApi.Controllers
             //_dbContext.SaveChanges();
             //var tagId = tag.Id;
 
-            Tag tag = new Tag();
-            tag.Name = "TestRepository";
+            Tag tag = new Tag()
+            {
+                Name = "TestRepository"
+            };
             _tagRepository.Insert(tag);
             var tagId = tag.Id;
             return new string[] { "value1", "value2" };
