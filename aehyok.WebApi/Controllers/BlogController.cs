@@ -16,7 +16,7 @@ namespace aehyok.WebApi.Controllers
     /// <summary>
     /// ²©¿ÍApi
     /// </summary>
-    //[Produces("application/json")]
+    [Produces("application/json")]
     [Route("api/[controller]")]
     public class BlogController : Controller
     {
