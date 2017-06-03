@@ -89,7 +89,7 @@ namespace aehyok.WebApi.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Ìí¼Ó²©¿Í
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
