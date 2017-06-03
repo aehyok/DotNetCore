@@ -48,7 +48,11 @@ namespace aehyok.WebApi.Controllers
             this._blogService = blogService;
         }
 
-
+        /// <summary>
+        /// 获取博客列表（分页）
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("Article/{pageIndex:int}")]
         public ArticleModel GetArticleList(int pageIndex)
@@ -71,6 +75,11 @@ namespace aehyok.WebApi.Controllers
             return model;
         }
 
+        /// <summary>
+        /// 获取博客详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("Detail/{id:int}")]
         public Article GetArticle(int id)
@@ -79,6 +88,12 @@ namespace aehyok.WebApi.Controllers
             return blog;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]    //不加[HttpPost] Swagger访问报错
         [Route("Add/{id:int}")]
         public CreateArticle GetCreateArticle(int id = 0)
         {
@@ -122,6 +137,10 @@ namespace aehyok.WebApi.Controllers
             return model;
         }
 
+        /// <summary>
+        /// 博客标签列表
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("TagList")]
         public dynamic GetTagList()
@@ -136,6 +155,11 @@ namespace aehyok.WebApi.Controllers
             return list;
         }
 
+        /// <summary>
+        /// 获取博客标签详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetTag/{Id:int}")]
         public Tag GetTag(int id = 0)
@@ -144,6 +168,11 @@ namespace aehyok.WebApi.Controllers
             return tag;
         }
 
+        /// <summary>
+        /// 删除博客标签
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         [Route("Tag/{Id:int}")]
         public async Task DeleteTag(int id = 0)
