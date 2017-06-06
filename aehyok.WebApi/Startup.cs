@@ -51,9 +51,21 @@ namespace aehyok.WebApi
         /// <returns></returns>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<CodeFirstDbContext>(options =>
+options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  //设置数据库链接字符串
+
             //http://www.cnblogs.com/TomXu/p/4496440.html
             services.AddScoped<CodeFirstDbContext>();
             //services.AddTransient(typeof(IRepository<Tag, int>), typeof(Repository<Tag, int>));
+
+            //注册Identity
+            services.AddIdentity<IdentityUser, IdentityRole>(options => {
+                options.Cookies.ApplicationCookie.AuthenticationScheme = "ApplicationCookie";
+                options.Cookies.ApplicationCookie.CookieName = "Interop";
+            })
+            .AddEntityFrameworkStores<CodeFirstDbContext>()
+            .AddDefaultTokenProviders();
 
             // Add framework services.
             services.AddMvc();
@@ -74,14 +86,6 @@ namespace aehyok.WebApi
                     "aehyok.WebApi.xml")); // 注意：此处替换成所生成的XML documentation的文件名。
                 options.DescribeAllEnumsAsStrings();
             });
-
-            //注册Identity
-            services.AddIdentity<IdentityUser, IdentityRole>()
-            .AddEntityFrameworkStores<CodeFirstDbContext>()
-            .AddDefaultTokenProviders();
-
-            services.AddDbContext<CodeFirstDbContext>(options =>
-    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  //设置数据库链接字符串
 
             var builder = new ContainerBuilder();  // 构造容器构建类
             builder.Populate(services);  //将现有的Services路由到Autofac的管理集合中
@@ -104,6 +108,9 @@ namespace aehyok.WebApi
             loggerFactory.AddDebug();
 
             app.UseMvc();
+
+            // 使用了 CookieAuthentication 中间件做身份认证
+            app.UseIdentity();
 
             app.UseSwagger();
             app.UseSwaggerUi();

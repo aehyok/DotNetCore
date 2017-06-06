@@ -13,15 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.WebApi", "aehyok.Web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.WebApi.OAuth", "aehyok.WebApi.OAuth\aehyok.WebApi.OAuth.csproj", "{5F3CB57E-D7A2-4E9E-BE0B-EA8E9F483A7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.Core.Data.Entity", "aehyok.Core.Data.Entity\aehyok.Core.Data.Entity.csproj", "{42E34D34-6A4A-4444-A486-418A88850C23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.Core.Data.Entity", "aehyok.Core.Data.Entity\aehyok.Core.Data.Entity.csproj", "{42E34D34-6A4A-4444-A486-418A88850C23}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.Model", "aehyok.Model\aehyok.Model.csproj", "{F037C374-63A1-476D-A28B-BF7C64676705}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.NLog", "aehyok.NLog\aehyok.NLog.csproj", "{0E558616-25EB-42E1-80E4-1D1F96D21A97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.NLog", "aehyok.NLog\aehyok.NLog.csproj", "{0E558616-25EB-42E1-80E4-1D1F96D21A97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.Contracts", "aehyok.Contracts\aehyok.Contracts.csproj", "{4732AFE9-BA94-4F51-93BE-6FB0D8C0622B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.Contracts", "aehyok.Contracts\aehyok.Contracts.csproj", "{4732AFE9-BA94-4F51-93BE-6FB0D8C0622B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.Services", "aehyok.Services\aehyok.Services.csproj", "{79F56E4D-7EEA-4F1A-A94A-F8930CA731BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.Services", "aehyok.Services\aehyok.Services.csproj", "{79F56E4D-7EEA-4F1A-A94A-F8930CA731BD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Infrastructure", "1-Infrastructure", "{6D3952E2-C26B-44C5-BECB-B9C7EC7AE623}"
 EndProject
@@ -31,7 +31,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Presentation", "3-Present
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Extend", "4-Extend", "{C36813B2-8C07-4648-91EC-0E8990F7156E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.Utility", "aehyok.Utility\aehyok.Utility.csproj", "{5F20DCEB-6E42-4EF2-913A-B1C817A0AB7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.Utility", "aehyok.Utility\aehyok.Utility.csproj", "{5F20DCEB-6E42-4EF2-913A-B1C817A0AB7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.IdentityServer", "aehyok.IdentityServer\aehyok.IdentityServer.csproj", "{66A7DBB5-359A-4C4E-960D-624A863D4EF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,10 @@ Global
 		{5F20DCEB-6E42-4EF2-913A-B1C817A0AB7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F20DCEB-6E42-4EF2-913A-B1C817A0AB7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F20DCEB-6E42-4EF2-913A-B1C817A0AB7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66A7DBB5-359A-4C4E-960D-624A863D4EF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66A7DBB5-359A-4C4E-960D-624A863D4EF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66A7DBB5-359A-4C4E-960D-624A863D4EF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66A7DBB5-359A-4C4E-960D-624A863D4EF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,5 +105,6 @@ Global
 		{4732AFE9-BA94-4F51-93BE-6FB0D8C0622B} = {382CF390-EAB7-4A0E-9576-DE8D9135AA3B}
 		{79F56E4D-7EEA-4F1A-A94A-F8930CA731BD} = {382CF390-EAB7-4A0E-9576-DE8D9135AA3B}
 		{5F20DCEB-6E42-4EF2-913A-B1C817A0AB7A} = {6D3952E2-C26B-44C5-BECB-B9C7EC7AE623}
+		{66A7DBB5-359A-4C4E-960D-624A863D4EF9} = {C36813B2-8C07-4648-91EC-0E8990F7156E}
 	EndGlobalSection
 EndGlobal
