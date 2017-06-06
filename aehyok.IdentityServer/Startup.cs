@@ -57,14 +57,15 @@ namespace aehyok.IdentityServer
 
             app.UseStaticFiles();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
-
+            //InvalidOperationException: No authentication handler is configured to handle the scheme: idsrv
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Home}/{action=Index}/{id?}");
+            //});
             app.UseIdentityServer();
+            app.UseMvcWithDefaultRoute();
         }
     }
 }
