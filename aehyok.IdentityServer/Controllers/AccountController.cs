@@ -17,8 +17,7 @@ using System.Threading.Tasks;
 
 namespace aehyok.IdentityServer.Controllers
 {
-    [SecurityHeaders]
-    public class AccountController: Controller
+    public class AccountController: BaseController
     {
         private readonly TestUserStore _users;
         private readonly IIdentityServerInteractionService _interaction;

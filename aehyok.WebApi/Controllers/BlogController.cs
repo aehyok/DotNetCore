@@ -10,12 +10,14 @@ using aehyok.Contracts;
 using aehyok.NLog;
 using aehyok.WebApi.ViewModel;
 using aehyok.Utility;
+using Microsoft.AspNetCore.Authorization;
 
 namespace aehyok.WebApi.Controllers
 {
     /// <summary>
     /// ²©¿ÍApi
     /// </summary>
+    [Authorize]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class BlogController : Controller

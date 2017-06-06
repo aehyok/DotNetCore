@@ -51,14 +51,11 @@ namespace aehyok.WebApi
         /// <returns></returns>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-
             services.AddDbContext<CodeFirstDbContext>(options =>
 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  //设置数据库链接字符串
 
-            //http://www.cnblogs.com/TomXu/p/4496440.html
-            services.AddScoped<CodeFirstDbContext>();
-            //services.AddTransient(typeof(IRepository<Tag, int>), typeof(Repository<Tag, int>));
 
+            //http://www.cnblogs.com/TomXu/p/4496440.html
             //注册Identity
             services.AddIdentity<IdentityUser, IdentityRole>(options => {
                 options.Cookies.ApplicationCookie.AuthenticationScheme = "ApplicationCookie";
@@ -70,22 +67,24 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
             // Add framework services.
             services.AddMvc();
 
-            //Web Api Swagger插件的引入
-            services.AddSwaggerGen();
-
-            services.ConfigureSwaggerGen(options =>
+            services.AddCors(options =>
             {
-                options.SingleApiVersion(new Swashbuckle.Swagger.Model.Info
+                // this defines a CORS policy called "default"
+                options.AddPolicy("default", policy =>
                 {
-                    Version = "v1",
-                    Title = "aehyok",
-                    Description = "aehyok.com Web Api Interface Manage",
-                    TermsOfService = "None"
+                    policy.WithOrigins("http://localhost:5003")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 });
-                options.IncludeXmlComments(Path.Combine(PlatformServices.Default.Application.ApplicationBasePath,
-                    "aehyok.WebApi.xml")); // 注意：此处替换成所生成的XML documentation的文件名。
-                options.DescribeAllEnumsAsStrings();
             });
+
+            services.AddMvcCore()
+                .AddAuthorization()
+                .AddJsonFormatters();
+
+            AddSwagger(services);
+
+
 
             var builder = new ContainerBuilder();  // 构造容器构建类
             builder.Populate(services);  //将现有的Services路由到Autofac的管理集合中
@@ -115,6 +114,16 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
             app.UseSwagger();
             app.UseSwaggerUi();
 
+            // this uses the policy called "default"
+            app.UseCors("default");
+
+            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
+            {
+                Authority = "http://localhost:5000",
+                RequireHttpsMetadata = false,
+
+                ApiName = "api1"
+            });
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
@@ -128,6 +137,34 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
                 }
             }
         }
+
+        #region 自定义扩展
+
+
+        /// <summary>
+        /// 注册引入Swagger插件
+        /// </summary>
+        /// <param name="services"></param>
+        public static void AddSwagger(IServiceCollection services)
+        {
+            //Web Api Swagger插件的引入
+            services.AddSwaggerGen();
+
+            services.ConfigureSwaggerGen(options =>
+            {
+                options.SingleApiVersion(new Swashbuckle.Swagger.Model.Info
+                {
+                    Version = "v1",
+                    Title = "aehyok",
+                    Description = "aehyok.com Web Api Interface Manage",
+                    TermsOfService = "None"
+                });
+                options.IncludeXmlComments(Path.Combine(PlatformServices.Default.Application.ApplicationBasePath,
+                    "aehyok.WebApi.xml")); // 注意：此处替换成所生成的XML documentation的文件名。
+                options.DescribeAllEnumsAsStrings();
+            });
+        }
+        #endregion
     }
 
     /// <summary>

@@ -8,8 +8,7 @@ using aehyok.IdentityServer.Helper;
 
 namespace aehyok.IdentityServer.Controllers
 {
-    [SecurityHeaders]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly IIdentityServerInteractionService _interaction;
 
