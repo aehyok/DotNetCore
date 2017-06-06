@@ -29,6 +29,14 @@ namespace aehyok.IdentityServer
         {
             // Add framework services.
             services.AddMvc();
+
+            //配置IdentityServer
+            services.AddIdentityServer()
+            .AddTemporarySigningCredential()
+            .AddInMemoryIdentityResources(Config.GetIdentityResources())
+            .AddInMemoryApiResources(Config.GetApiResources())
+            .AddInMemoryClients(Config.GetClients())
+            .AddTestUsers(Config.GetUsers());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +63,8 @@ namespace aehyok.IdentityServer
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseIdentityServer();
         }
     }
 }
