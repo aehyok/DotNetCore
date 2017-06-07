@@ -11,5 +11,7 @@
 
 5、AutoFac
 
-6、IdentityServer
+6、IdentityServer OpenId and OAuth2
+
+7、…………
 
