@@ -13,7 +13,7 @@ namespace aehyok.IdentityServer.Helper
     {
         public static List<TestUser> Users = new List<TestUser>
         {
-            new TestUser{SubjectId = "818727", Username = "alice", Password = "alice",
+            new TestUser{SubjectId = "818727", Username = "TT", Password = "123456",
                 Claims =
                 {
                     new Claim(JwtClaimTypes.Name, "Alice Smith"),
@@ -25,7 +25,7 @@ namespace aehyok.IdentityServer.Helper
                     new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServerConstants.ClaimValueTypes.Json)
                 }
             },
-            new TestUser{SubjectId = "88421113", Username = "bob", Password = "bob",
+            new TestUser{SubjectId = "88421113", Username = "Jack", Password = "123456",
                 Claims =
                 {
                     new Claim(JwtClaimTypes.Name, "Bob Smith"),

@@ -113,25 +113,25 @@ namespace aehyok.IdentityServer
                 new TestUser
                 {
                     SubjectId = "1",
-                    Username = "alice",
-                    Password = "password",
+                    Username = "aehyok",
+                    Password = "123456",
 
                     Claims = new List<Claim>
                     {
-                        new Claim("name", "Alice"),
-                        new Claim("website", "https://alice.com")
+                        new Claim("name", "aehyok"),
+                        new Claim("website", "https://aehyok.com")
                     }
                 },
                 new TestUser
                 {
                     SubjectId = "2",
-                    Username = "bob",
-                    Password = "password",
+                    Username = "Sandy",
+                    Password = "123456",
 
                     Claims = new List<Claim>
                     {
-                        new Claim("name", "Bob"),
-                        new Claim("website", "https://bob.com")
+                        new Claim("name", "Sandy"),
+                        new Claim("website", "https://sandy.com")
                     }
                 }
             };

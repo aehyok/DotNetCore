@@ -30,41 +30,9 @@ namespace aehyok.IdentityServer.Helper
         public async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-            if (context?.IdP != null)
-            {
-                // this is meant to short circuit the UI and only trigger the one external IdP
-                return new LoginViewModel
-                {
-                    EnableLocalLogin = false,
-                    ReturnUrl = returnUrl,
-                    Username = context?.LoginHint,
-                    ExternalProviders = new ExternalProvider[] { new ExternalProvider { AuthenticationScheme = context.IdP } }
-                };
-            }
 
             var schemes = _httpContextAccessor.HttpContext.Authentication.GetAuthenticationSchemes();
 
-            var providers = schemes
-                .Where(x => x.DisplayName != null && !AccountOptions.WindowsAuthenticationSchemes.Contains(x.AuthenticationScheme))
-                .Select(x => new ExternalProvider
-                {
-                    DisplayName = x.DisplayName,
-                    AuthenticationScheme = x.AuthenticationScheme
-                }).ToList();
-
-            if (AccountOptions.WindowsAuthenticationEnabled)
-            {
-                // this is needed to handle windows auth schemes
-                var windowsSchemes = schemes.Where(s => AccountOptions.WindowsAuthenticationSchemes.Contains(s.AuthenticationScheme));
-                if (windowsSchemes.Any())
-                {
-                    providers.Add(new ExternalProvider
-                    {
-                        AuthenticationScheme = AccountOptions.WindowsAuthenticationSchemes.First(),
-                        DisplayName = AccountOptions.WindowsAuthenticationDisplayName
-                    });
-                }
-            }
 
             var allowLocal = true;
             if (context?.ClientId != null)
@@ -73,25 +41,17 @@ namespace aehyok.IdentityServer.Helper
                 if (client != null)
                 {
                     allowLocal = client.EnableLocalLogin;
-
-                    if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any())
-                    {
-                        providers = providers.Where(provider => client.IdentityProviderRestrictions.Contains(provider.AuthenticationScheme)).ToList();
-                    }
                 }
             }
 
             return new LoginViewModel
             {
-                AllowRememberLogin = AccountOptions.AllowRememberLogin,
-                EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
                 ReturnUrl = returnUrl,
-                Username = context?.LoginHint,
-                ExternalProviders = providers.ToArray()
+                Username = context?.LoginHint
             };
         }
 
-        public async Task<LoginViewModel> BuildLoginViewModelAsync(LoginInputModel model)
+        public async Task<LoginViewModel> BuildLoginViewModelAsync(LoginViewModel model)
         {
             var vm = await BuildLoginViewModelAsync(model.ReturnUrl);
             vm.Username = model.Username;
@@ -99,28 +59,28 @@ namespace aehyok.IdentityServer.Helper
             return vm;
         }
 
+        /// <summary>
+        /// 创建登出页面
+        /// </summary>
+        /// <param name="logoutId"></param>
+        /// <returns></returns>
         public async Task<LogoutViewModel> BuildLogoutViewModelAsync(string logoutId)
         {
-            var vm = new LogoutViewModel { LogoutId = logoutId, ShowLogoutPrompt = AccountOptions.ShowLogoutPrompt };
+            var vm = new LogoutViewModel { LogoutId = logoutId, ShowLogoutPrompt = true };
 
             var user = await _httpContextAccessor.HttpContext.GetIdentityServerUserAsync();
             if (user == null || user.Identity.IsAuthenticated == false)
             {
-                // if the user is not authenticated, then just show logged out page
                 vm.ShowLogoutPrompt = false;
                 return vm;
             }
 
             var context = await _interaction.GetLogoutContextAsync(logoutId);
-            if (context?.ShowSignoutPrompt == false)
+            if (context?.ShowSignoutPrompt == false) //C#7.0新语法
             {
-                // it's safe to automatically sign-out
                 vm.ShowLogoutPrompt = false;
                 return vm;
             }
-
-            // show the logout prompt. this prevents attacks where the user
-            // is automatically signed out by another malicious web page.
             return vm;
         }
 

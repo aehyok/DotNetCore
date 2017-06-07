@@ -17,10 +17,9 @@ namespace aehyok.WebApi.Controllers
     /// <summary>
     /// ²©¿ÍApi
     /// </summary>
-    [Authorize]
     [Produces("application/json")]
     [Route("api/[controller]")]
-    public class BlogController : Controller
+    public class BlogController : BaseController
     {
         private static LogWriter Logger = new LogWriter();
         private readonly IRepository<Article, int> _blogArticleRepository;

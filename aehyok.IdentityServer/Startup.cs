@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,6 +53,7 @@ namespace aehyok.IdentityServer
 
             app.UseStaticFiles();
 
+            //HttpContext.Authentication.SignInAsync报错
             //InvalidOperationException: No authentication handler is configured to handle the scheme: idsrv
             //app.UseMvc(routes =>
             //{

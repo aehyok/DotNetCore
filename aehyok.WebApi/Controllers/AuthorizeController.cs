@@ -11,7 +11,7 @@ namespace aehyok.WebApi.Controllers
 {
     [Produces("application/json")]
     [Route("api/Authorize")]
-    public class AuthorizeController : Controller
+    public class AuthorizeController : BaseController
     {
         private readonly UserManager<IdentityUser> _userManager;
 
