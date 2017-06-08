@@ -93,7 +93,7 @@ namespace aehyok.IdentityServer
                     AllowAccessTokensViaBrowser = true,
 
                     RedirectUris = { "http://localhost:5003/callback.html" },
-                    PostLogoutRedirectUris = { "http://localhost:5003/index.html" },
+                    PostLogoutRedirectUris = { "http://localhost:5003/Home/Index" },
                     AllowedCorsOrigins = { "http://localhost:5003" },
 
                     AllowedScopes =

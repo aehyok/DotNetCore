@@ -20,7 +20,13 @@ namespace aehyok.Web.Controllers
 
         public IActionResult Index()
         {
+            ViewData["Title"] = "aehyok";
             var context=_accessor.HttpContext;
+            return View();
+        }
+
+        public IActionResult CallBack()
+        {
             return View();
         }
     }

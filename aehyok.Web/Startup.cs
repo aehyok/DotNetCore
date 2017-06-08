@@ -20,7 +20,7 @@ namespace aehyok.Web
             services.AddMvc();
 
             //单独注册HttpContext，上面services.AddMvc()中已经进行过注册
-            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,7 +34,7 @@ namespace aehyok.Web
             }
 
             app.UseStaticFiles();//使用默认文件夹wwwroot    
-
+            //app.UseDefaultFiles();
             app.UseMvc(routes =>   //引入mvc路由  
             {
                 routes.MapRoute(
