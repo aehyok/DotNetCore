@@ -6,9 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="wwwroot\Css\bootstrap.min.css" />
-    <Content Include="wwwroot\Css\bootstrap.min.css.map" />
-    <Content Include="wwwroot\Css\site.css" />
+    <Content Include="wwwroot\css\site.css" />
     <Content Include="wwwroot\scripts\app.js" />
   </ItemGroup>
 

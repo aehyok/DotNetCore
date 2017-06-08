@@ -92,7 +92,7 @@ namespace aehyok.IdentityServer
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowAccessTokensViaBrowser = true,
 
-                    RedirectUris = { "http://localhost:5003/callback.html" },
+                    RedirectUris = { "http://localhost:5003/Home/CallBack" },
                     PostLogoutRedirectUris = { "http://localhost:5003/Home/Index" },
                     AllowedCorsOrigins = { "http://localhost:5003" },
 
