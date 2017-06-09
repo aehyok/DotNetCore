@@ -106,7 +106,6 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMvc();
 
             // 使用了 CookieAuthentication 中间件做身份认证
             app.UseIdentity();
@@ -125,6 +124,7 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
                 ApiName = "api1"
             });
 
+            app.UseMvc();
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetService<CodeFirstDbContext>();
