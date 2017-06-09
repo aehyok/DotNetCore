@@ -150,6 +150,15 @@ namespace IdentityServer4.Quickstart.UI
             // delete local authentication cookie
             await HttpContext.Authentication.SignOutAsync();
 
+            if (vm.PostLogoutRedirectUri != null)
+            {
+                return Redirect(vm.PostLogoutRedirectUri);
+            }
+            //var refererUrl = Request.Headers["Referer"].ToString();
+            //if(!string.IsNullOrEmpty(refererUrl))
+            //{
+            //    return Redirect(refererUrl);
+            //}
             return View("LoggedOut", vm);
         }
 

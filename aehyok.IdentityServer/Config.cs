@@ -53,7 +53,7 @@ namespace QuickstartIdentityServer
                     ClientId = "ro.client",
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
 
-                    ClientSecrets = 
+                    ClientSecrets =
                     {
                         new Secret("secret".Sha256())
                     },
@@ -93,9 +93,9 @@ namespace QuickstartIdentityServer
                     AllowAccessTokensViaBrowser = true,
 
                     RedirectUris = { "http://localhost:5003/callback.html" },
-                    PostLogoutRedirectUris = { "http://localhost:5003/index.html" },
+                    PostLogoutRedirectUris = { "http://localhost:5003/Home/Index" },
                     AllowedCorsOrigins = { "http://localhost:5003" },
-
+                    RequireConsent=false,  //过滤掉登录后的确认
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,

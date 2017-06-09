@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot/app.js" />
+    <Content Remove="wwwroot/index.html" />
+    <Content Remove="wwwroot/oidc-client.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\css\site.css" />
     <Content Include="wwwroot\scripts\app.js" />
   </ItemGroup>

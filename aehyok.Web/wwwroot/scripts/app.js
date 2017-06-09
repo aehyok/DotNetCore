@@ -21,7 +21,7 @@ document.getElementById("logout").addEventListener("click", logout, false);
 var config = {
     authority: "http://localhost:5000",
     client_id: "js",
-    redirect_uri: "http://localhost:5003/Home/CallBack",
+    redirect_uri: "http://localhost:5003/callback.html",
     response_type: "id_token token",
     scope: "openid profile api1",
     post_logout_redirect_uri: "http://localhost:5003/Home/Index",
@@ -38,7 +38,9 @@ mgr.getUser().then(function (user) {
 });
 
 function login() {
-    mgr.signinRedirect();
+    //mgr.signinRedirect();
+    console.info(window.location.href);
+    mgr.signinRedirect({ state: window.location.href }); //登录后跳转到原来页面
 }
 
 function api() {

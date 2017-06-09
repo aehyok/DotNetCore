@@ -13,7 +13,7 @@ namespace IdentityServer4.Quickstart.UI
     {
         public static List<TestUser> Users = new List<TestUser>
         {
-            new TestUser{SubjectId = "818727", Username = "alice", Password = "alice", 
+            new TestUser{SubjectId = "818727", Username = "aehyok", Password = "123456", 
                 Claims = 
                 {
                     new Claim(JwtClaimTypes.Name, "Alice Smith"),
