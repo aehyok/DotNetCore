@@ -49,7 +49,7 @@ namespace IdentityServer4.Quickstart.UI
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(ConsentInputModel model)
+        public async Task<IActionResult> Index(ConsentViewModel model)
         {
             var result = await _consent.ProcessConsent(model);
 

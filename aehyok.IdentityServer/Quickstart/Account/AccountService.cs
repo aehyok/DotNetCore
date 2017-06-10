@@ -92,7 +92,7 @@ namespace IdentityServer4.Quickstart.UI
             };
         }
 
-        public async Task<LoginViewModel> BuildLoginViewModelAsync(LoginInputModel model)
+        public async Task<LoginViewModel> BuildLoginViewModelAsync(LoginViewModel model)
         {
             var vm = await BuildLoginViewModelAsync(model.ReturnUrl);
             vm.Username = model.Username;

@@ -22,8 +22,15 @@ using System.Runtime.Loader;
 
 namespace aehyok.WebApi
 {
+    /// <summary>
+    /// 初始化类
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// 启动方法
+        /// </summary>
+        /// <param name="env"></param>
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -35,6 +42,9 @@ namespace aehyok.WebApi
 
         }
 
+        /// <summary>
+        /// 配置根
+        /// </summary>
         public IConfigurationRoot Configuration { get; }
 
 

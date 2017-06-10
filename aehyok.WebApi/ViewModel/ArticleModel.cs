@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace aehyok.WebApi.ViewModel
 {
+    /// <summary>
+    /// 博客文档ViewModel
+    /// </summary>
     public class ArticleModel
     {
         /// <summary>

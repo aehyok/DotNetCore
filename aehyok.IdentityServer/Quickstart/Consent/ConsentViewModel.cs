@@ -6,8 +6,13 @@ using System.Collections.Generic;
 
 namespace IdentityServer4.Quickstart.UI
 {
-    public class ConsentViewModel : ConsentInputModel
+    public class ConsentViewModel 
     {
+        public string Button { get; set; }
+        public IEnumerable<string> ScopesConsented { get; set; }
+        public bool RememberConsent { get; set; }
+        public string ReturnUrl { get; set; }
+
         public string ClientName { get; set; }
         public string ClientUrl { get; set; }
         public string ClientLogoUrl { get; set; }

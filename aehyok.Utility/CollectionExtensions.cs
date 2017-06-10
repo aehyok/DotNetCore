@@ -37,7 +37,7 @@ namespace aehyok.Utility
             }
             else
             {
-                int count = 0;
+                //int count = 0;
                 IOrderedQueryable<TEntity> orderSource = null;
                 source = orderSource;
             }

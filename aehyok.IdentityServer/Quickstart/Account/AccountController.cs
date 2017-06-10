@@ -65,7 +65,7 @@ namespace IdentityServer4.Quickstart.UI
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginInputModel model)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -127,7 +127,7 @@ namespace IdentityServer4.Quickstart.UI
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout(LogoutInputModel model)
+        public async Task<IActionResult> Logout(LogoutViewModel model)
         {
             var vm = await _account.BuildLoggedOutViewModelAsync(model.LogoutId);
             if (vm.TriggerExternalSignout)

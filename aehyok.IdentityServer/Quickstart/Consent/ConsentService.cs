@@ -31,7 +31,7 @@ namespace IdentityServer4.Quickstart.UI
             _logger = logger;
         }
 
-        public async Task<ProcessConsentResult> ProcessConsent(ConsentInputModel model)
+        public async Task<ProcessConsentResult> ProcessConsent(ConsentViewModel model)
         {
             var result = new ProcessConsentResult();
 
@@ -91,7 +91,7 @@ namespace IdentityServer4.Quickstart.UI
             return result;
         }
 
-        public async Task<ConsentViewModel> BuildViewModelAsync(string returnUrl, ConsentInputModel model = null)
+        public async Task<ConsentViewModel> BuildViewModelAsync(string returnUrl, ConsentViewModel model = null)
         {
             var request = await _interaction.GetAuthorizationContextAsync(returnUrl);
             if (request != null)
@@ -123,21 +123,22 @@ namespace IdentityServer4.Quickstart.UI
         }
 
         private ConsentViewModel CreateConsentViewModel(
-            ConsentInputModel model, string returnUrl, 
+            ConsentViewModel model, string returnUrl, 
             AuthorizationRequest request, 
             Client client, Resources resources)
         {
-            var vm = new ConsentViewModel();
-            vm.RememberConsent = model?.RememberConsent ?? true;
-            vm.ScopesConsented = model?.ScopesConsented ?? Enumerable.Empty<string>();
+            var vm = new ConsentViewModel()
+            {
+                RememberConsent = model?.RememberConsent ?? true,
+                ScopesConsented = model?.ScopesConsented ?? Enumerable.Empty<string>(),
 
-            vm.ReturnUrl = returnUrl;
+                ReturnUrl = returnUrl,
 
-            vm.ClientName = client.ClientName;
-            vm.ClientUrl = client.ClientUri;
-            vm.ClientLogoUrl = client.LogoUri;
-            vm.AllowRememberConsent = client.AllowRememberConsent;
-
+                ClientName = client.ClientName,
+                ClientUrl = client.ClientUri,
+                ClientLogoUrl = client.LogoUri,
+                AllowRememberConsent = client.AllowRememberConsent
+            };
             vm.IdentityScopes = resources.IdentityResources.Select(x => CreateScopeViewModel(x, vm.ScopesConsented.Contains(x.Name) || model == null)).ToArray();
             vm.ResourceScopes = resources.ApiResources.SelectMany(x => x.Scopes).Select(x => CreateScopeViewModel(x, vm.ScopesConsented.Contains(x.Name) || model == null)).ToArray();
             if (ConsentOptions.EnableOfflineAccess && resources.OfflineAccess)

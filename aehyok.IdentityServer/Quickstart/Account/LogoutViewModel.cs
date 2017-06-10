@@ -4,8 +4,9 @@
 
 namespace IdentityServer4.Quickstart.UI
 {
-    public class LogoutViewModel : LogoutInputModel
+    public class LogoutViewModel
     {
+        public string LogoutId { get; set; }
         public bool ShowLogoutPrompt { get; set; }
     }
 }

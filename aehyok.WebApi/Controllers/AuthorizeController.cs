@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace aehyok.WebApi.Controllers
 {
+    /// <summary>
+    /// 授权管理Api
+    /// </summary>
     [Produces("application/json")]
     [Route("api/Authorize")]
     public class AuthorizeController : BaseController
@@ -18,6 +21,12 @@ namespace aehyok.WebApi.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
 
         private readonly RoleManager<IdentityRole> _roleManager;
+        /// <summary>
+        /// 构造函数初始化
+        /// </summary>
+        /// <param name="userManager"></param>
+        /// <param name="signInManager"></param>
+        /// <param name="roleManager"></param>
         public AuthorizeController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;

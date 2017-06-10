@@ -3,12 +3,20 @@
 
 
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace IdentityServer4.Quickstart.UI
 {
-    public class LoginViewModel : LoginInputModel
+    public class LoginViewModel
     {
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string Password { get; set; }
+        public bool RememberLogin { get; set; }
+        public string ReturnUrl { get; set; }
+
         public bool AllowRememberLogin { get; set; }
         public bool EnableLocalLogin { get; set; }
         public IEnumerable<ExternalProvider> ExternalProviders { get; set; }
