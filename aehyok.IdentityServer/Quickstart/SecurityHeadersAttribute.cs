@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace IdentityServer4.Quickstart.UI
 {
+    /// <summary>
+    /// Http安全头设置 http://blog.jobbole.com/60143/
+    /// </summary>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
         public override void OnResultExecuting(ResultExecutingContext context)
@@ -23,6 +26,7 @@ namespace IdentityServer4.Quickstart.UI
                     context.HttpContext.Response.Headers.Add("X-Frame-Options", "SAMEORIGIN");
                 }
 
+                //脚本文件只能来自default-src self
                 var csp = "default-src 'self'";
                 // once for standards compliant browsers
                 if (!context.HttpContext.Response.Headers.ContainsKey("Content-Security-Policy"))

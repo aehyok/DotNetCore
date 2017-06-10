@@ -16,16 +16,14 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using aehyok.IdentityServer.Controllers;
 
 namespace IdentityServer4.Quickstart.UI
 {
     /// <summary>
-    /// This sample controller implements a typical login/logout/provision workflow for local and external accounts.
-    /// The login service encapsulates the interactions with the user data store. This data store is in-memory only and cannot be used for production!
-    /// The interaction service provides a way for the UI to communicate with identityserver for validation and context retrieval
+    ///IdentityServer4 登录中（登录登出）
     /// </summary>
-    [SecurityHeaders]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly TestUserStore _users;
         private readonly IIdentityServerInteractionService _interaction;
