@@ -18,6 +18,11 @@ namespace aehyok.Core.Data.Entity
     /// </summary>
     public class CodeFirstDbContext : IdentityDbContext<IdentityUser>, IUnitOfWork, IDependency
     {
+
+        public CodeFirstDbContext()
+        {
+
+        }
         public CodeFirstDbContext(DbContextOptions options) :
             base(options)
         {
@@ -38,5 +43,13 @@ namespace aehyok.Core.Data.Entity
         }
 
         public bool TransactionEnabled { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        //配置SqlServer数据库
+        //程序包管理器控制台输入 Add-Migration ApiMigration会在生成相应的数据库
+        //http://www.cnblogs.com/DaphneOdera/p/6573066.html  命令迁移
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(@"Data Source=.;Initial Catalog=aehyokCore;Persist Security Info=True;User ID=sa;Password=M9y2512;");
+        }
     }
 }
