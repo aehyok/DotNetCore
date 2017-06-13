@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.Utility", "aehyok.Ut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.IdentityServer", "aehyok.IdentityServer\aehyok.IdentityServer.csproj", "{60F1A58B-A162-4E2A-B640-E6A5F2835866}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.Zxing", "aehyok.Zxing\aehyok.Zxing.csproj", "{DB420E68-96D6-44F8-A117-F3CE096993DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{60F1A58B-A162-4E2A-B640-E6A5F2835866}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60F1A58B-A162-4E2A-B640-E6A5F2835866}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60F1A58B-A162-4E2A-B640-E6A5F2835866}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB420E68-96D6-44F8-A117-F3CE096993DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB420E68-96D6-44F8-A117-F3CE096993DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB420E68-96D6-44F8-A117-F3CE096993DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB420E68-96D6-44F8-A117-F3CE096993DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,5 +105,6 @@ Global
 		{79F56E4D-7EEA-4F1A-A94A-F8930CA731BD} = {382CF390-EAB7-4A0E-9576-DE8D9135AA3B}
 		{5F20DCEB-6E42-4EF2-913A-B1C817A0AB7A} = {6D3952E2-C26B-44C5-BECB-B9C7EC7AE623}
 		{60F1A58B-A162-4E2A-B640-E6A5F2835866} = {C36813B2-8C07-4648-91EC-0E8990F7156E}
+		{DB420E68-96D6-44F8-A117-F3CE096993DC} = {C36813B2-8C07-4648-91EC-0E8990F7156E}
 	EndGlobalSection
 EndGlobal
