@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ZXing;
 using ZXing.Common;
 using ZXing.QrCode;
@@ -12,7 +13,6 @@ namespace aehyok.Zxing
     {
         public static void Create(string text)
         {
-
         }
     }
 }
