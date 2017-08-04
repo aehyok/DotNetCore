@@ -1,0 +1,24 @@
+﻿[
+  {
+    "outputFileName": "wwwroot/css/css.min.css",
+    "inputFiles": [
+      "wwwroot/lib/simple-line-icons/css/simple-line-icons.css",
+      "wwwroot/lib/bootstrap/dist/css/bootstrap.css",
+      "wwwroot/lib/bootstrap-switch/dist/css/bootstrap-switch.css",
+      "wwwroot/lib/bootstrap-daterangepicker/daterangepicker.css",
+      "wwwroot/lib/fullcanlendar/dist/fullcalendar.css",
+      "wwwroot/lib/layer/src/skin/default/layer.css",
+      "wwwroot/lib/jqvmap/dist/jqvmap.css",
+      "wwwroot/lib/toastr/toastr.css",
+      "wwwroot/lib/sweetalert/dist/sweetalert.css"
+    ],
+    // Optionally specify minification options
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    // Optionally generate .map file
+    "sourceMap": false
+  }
+
+]
