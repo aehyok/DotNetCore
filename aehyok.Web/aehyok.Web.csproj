@@ -19,12 +19,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\css\components-rounded.css" />
+    <Content Include="wwwroot\css\plugins.css" />
+    <Content Include="wwwroot\css\plugins.min.css" />
     <Content Include="wwwroot\css\site.css" />
     <Content Include="wwwroot\scripts\app.js" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="wwwroot\css\themes\" />
   </ItemGroup>
   <!--http://www.cnblogs.com/kzwrcom/p/6678674.html-->
   <ItemGroup>

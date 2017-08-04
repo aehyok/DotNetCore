@@ -40,8 +40,6 @@ namespace aehyok.Web
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
-
-            env.EnvironmentName = "Test";
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
