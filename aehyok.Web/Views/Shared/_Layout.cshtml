@@ -2,14 +2,18 @@
 @inject Microsoft.AspNetCore.Hosting.IHostingEnvironment _env
 <html>
 <head>
-    <meta charset="utf-8" />
-    <title>@ViewData["Title"] - aehyok</title>
-
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>@ViewData["Title"]——智慧缉私</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
         @*<link rel="stylesheet" href="~/css/css.min.css" asp-append-version="true" />*@
     <link href="~/lib/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" />    
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <link href="~/lib/morris.js/morris.css" rel="stylesheet" />
     <link href="~/lib/fullcalendar/dist/fullcalendar.css" rel="stylesheet" />
     <link href="~/lib/jqvmap/dist/jqvmap.css" rel="stylesheet" />
     <link href="~/css/components-rounded.css" rel="stylesheet" />
@@ -21,22 +25,92 @@
     <link href="~/lib/layer/src/skin/default/layer.css" rel="stylesheet" />
     
     <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
-       
+    <link rel="shortcut icon" href="~/favicon.ico" />
 </head>
-<body>
-<div class="container body-content">
-    @RenderBody()
-    <hr />
-    <footer>
-        <p>&copy; 2017 - WebApplication1</p>
-    </footer>
-</div>
+<body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+    <div class="page-wrapper">
+        <!-- BEGIN HEADER -->
+        <div class="page-header navbar navbar-fixed-top">
+            <!-- BEGIN HEADER INNER -->
+            <div class="page-header-inner ">
+                <!-- BEGIN LOGO -->
+                @Html.Partial("_TopLogo")
+                <!-- END RESPONSIVE MENU TOGGLER -->
+                <!-- BEGIN TOP NAVIGATION MENU -->
+                <div class="top-menu">
+                    @Html.Partial("_TopMenu")
+                </div>
+                <!-- END TOP NAVIGATION MENU -->
+            </div>
+            <!-- END HEADER INNER -->
+        </div>
+        <!-- END HEADER -->
+        <!-- BEGIN HEADER & CONTENT DIVIDER -->
+        <div class="clearfix"> </div>
+        <!-- END HEADER & CONTENT DIVIDER -->
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container" id="mainLayout">
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <div class="page-content">
+                    @RenderBody()
+                </div>
+                <!-- END CONTENT BODY -->
+            </div>
+        </div>
+        <!-- END CONTAINER -->
+        <!-- BEGIN FOOTER -->
+        <div class="scroll-to-top">
+            <i class="icon-arrow-up"></i>
+        </div>
+        <!-- END FOOTER -->
+    </div>
+
+    <div class="quick-nav-overlay"></div>
+    <!-- END QUICK NAV -->
+    <!--[if lt IE 9]>
+    <script src="../assets/global/plugins/respond.min.js"></script>
+    <script src="../assets/global/plugins/excanvas.min.js"></script>
+    <script src="../assets/global/plugins/ie8.fix.min.js"></script>
+    <![endif]-->
+    <!-- END THEME LAYOUT SCRIPTS -->
+    <script type="text/javascript">
+
+        function GetUrlRegExp(name) {
+            var reg = new RegExp("(^|\\?|&)" + name + "=([^&]*)(\\s|&|$)", "i");
+            if (reg.test(window.location.href)) return decodeURIComponent(RegExp.$2.replace(/\+/g, " ")); return "";
+        }
+
+        $(document).ready(function () {
+            var menuId = GetUrlRegExp("menuId");
+            if (menuId == null || menuId == "") {
+
+            } else {
+                Layout.setSidebarMenuActiveLink('click', $('#' + menuId));
+            }
+
+        });
+    </script>
 </body>
 </html>
-<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/scripts/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 <script src="~/lib/js-cookie/src/js.cookie.js"></script>
 <script src="~/lib/jquery-slimscroll/jquery.slimscroll.js"></script>
 <script src="~/lib/blockui/jquery.blockUI.js"></script>
 <script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+<script src="~/lib/moment/moment.js"></script>
 <script src="~/lib/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="~/lib/morris.js/morris.js"></script>
+<script src="~/scripts/app.min.js"></script>
+<script src="~/scripts/dashboard.js"></script>
+<script src="~/scripts/layout.js"></script>
+<script src="~/scripts/demo.js"></script>
+<script src="~/scripts/quick-sidebar.js"></script>
+<script src="~/scripts/quick-nav.js"></script>
+<script src="~/lib/toastr/toastr.js"></script>
+<script src="~/lib/sweetalert/dist/sweetalert.min.js"></script>
+<script src="~/lib/spin/javascripts/jquery.spin.js"></script>
+<script src="~/lib/layer/src/layer.js"></script>
+<script src="~/lib/js-cookie/src/js.cookie.js"></script>
+<script src="~/scripts/common.js"></script>

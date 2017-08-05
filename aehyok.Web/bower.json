@@ -13,12 +13,13 @@
     "toastr": "2.1.3",
     "sweetalert": "v1.1.3",
     "jqvmap": "v1.5.1",
-    "jquery-1.11.1": "2.2.4",
     "js-cookie": "v2.1.4",
     "jquery-slimscroll": "slimScroll#v1.3.8",
-    "blockui": "v2.65"
+    "blockui": "v2.65",
+    "spin": "v1.1.6",
+    "morris.js": "morrisjs#0.5.1"
   },
   "resolutions": {
-    "jquery": "2 - 3"
+    "jquery": "3.2.1"
   }
 }
