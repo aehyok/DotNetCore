@@ -74,23 +74,6 @@
     <script src="../assets/global/plugins/ie8.fix.min.js"></script>
     <![endif]-->
     <!-- END THEME LAYOUT SCRIPTS -->
-    <script type="text/javascript">
-
-        function GetUrlRegExp(name) {
-            var reg = new RegExp("(^|\\?|&)" + name + "=([^&]*)(\\s|&|$)", "i");
-            if (reg.test(window.location.href)) return decodeURIComponent(RegExp.$2.replace(/\+/g, " ")); return "";
-        }
-
-        $(document).ready(function () {
-            var menuId = GetUrlRegExp("menuId");
-            if (menuId == null || menuId == "") {
-
-            } else {
-                Layout.setSidebarMenuActiveLink('click', $('#' + menuId));
-            }
-
-        });
-    </script>
 </body>
 </html>
 <script src="~/scripts/jquery.min.js"></script>
@@ -114,3 +97,20 @@
 <script src="~/lib/layer/src/layer.js"></script>
 <script src="~/lib/js-cookie/src/js.cookie.js"></script>
 <script src="~/scripts/common.js"></script>
+<script type="text/javascript">
+
+        function GetUrlRegExp(name) {
+            var reg = new RegExp("(^|\\?|&)" + name + "=([^&]*)(\\s|&|$)", "i");
+            if (reg.test(window.location.href)) return decodeURIComponent(RegExp.$2.replace(/\+/g, " ")); return "";
+        }
+
+        $(document).ready(function () {
+            var menuId = GetUrlRegExp("menuId");
+            if (menuId == null || menuId == "") {
+
+            } else {
+                Layout.setSidebarMenuActiveLink('click', $('#' + menuId));
+            }
+
+        });
+</script>

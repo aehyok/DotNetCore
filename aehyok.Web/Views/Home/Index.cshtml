@@ -1,5 +1,11 @@
 ﻿@{
     ViewData["Title"] = "Index Page";
+    var type = ViewBag.Type as string;
+    if (!string.IsNullOrEmpty(type))
+    {
+        Layout = "~/Views/Shared/_MainLayout.cshtml";
+    }
+
 }
 <h1>这是测试用的Index页面</h1>
 

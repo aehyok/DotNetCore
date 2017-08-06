@@ -18,10 +18,19 @@ namespace aehyok.Web.Controllers
             _accessor = accessor;
         }
 
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+        //    ViewData["Title"] = "aehyok";
+        //    var context=_accessor.HttpContext;
+        //    return View();
+        //}
+
+        public IActionResult Index(string userName, string ticket, string type, string menuId)
         {
-            ViewData["Title"] = "aehyok";
-            var context=_accessor.HttpContext;
+            ViewBag.Type = type;
+            ViewBag.UserName = userName;
+            ViewBag.Title = "Home Page";
+            ViewBag.MenuId = menuId;
             return View();
         }
 
