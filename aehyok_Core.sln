@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.4
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.Web", "aehyok.Web\aehyok.Web.csproj", "{A25B2A99-A051-45F3-8C46-436494B0A48A}"
 EndProject
@@ -33,7 +33,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.Utility", "aehyok.Ut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.IdentityServer", "aehyok.IdentityServer\aehyok.IdentityServer.csproj", "{60F1A58B-A162-4E2A-B640-E6A5F2835866}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.Zxing", "aehyok.Zxing\aehyok.Zxing.csproj", "{DB420E68-96D6-44F8-A117-F3CE096993DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.Zxing", "aehyok.Zxing\aehyok.Zxing.csproj", "{DB420E68-96D6-44F8-A117-F3CE096993DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.Dapper", "aehyok.Dapper\aehyok.Dapper.csproj", "{EB36AD09-3AB1-456C-AE83-FCBC94D1E224}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.Dapper.Model", "aehyok.Dapper.Model\aehyok.Dapper.Model.csproj", "{55742852-A941-46D8-8630-2355E2B33FDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.UnitTest", "aehyok.UnitTest\aehyok.UnitTest.csproj", "{35896C40-7CEF-40AC-AEED-86205A850B74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +95,18 @@ Global
 		{DB420E68-96D6-44F8-A117-F3CE096993DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB420E68-96D6-44F8-A117-F3CE096993DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB420E68-96D6-44F8-A117-F3CE096993DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB36AD09-3AB1-456C-AE83-FCBC94D1E224}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB36AD09-3AB1-456C-AE83-FCBC94D1E224}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB36AD09-3AB1-456C-AE83-FCBC94D1E224}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB36AD09-3AB1-456C-AE83-FCBC94D1E224}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55742852-A941-46D8-8630-2355E2B33FDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55742852-A941-46D8-8630-2355E2B33FDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55742852-A941-46D8-8630-2355E2B33FDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55742852-A941-46D8-8630-2355E2B33FDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35896C40-7CEF-40AC-AEED-86205A850B74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35896C40-7CEF-40AC-AEED-86205A850B74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35896C40-7CEF-40AC-AEED-86205A850B74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35896C40-7CEF-40AC-AEED-86205A850B74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,5 +124,8 @@ Global
 		{5F20DCEB-6E42-4EF2-913A-B1C817A0AB7A} = {6D3952E2-C26B-44C5-BECB-B9C7EC7AE623}
 		{60F1A58B-A162-4E2A-B640-E6A5F2835866} = {C36813B2-8C07-4648-91EC-0E8990F7156E}
 		{DB420E68-96D6-44F8-A117-F3CE096993DC} = {C36813B2-8C07-4648-91EC-0E8990F7156E}
+		{EB36AD09-3AB1-456C-AE83-FCBC94D1E224} = {C36813B2-8C07-4648-91EC-0E8990F7156E}
+		{55742852-A941-46D8-8630-2355E2B33FDB} = {C36813B2-8C07-4648-91EC-0E8990F7156E}
+		{35896C40-7CEF-40AC-AEED-86205A850B74} = {C36813B2-8C07-4648-91EC-0E8990F7156E}
 	EndGlobalSection
 EndGlobal
