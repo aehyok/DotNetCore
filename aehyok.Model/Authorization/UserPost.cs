@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using aehyok.Base;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace aehyok.Model.Authorization
 {

@@ -175,7 +175,7 @@ namespace IdentityServer4.Quickstart.UI
                 // but they don't support the redirect uri, so this URL is re-triggered when we call challenge
                 if (HttpContext.User is WindowsPrincipal)
                 {
-                    var props = new AuthenticationProperties();
+                    var props = new Microsoft.AspNetCore.Http.Authentication.AuthenticationProperties();
                     props.Items.Add("scheme", HttpContext.User.Identity.AuthenticationType);
 
                     var id = new ClaimsIdentity(provider);
@@ -257,11 +257,11 @@ namespace IdentityServer4.Quickstart.UI
             }
 
             // if the external provider issued an id_token, we'll keep it for signout
-            AuthenticationProperties props = null;
+            Microsoft.AspNetCore.Http.Authentication.AuthenticationProperties props = null;
             var id_token = info.Properties.GetTokenValue("id_token");
             if (id_token != null)
             {
-                props = new AuthenticationProperties();
+                props = new Microsoft.AspNetCore.Authentication.AuthenticationProperties();
                 props.StoreTokens(new[] { new AuthenticationToken { Name = "id_token", Value = id_token } });
             }
 

@@ -19,6 +19,7 @@ using Autofac.Extensions.DependencyInjection;
 using aehyok.Core;
 using System.Reflection;
 using System.Runtime.Loader;
+using Microsoft.AspNetCore.Identity;
 
 namespace aehyok.WebApi
 {
@@ -68,8 +69,8 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
             //http://www.cnblogs.com/TomXu/p/4496440.html
             //注册Identity
             services.AddIdentity<IdentityUser, IdentityRole>(options => {
-                options.Cookies.ApplicationCookie.AuthenticationScheme = "ApplicationCookie";
-                options.Cookies.ApplicationCookie.CookieName = "Interop";
+                //options.Cookies.ApplicationCookie.AuthenticationScheme = "ApplicationCookie";
+                //options.Cookies.ApplicationCookie.CookieName = "Interop";
             })
             .AddEntityFrameworkStores<CodeFirstDbContext>()
             .AddDefaultTokenProviders();
@@ -126,13 +127,13 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
             // this uses the policy called "default"
             app.UseCors("default");
 
-            app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
-            {
-                Authority = "http://localhost:5000",
-                RequireHttpsMetadata = false,
+            //app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
+            //{
+            //    Authority = "http://localhost:5000",
+            //    RequireHttpsMetadata = false,
 
-                ApiName = "api1"
-            });
+            //    ApiName = "api1"
+            //});
 
             app.UseMvc();
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())

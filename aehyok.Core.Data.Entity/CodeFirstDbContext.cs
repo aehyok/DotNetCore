@@ -1,5 +1,6 @@
 ﻿using aehyok.Core.Data.Entity.Configurations.Blog;
 using aehyok.Model.Blog;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
