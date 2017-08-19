@@ -67,6 +67,7 @@ namespace IdentityServer4.Quickstart.UI
         {
             if (ModelState.IsValid)
             {
+                //验证授权中心 用户名和密码的真实性
                 // validate username/password against in-memory store
                 if (_users.ValidateCredentials(model.Username, model.Password))
                 {
