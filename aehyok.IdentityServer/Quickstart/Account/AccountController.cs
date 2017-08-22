@@ -261,7 +261,7 @@ namespace IdentityServer4.Quickstart.UI
             var id_token = info.Properties.GetTokenValue("id_token");
             if (id_token != null)
             {
-                props = new Microsoft.AspNetCore.Authentication.AuthenticationProperties();
+                props = new AuthenticationProperties();
                 props.StoreTokens(new[] { new AuthenticationToken { Name = "id_token", Value = id_token } });
             }
 
