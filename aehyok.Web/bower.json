@@ -16,8 +16,7 @@
     "js-cookie": "v2.1.4",
     "jquery-slimscroll": "slimScroll#v1.3.8",
     "blockui": "v2.65",
-    "spin": "v1.1.6",
-    "morris.js": "morrisjs#0.5.1"
+    "spin": "v1.1.6"
   },
   "resolutions": {
     "jquery": "3.2.1"

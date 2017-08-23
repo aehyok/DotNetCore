@@ -82,9 +82,10 @@
 <script src="~/lib/jquery-slimscroll/jquery.slimscroll.js"></script>
 <script src="~/lib/blockui/jquery.blockUI.js"></script>
 <script src="~/lib/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
-<script src="~/lib/moment/moment.js"></script>
+<script src="~/scripts/moment.min.js"></script>
 <script src="~/lib/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script src="~/lib/morris.js/morris.js"></script>
+<script src="~/scripts/morris.min.js"></script>
+<script src="~/scripts/raphael.min.js"></script>
 <script src="~/scripts/app.min.js"></script>
 <script src="~/scripts/dashboard.js"></script>
 <script src="~/scripts/layout.js"></script>
@@ -98,19 +99,16 @@
 <script src="~/lib/js-cookie/src/js.cookie.js"></script>
 <script src="~/scripts/common.js"></script>
 <script type="text/javascript">
+    function GetUrlRegExp(name) {
+        var reg = new RegExp("(^|\\?|&)" + name + "=([^&]*)(\\s|&|$)", "i");
+        if (reg.test(window.location.href)) return decodeURIComponent(RegExp.$2.replace(/\+/g, " ")); return "";
+    }
 
-        function GetUrlRegExp(name) {
-            var reg = new RegExp("(^|\\?|&)" + name + "=([^&]*)(\\s|&|$)", "i");
-            if (reg.test(window.location.href)) return decodeURIComponent(RegExp.$2.replace(/\+/g, " ")); return "";
+    $(document).ready(function () {
+        var menuId = GetUrlRegExp("menuId");
+        if (menuId == null || menuId == "") {
+        } else {
+            Layout.setSidebarMenuActiveLink('click', $('#' + menuId));
         }
-
-        $(document).ready(function () {
-            var menuId = GetUrlRegExp("menuId");
-            if (menuId == null || menuId == "") {
-
-            } else {
-                Layout.setSidebarMenuActiveLink('click', $('#' + menuId));
-            }
-
-        });
+    });
 </script>
