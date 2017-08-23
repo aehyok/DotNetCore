@@ -19,7 +19,9 @@ namespace aehyok.Core.Data.Entity.Configurations.Blog
             builder.Property(item => item.Title).HasMaxLength(100);
             builder.ToTable("Article");
             //http://www.cnblogs.com/chen-jie/p/7376676.html
-            builder.HasQueryFilter(item => !item.IsDeleted);  //设置全局过滤软删除字段
+            builder.HasQueryFilter(item => !item.IsDeleted);  //设置全局过滤软删除字段  IgnoreQueryFilters
+            //取消全局查询过滤条件的限制
+            //_blogArticleRepository.Entities.IgnoreQueryFilters().ToList();
         }
     }
 }
