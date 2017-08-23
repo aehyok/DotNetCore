@@ -11,6 +11,7 @@ using aehyok.NLog;
 using aehyok.WebApi.ViewModel;
 using aehyok.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace aehyok.WebApi.Controllers
 {
@@ -59,6 +60,7 @@ namespace aehyok.WebApi.Controllers
         public ArticleModel GetArticleList(int pageIndex)
         {
             var list = Utility.CollectionExtensions.Where<Article, int>(_blogArticleRepository.Entities, m => m.Id > 0, pageIndex, 8, out int total);
+            //var likeList=_blogArticleRepository.Entities.Where(item => EF.Functions.Like(item.Title, "a%"));    //模糊查询条件的新应用
             var result = list.ToList().Select(item => new Article()
             {
                 Id = item.Id,
@@ -67,6 +69,7 @@ namespace aehyok.WebApi.Controllers
                 UpdateTime = item.UpdateTime,
                 Count = item.Count
             }).ToList();
+
             Logger.Info("查询文章列表");
             ArticleModel model = new ArticleModel()
             {
