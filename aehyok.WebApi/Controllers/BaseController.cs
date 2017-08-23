@@ -11,7 +11,7 @@ namespace aehyok.WebApi.Controllers
     /// <summary>
     /// Web Api »ù´¡¿ØÖÆÆ÷
     /// </summary>
-    [Authorize]
+    //[Authorize]
     public class BaseController : Controller
     {
     }

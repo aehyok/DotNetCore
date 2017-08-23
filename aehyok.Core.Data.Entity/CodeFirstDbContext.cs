@@ -22,7 +22,7 @@ namespace aehyok.Core.Data.Entity
 
         public CodeFirstDbContext()
         {
-
+            
         }
         public CodeFirstDbContext(DbContextOptions options) :
             base(options)
@@ -50,7 +50,7 @@ namespace aehyok.Core.Data.Entity
         //http://www.cnblogs.com/DaphneOdera/p/6573066.html  命令迁移
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=.;Initial Catalog=aehyokCore;Persist Security Info=True;User ID=sa;Password=M9y2512;");
+            optionsBuilder.UseSqlServer(@"Data Source=.;Initial Catalog=aehyokCore2;Persist Security Info=True;User ID=sa;Password=M9y2512;");
         }
     }
 }

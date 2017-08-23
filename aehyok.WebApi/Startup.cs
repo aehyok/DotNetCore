@@ -119,7 +119,7 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
 
 
             // 使用了 CookieAuthentication 中间件做身份认证
-            app.UseIdentity();
+            app.UseAuthentication();
 
             app.UseSwagger();
             app.UseSwaggerUi();
