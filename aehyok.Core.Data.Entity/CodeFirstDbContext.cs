@@ -1,10 +1,12 @@
-﻿using aehyok.Core.Data.Entity.Configurations.Blog;
+﻿using aehyok.Base;
+using aehyok.Core.Data.Entity.Configurations.Blog;
 using aehyok.Model.Blog;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -36,7 +38,24 @@ namespace aehyok.Core.Data.Entity
 
             //https://github.com/aspnet/EntityFramework/issues/2805
             builder.AddEntityConfigurationsFromAssembly(GetType().GetTypeInfo().Assembly);
+
+            //http://gunnarpeipman.com/2017/08/ef-core-global-query-filters/
+            //foreach (var type in _entityTypeProvider.GetEntityTypes())
+            //{
+            //    var method = SetGlobalQueryMethod.MakeGenericMethod(type);
+            //    method.Invoke(this, new object[] { builder });
+            //}
         }
+
+        static readonly MethodInfo SetGlobalQueryMethod = typeof(CodeFirstDbContext).GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                                                        .Single(t => t.IsGenericMethod && t.Name == "SetGlobalQuery");
+
+        public void SetGlobalQuery<T>(ModelBuilder builder) where T :EntityBase<object>
+        {
+            builder.Entity<T>().HasKey(e => e.Id);
+            builder.Entity<T>().HasQueryFilter(e => !e.IsDeleted);
+        }
+
 
         public Task<int> SaveChangesAsync()
         {

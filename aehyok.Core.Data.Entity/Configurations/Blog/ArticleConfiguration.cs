@@ -18,7 +18,8 @@ namespace aehyok.Core.Data.Entity.Configurations.Blog
         {
             builder.Property(item => item.Title).HasMaxLength(100);
             builder.ToTable("Article");
-            
+            //http://www.cnblogs.com/chen-jie/p/7376676.html
+            builder.HasQueryFilter(item => !item.IsDeleted);  //设置全局过滤软删除字段
         }
     }
 }

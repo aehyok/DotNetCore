@@ -14,6 +14,7 @@ namespace aehyok.Base
         /// </summary>
         [Key]
         public TKey Id { get; set; }
+        public bool IsDeleted { get; set; }
 
         public EntityBase()
         {

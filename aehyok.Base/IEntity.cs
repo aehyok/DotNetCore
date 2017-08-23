@@ -15,5 +15,7 @@ namespace aehyok.Base
         /// 获取或设置 实体唯一标识，主键
         /// </summary>
         TKey Id { get; set; }
+
+        bool IsDeleted { get; set; }
     }
 }
