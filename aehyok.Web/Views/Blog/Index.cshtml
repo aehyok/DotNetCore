@@ -1,11 +1,17 @@
 ﻿
 @{
     ViewData["Title"] = "Index";
+    var type = ViewBag.Type as string;
+
+        Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
-<div id="BlogIndex">
+<script src="~/scripts/jquery.min.js"></script>
+<script src="~/lib/vue/dist/vue.js"></script>
+<script src="~/lib/axios/dist/axios.min.js"></script>
+<div>
     <section class="panel">
         <header class="panel-heading tab-bg-dark-navy-blue">
-            <ul class="nav nav-tabs" id="BlogTab">
+            <ul class="nav nav-tabs">
                 <li class="active">
                     <a data-toggle="tab" href="#BlogList">
                         <i class="icon-home"></i>
@@ -48,8 +54,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="Article in ArticleList">
-                                                <td ></td>
+                                            <tr v-for="(Article,index) in ArticleList">
+                                                <td >{{index+1}}</td>
                                                 <td><a href="#">{{Article.title}}</a></td>
                                                 <td>{{Article.postTime}}</td>
                                                 <td>{{Article.updateTime}}</td>
@@ -62,7 +68,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                总记录数<span data-bind="text:RecordCount"></span>&nbsp;&nbsp;&nbsp;每页显示记录数<span data-bind="text:pageSize"></span>
+                                @*总记录数<span data-bind="text:RecordCount"></span>&nbsp;&nbsp;&nbsp;每页显示记录数<span data-bind="text:pageSize"></span>
                                 <section class="panel">
                                     <ul class=" pagination" style="float: left;">
                                         <li data-bind="css: { disabled: pageIndex() === 1 }"><a href="#" data-bind="click: previousPage">Previous</a></li>
@@ -75,7 +81,53 @@
                                     <ul class=" pagination" style="float: left;">
                                         <li data-bind="css: { disabled: pageIndex() === maxPageIndex() }"><a href="#" data-bind="click: nextPage">Next</a></li>
                                     </ul>
-                                </section>
+                                </section>*@
+                                <div class="page-header">分页</div>
+                                <div class="pager" id="pager">
+                                    <span class="form-inline">
+                                        <select class="form-control" v-model="pagesize" v-on:change="showPage(pageCurrent,$event,true)" number>
+                                            <option value="3">3</option>
+                                            <option value="8">8</option>
+                                            <option value="10">10</option>
+                                            <option value="20">20</option>
+                                            <option value="30">30</option>
+                                            <option value="40">40</option>
+                                        </select>
+                                    </span>
+                                    <template v-for="item in pageCount+1">
+                                        <span v-if="item==1" class="btn btn-default" v-on:click="showPage(1,$event)">
+                                            首页
+                                        </span>
+                                        <span v-if="item==1" class="btn btn-default" v-on:click="showPage(pageCurrent-1,$event)">
+                                            上一页
+                                        </span>
+                                        <span v-if="item==1" class="btn btn-default" v-on:click="showPage(item,$event)">
+                                            {{item}}
+                                        </span>
+                                        <span v-if="item==1&&item<showPagesStart-1" class="btn btn-default disabled">
+                                            ...
+                                        </span>
+                                        <span v-if="item>1&&item<=pageCount-1&&item>=showPagesStart&&item<=showPageEnd&&item<=pageCount" class="btn btn-default" v-on:click="showPage(item,$event)">
+                                            {{item}}
+                                        </span>
+                                        <span v-if="item==pageCount&&item>showPageEnd+1" class="btn btn-default disabled">
+                                            ...
+                                        </span>
+                                        <span v-if="item==pageCount" class="btn btn-default" v-on:click="showPage(item,$event)">
+                                            {{item}}
+                                        </span>
+                                        <span v-if="item==pageCount" class="btn btn-default" v-on:click="showPage(pageCurrent+1,$event)">
+                                            下一页
+                                        </span>
+                                        <span v-if="item==pageCount" class="btn btn-default" v-on:click="showPage(pageCount,$event)">
+                                            尾页
+                                        </span>
+                                    </template>
+                                    <span class="form-inline">
+                                        <input class="form-control" style="width:60px;text-align:center" type="text" v-model="pageCurrent"  v-on:keyup.enter="showPage(pageCurrent,$event,true)" />
+                                    </span>
+                                    <span class="label label-success"> {{pageCurrent}}/{{pageCount}}</span>
+                                </div>  
                             </section>
                         </div>
                     </div>
@@ -93,8 +145,6 @@
 </div>
 
 <div style="height: 55px;"></div>
-<script src="~/lib/axios/dist/axios.min.js"></script>
-<script src="~/lib/vue/dist/vue.js"></script>
 <script type="text/javascript">
     function ChangeDateFormat(jsondate) {
         if (jsondate === "") { return ""; }
@@ -124,28 +174,169 @@
             + ":"
             + seconds;
     }
-
-
-    var articleList = [];
-    axios.get('http://localhost:5001/api/Blog/Article/1')
-        .then(function (response) {
-            console.log(response);
-            articleList = response.data.articleList;
-            var vm = new Vue({
-                el: '#BlogIndex',
-                data: {
-                    ArticleList: articleList
-                }
-            });
-
-            console.log(articleList);
-        })
-        .catch(function (response) {
-            console.log(response);
-        });
-
-
-
-
 </script>
+<script>
+    //只能输入正整数过滤器
+    Vue.filter('onlyNumeric', {
+        // model -> view
+        // 在更新 `<input>` 元素之前格式化值
+        read: function (val) {
+            return val;
+        },
+        // view -> model
+        // 在写回数据之前格式化值
+        write: function (val, oldVal) {
+            var number = +val.replace(/[^\d]/g, '')
+            return isNaN(number) ? 1 : parseFloat(number.toFixed(2))
+        }
+    })
 
+    //数组删除某项功能
+    Array.prototype.remove = function (dx) {
+        if (isNaN(dx) || dx > this.length) { return false; }
+        for (var i = 0, n = 0; i < this.length; i++) {
+            if (this[i] != this[dx]) {
+                this[n++] = this[i]
+            }
+        }
+        this.length -= 1
+    }
+
+    //http://www.jianshu.com/p/addd2bab739f?from=timeline 样例
+    Vue.prototype.$http = axios;
+    var url = "http://localhost:5001/api/Blog/Article/";
+    var vue=new Vue({
+        el: "#BlogList",
+        data: {  
+            ArticleList: [],//空的初始化数据
+
+            //总项目数
+            totalCount: 200,
+            //分页数
+            pageCount: 20,
+            //当前页面
+            pageCurrent: 1,
+            //分页大小
+            pagesize: 8,
+            //显示分页按钮数
+            showPages: 11,
+            //开始显示的分页按钮
+            showPagesStart: 1,
+            //结束显示的分页按钮
+            showPageEnd: 100,
+            newTodo: { id: null, Name: '', Task: false }//新建默认数据
+        },
+        mounted() {
+            this.getArticleData(url, '1','3');//通过this.getData的URL取得API数据
+            this.showPage(1, null, true);
+        },
+        computed: {
+            remaining: function () {
+                return this.totalCount;
+            }
+        },//这里我们声明了一个计算属性 remaining,通过返回this.num的值做为未完成总数
+        methods: {//VUE事件处理器
+            getArticleData(url, pageCurrent,pageSize) {
+                var tempUrl = url + pageCurrent + "/" + pageSize;
+                this.$http.get(tempUrl).then((response) => {
+                    this.ArticleList = response.data.articleList;
+                    this.totalCount = response.data.count;
+                    this.pageCount = Math.ceil(this.totalCount / this.pagesize);
+                    this.showPages = this.pageCount-4;   //要显示的分页数
+                });
+            },//this.getData取得数据库数据，并取得未完成事件总数
+
+            showPage: function (pageIndex, $event, forceRefresh) {
+                console.log('当前页数为' + pageIndex);
+                this.getArticleData(url, pageIndex, this.pagesize);
+                if (pageIndex > 0) {
+
+
+                    if (pageIndex > this.pageCount) {
+                        pageIndex = this.pageCount;
+                    }
+
+                    //判断数据是否需要更新
+                    var currentPageCount = Math.ceil(this.totalCount / this.pagesize);
+                    if (currentPageCount != this.pageCount) {
+                        pageIndex = 1;
+                        this.pageCount = currentPageCount;
+                    }
+                    else if (this.pageCurrent == pageIndex && currentPageCount == this.pageCount && typeof (forceRefresh) == "undefined") {
+                        console.log("not refresh");
+                        return;
+                    }
+
+                    //处理分页点中样式
+                    var buttons = $("#pager").find("span");
+                    for (var i = 0; i < buttons.length; i++) {
+                        if (buttons.eq(i).html() != pageIndex) {
+                            buttons.eq(i).removeClass("active");
+                        }
+                        else {
+                            buttons.eq(i).addClass("active");
+                        }
+                    }
+
+                    //测试数据 随机生成的
+                    var newPageInfo = [];
+                    for (var i = 0; i < this.pagesize; i++) {
+                        newPageInfo[newPageInfo.length] = {
+                            name: "test" + (i + (pageIndex - 1) * 20),
+                            age: (i + (pageIndex - 1) * 20)
+                        };
+                    }
+                    this.pageCurrent = pageIndex;
+                    this.arrayData = newPageInfo;
+
+                    //计算分页按钮数据
+                    if (this.pageCount > this.showPages) {
+                        if (pageIndex <= (this.showPages - 1) / 2) {
+                            this.showPagesStart = 1;
+                            this.showPageEnd = this.showPages - 1;
+                            console.log("showPage1")
+                        }
+                        else if (pageIndex >= this.pageCount - (this.showPages - 3) / 2) {
+                            this.showPagesStart = this.pageCount - this.showPages + 2;
+                            this.showPageEnd = this.pageCount;
+                            console.log("showPage2")
+                        }
+                        else {
+                            console.log("showPage3")
+                            this.showPagesStart = pageIndex - (this.showPages - 3) / 2;
+                            this.showPageEnd = pageIndex + (this.showPages - 3) / 2;
+                        }
+                    }
+                    console.log("showPagesStart:" + this.showPagesStart + ",showPageEnd:" + this.showPageEnd + ",pageIndex:" + pageIndex);
+                }
+            },//分页方法
+
+            addTodo(newTodo) {
+                this.ArticleList.push(newTodo);
+                this.totalCount++;
+                this.$http.post('/api/todo/PostTodo', newTodo).then(response => console.log(response));
+                this.newTodo = { id: null, Name: '', Task: false }
+            },//添加任务，并且将数据post到URL
+
+            deleteTodo(index, id) {
+                if (!this.ArticleList[index].Task) {
+                    this.totalCount--;
+                }
+                this.$http.delete('/api/todo/DeleteTodo/' + id).then(response => console.log(response));
+                this.ArticleList.splice(index, 1);
+            },//删除任务，如果删除的任务是未完成的，那么将对未完成总数-1
+
+            toggleTodo(index, id) {
+                var thistodo = !this.ArticleList[index].Task;
+                var thisdata = {
+                    Name: this.ArticleList[index].Name,
+                    Task: thistodo
+                };
+                this.$http.put('/api/todo/puttodo/' + id, thisdata
+                ).then(response => console.log(response));
+                thistodo ? this.totalCount-- : this.totalCount++;
+                this.ArticleList[index].Task = thistodo;
+            }
+        },//完成任务或者撤销任务
+    });
+</script>

@@ -54,12 +54,13 @@ namespace aehyok.WebApi.Controllers
         /// 获取博客列表（分页）
         /// </summary>
         /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("Article/{pageIndex:int}")]
-        public ArticleModel GetArticleList(int pageIndex)
+        [Route("Article/{pageIndex:int}/{pageSize:int}")]
+        public ArticleModel GetArticleList(int pageIndex,int pageSize)
         {
-            var list = Utility.CollectionExtensions.Where<Article, int>(_blogArticleRepository.Entities, m => m.Id > 0, pageIndex, 8, out int total);
+            var list = Utility.CollectionExtensions.Where<Article, int>(_blogArticleRepository.Entities, m => m.Id > 0, pageIndex, pageSize, out int total);
             //var likeList=_blogArticleRepository.Entities.Where(item => EF.Functions.Like(item.Title, "a%"));    //模糊查询条件的新应用
             var result = list.ToList().Select(item => new Article()
             {
