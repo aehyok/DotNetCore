@@ -91,7 +91,10 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
 
             services.AddMvcCore()
                 .AddAuthorization()
-                .AddJsonFormatters();
+                .AddJsonFormatters(item=> {
+                    item.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.MicrosoftDateFormat;
+                    item.DateFormatString = "yyyy年MM月dd日HH时mm分ss秒";
+                });
 
             AddSwagger(services);
 

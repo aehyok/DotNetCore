@@ -33,7 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Views\Account\" />
     <Folder Include="wwwroot\css\themes\" />
   </ItemGroup>
