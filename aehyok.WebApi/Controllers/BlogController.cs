@@ -230,7 +230,6 @@ namespace aehyok.WebApi.Controllers
         public async Task DeleteBlogArticle(int id)
         {
             await _blogArticleRepository.DeleteAsync(id);
-
         }
     }
 }
