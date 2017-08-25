@@ -18,7 +18,7 @@ namespace aehyok.WebApi.Controllers
     /// 授权管理Api
     /// </summary>
     [Produces("application/json")]
-    [Route("api/Authorize")]
+    [Route("api/[controller]")]
     public class AuthorizeController : BaseController
     {
         private static LogWriter _logger = new LogWriter();
@@ -60,16 +60,23 @@ namespace aehyok.WebApi.Controllers
 
 
         #region Role角色管理
-
+        [HttpGet]
         [Route("Role")]
-        public IActionResult GetRoleList()
+        public List<Role> GetRoleList()
         {
             var list = _roleRepository.Entities.ToList();
-            return Json(new { data = list });
+            //return Json(new { data = list });
+            return list;
         }
 
+        /// <summary>
+        /// 通过角色ID获取角色信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
         [Route("Role/{id:int}")]
-        public IActionResult GetRoleById(int id = 0)
+        public dynamic GetRoleById(int id = 0)
         {
             var role = _roleRepository.Entities.FirstOrDefault(item => item.Id == id);
 
@@ -82,10 +89,10 @@ namespace aehyok.WebApi.Controllers
         /// <returns></returns>
         [HttpDelete]
         [Route("Role/{id:int}")]
-        //public async Task DeleteBlogArticle([FromUri]int id)
-        //{
-        //    await _roleRepository.DeleteAsync(id);
-        //}
+        public async Task DeleteBlogArticle(int id)
+        {
+            await _roleRepository.DeleteAsync(id);
+        }
 
         /// <summary>
         /// 保存角色
@@ -94,7 +101,7 @@ namespace aehyok.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("Role")]
-        public async Task SaveRole([FromBody]Role role)
+        public async Task SaveRole(Role role)
         {
             try
             {
@@ -117,8 +124,9 @@ namespace aehyok.WebApi.Controllers
         /// 获取角色对应的勾选菜单
         /// </summary>
         /// <returns></returns>
+        [HttpGet]
         [Route("RoleMenu")]
-        public IActionResult GetRoleMenuList()
+        public dynamic GetRoleMenuList()
         {
             int roleId = 0;
             //int roleId = int.Parse((((HttpContextBase)Request.Properties["MS_HttpContext"])).Request.QueryString["roleId"]);
@@ -154,7 +162,7 @@ namespace aehyok.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("SaveRoleMenu")]
-        public async Task SaveRoleMenu([FromBody] RoleMenuViewModel roleMenu)
+        public async Task SaveRoleMenu(RoleMenuViewModel roleMenu)
         {
             try
             {
@@ -169,6 +177,7 @@ namespace aehyok.WebApi.Controllers
         #endregion
 
         #region Menu菜单管理
+        [HttpGet]
         [Route("Menu")]
         public IActionResult GetMenuList()
         {
@@ -229,6 +238,12 @@ namespace aehyok.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// 通过菜单ID获取菜单信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
         [Route("Menu/{id:int}")]
         public IActionResult GetMenuById(int id = 0)
         {
@@ -237,6 +252,11 @@ namespace aehyok.WebApi.Controllers
             return Json(menu);
         }
 
+        /// <summary>
+        /// 通过父级菜单ID获取其下列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         [Route("Menu2")]
         public IActionResult GetMenuList2()
         {
@@ -250,6 +270,12 @@ namespace aehyok.WebApi.Controllers
             return Json(new { data = list });
         }
 
+        /// <summary>
+        /// 通过菜单ID，获取菜单下的列表
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
         [Route("Menu3/{id:int}")]
         public IActionResult GetMenuList3(int id)
         {
@@ -268,6 +294,7 @@ namespace aehyok.WebApi.Controllers
         #endregion
 
         #region Organize组织机构管理
+        [HttpGet]
         [Route("Organize")]
         public IActionResult GetOrganizeList()
         {
@@ -325,6 +352,12 @@ namespace aehyok.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// 通过组织ID获取组织机构信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
         [Route("Organize/{id:int}")]
         public IActionResult GetOrganizeById(int id = 0)
         {
@@ -333,6 +366,11 @@ namespace aehyok.WebApi.Controllers
             return Json(organize);
         }
 
+        /// <summary>
+        /// 获取父级下的组织机构
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         [Route("Organize2")]
         public IActionResult GetOrganizeList2()
         {
@@ -346,6 +384,12 @@ namespace aehyok.WebApi.Controllers
             return Json(new { data = list });
         }
 
+        /// <summary>
+        /// 根据组织ID获取菜单列表
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
         [Route("Organize3/{id:int}")]
         public IActionResult GetOrganizeList3(int id)
         {
@@ -405,6 +449,12 @@ namespace aehyok.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// 获取组织ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
         [Route("Post/{id:int}")]
         public IActionResult GetPostById(int id = 0)
         {
@@ -417,6 +467,7 @@ namespace aehyok.WebApi.Controllers
         /// 组织机构下的岗位列表
         /// </summary>
         /// <returns></returns>
+        [HttpGet]
         [Route("OrganizePost")]
         public IActionResult GetPostListByOrganizeId()
         {
@@ -430,6 +481,12 @@ namespace aehyok.WebApi.Controllers
             return Json(new { data = list });
         }
 
+        /// <summary>
+        /// 根据岗位ID获取岗位信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
         [Route("Post3/{id:int}")]
         public IActionResult GetPostList3(int id)
         {
@@ -439,6 +496,11 @@ namespace aehyok.WebApi.Controllers
             return Json(temp);
         }
 
+        /// <summary>
+        /// 获取岗位下的角色列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         [Route("PostRole")]
         public IActionResult GetPostRoleList()
         {
@@ -483,6 +545,7 @@ namespace aehyok.WebApi.Controllers
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
+        [HttpGet]
         [Route("UserPost")]
         public IActionResult GetUserPostList()
         {
@@ -532,11 +595,6 @@ namespace aehyok.WebApi.Controllers
             {
                 _logger.Error("用户岗位列表保存时发生异常", exception);
             }
-        }
-
-        public IActionResult RegisterUser()
-        {
-            return Ok();
         }
         #endregion
     }
