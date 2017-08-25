@@ -1,0 +1,121 @@
+﻿
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<link href="~/scripts/select2/select2.min.css" rel="stylesheet" />
+<script src="~/scripts/kindeditor/kindeditor-all.js"></script>
+<script src="~/scripts/kindeditor/lang/zh_CN.js"></script>
+<script src="~/scripts/select2/select2.min.js"></script>
+<div style="padding-bottom:50px;" id="BlogAdd">
+    <div class="portlet box green-meadow">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-cogs"></i>新增博客
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="row">
+                <form role="form" id="default">
+                    <div class="form-body col-md-12">
+                        <div style="display: none">
+                            @{
+                                //string id = (Model.Id > 0) ? Model.Id.ToString() : "0";
+                                string id = "0";
+                            }
+                            <input type="text" id="Id" name="Id" value="@id" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Title">标题</label>
+                            <input type="text" id="Title" class="form-control" name="Title"  />
+                        </div>
+                        <div class="form-group">
+                            <label for="Content">内容(Kindeditor编辑器)</label>
+                            <textarea name="Content" id="Content" class="form-control" cols="60" rows="25"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="Tag">标签</label>
+                            <select class="form-control select" multiple="multiple" id="Tag"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Tag">标签标签</label>
+                            <select class="form-control" multiple="multiple" id="cest">
+                                <option value="AL">Alabama</option>
+                                <option value="WY">Wyoming</option>
+                                <option value="AL1">Alabama1</option>
+                                <option value="WY1">Wyoming1</option>
+                            </select>
+                        </div>
+                        <div class="form-group pull-right">
+                            <button type="button" class="btn btn-success" onclick="BtnSave_Click() ">保存</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    //var tag = ViewData["TagList"] as string;
+}
+<script type="text/javascript">
+    var url = "http://localhost:5001";
+    $(document).ready(function () {
+        //http://www.cnblogs.com/wuhuacong/p/4761637.html  select2使用
+        $.get(url+"/api/Blog/TagList", {}, function (data) {
+            debugger;
+            $("#Tag").select2(
+                {
+                tags: true,
+                data: data,
+                language: "zh-CN"
+            });
+            @*var tag = "@tag".split(',');
+            $("#Tag").select2("val", tag);*@
+        });
+        $("#cest").select2();
+    });
+
+    var editor;
+    editor = KindEditor.create('textarea[name="Content"]', {
+        afterBlur: function () { this.sync(); },
+        allowFileManager: true, //是否可以浏览上传文件
+        allowUpload: true, //是否可以上传
+        fileManagerJson: "../Blog/ProcessRequest",  ///浏览文件方法
+        uploadJson: "../Blog/UploadImage"//上传文件方法(注意这两个路径)
+    });
+    function BtnSave_Click() {
+        var json = { "Id":$("#Id").val(),"Title": $("#Title").val(), "Content": $("#Content").val() };
+        var tag = { "TagId": $("#Tag").val().toString() };
+        $.ajax({
+            type: 'POST',
+            url: url+'/api/Blog/SaveBlogArticle',
+            data: JSON.stringify({ Article: json, Tags: tag }),
+            success: function (data) {
+                //abp.message.success("保存成功！", "博文信息");
+                toastr.success("保存成功！");
+                return false;
+            },
+            error: function (data) {
+                toastr.success("保存失败！");
+            },
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+    }
+
+    //var BlogViewModel=function() {
+    //    var self = this;
+    //    self.Id = ko.observable(0);
+    //    self.Title = ko.observable("");
+    //    self.Content = ko.observable("");
+    //    self.Tags = ko.observableArray();
+    //    self.GetBlog=function() {
+    //        debugger;
+    //        var id = Common.GetQueryString("id");
+    //    }
+    //    self.GetBlog();
+    //}
+    //ko.applyBindings(new BlogViewModel(), document.getElementById("BlogAdd"));
+</script>

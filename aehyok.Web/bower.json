@@ -18,7 +18,8 @@
     "blockui": "v2.65",
     "spin": "v1.1.6",
     "vue": "v2.4.2",
-    "axios": "v0.16.2"
+    "axios": "v0.16.2",
+    "select2": "4.0.3"
   },
   "resolutions": {
     "jquery": "3.2.1"

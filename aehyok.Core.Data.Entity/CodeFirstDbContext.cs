@@ -56,13 +56,34 @@ namespace aehyok.Core.Data.Entity
             builder.Entity<T>().HasQueryFilter(e => !e.IsDeleted);
         }
 
-
-        public Task<int> SaveChangesAsync()
+        public override int SaveChanges()
         {
-            return base.SaveChangesAsync();
+            if (TransactionEnabled)
+            {
+                return 0;
+            }
+            else
+            {
+                return base.SaveChanges();
+            }
         }
 
-        public bool TransactionEnabled { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            if(TransactionEnabled)
+            {
+                return 0;
+            }
+            else
+            {
+                return await base.SaveChangesAsync();
+            }
+        }
 
         //配置SqlServer数据库
         //程序包管理器控制台输入 Add-Migration ApiMigration会在生成相应的数据库
@@ -71,5 +92,12 @@ namespace aehyok.Core.Data.Entity
         {
             optionsBuilder.UseSqlServer(@"Data Source=.;Initial Catalog=aehyokCore2;Persist Security Info=True;User ID=sa;Password=M9y2512;");
         }
+
+        public async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess)
+        {
+            return await base.SaveChangesAsync(acceptAllChangesOnSuccess);
+        }
+
+        public bool TransactionEnabled { get; set; }
     }
 }

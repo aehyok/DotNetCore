@@ -5,9 +5,6 @@
 
         Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
-<script src="~/scripts/jquery.min.js"></script>
-<script src="~/lib/vue/dist/vue.js"></script>
-<script src="~/lib/axios/dist/axios.min.js"></script>
 <div>
     <section class="panel">
         <header class="panel-heading tab-bg-dark-navy-blue">
@@ -82,52 +79,7 @@
                                         <li data-bind="css: { disabled: pageIndex() === maxPageIndex() }"><a href="#" data-bind="click: nextPage">Next</a></li>
                                     </ul>
                                 </section>*@
-                                <div class="page-header">分页</div>
-                                <div class="pager" id="pager">
-                                    <span class="form-inline">
-                                        <select class="form-control" v-model="pagesize" v-on:change="showPage(pageCurrent,$event,true)" number>
-                                            <option value="3">3</option>
-                                            <option value="8">8</option>
-                                            <option value="10">10</option>
-                                            <option value="20">20</option>
-                                            <option value="30">30</option>
-                                            <option value="40">40</option>
-                                        </select>
-                                    </span>
-                                    <template v-for="item in pageCount+1">
-                                        <span v-if="item==1" class="btn btn-default" v-on:click="showPage(1,$event)">
-                                            首页
-                                        </span>
-                                        <span v-if="item==1" class="btn btn-default" v-on:click="showPage(pageCurrent-1,$event)">
-                                            上一页
-                                        </span>
-                                        <span v-if="item==1" class="btn btn-default" v-on:click="showPage(item,$event)">
-                                            {{item}}
-                                        </span>
-                                        <span v-if="item==1&&item<showPagesStart-1" class="btn btn-default disabled">
-                                            ...
-                                        </span>
-                                        <span v-if="item>1&&item<=pageCount-1&&item>=showPagesStart&&item<=showPageEnd&&item<=pageCount" class="btn btn-default" v-on:click="showPage(item,$event)">
-                                            {{item}}
-                                        </span>
-                                        <span v-if="item==pageCount&&item>showPageEnd+1" class="btn btn-default disabled">
-                                            ...
-                                        </span>
-                                        <span v-if="item==pageCount" class="btn btn-default" v-on:click="showPage(item,$event)">
-                                            {{item}}
-                                        </span>
-                                        <span v-if="item==pageCount" class="btn btn-default" v-on:click="showPage(pageCurrent+1,$event)">
-                                            下一页
-                                        </span>
-                                        <span v-if="item==pageCount" class="btn btn-default" v-on:click="showPage(pageCount,$event)">
-                                            尾页
-                                        </span>
-                                    </template>
-                                    <span class="form-inline">
-                                        <input class="form-control" style="width:60px;text-align:center" type="text" v-model="pageCurrent"  v-on:keyup.enter="showPage(pageCurrent,$event,true)" />
-                                    </span>
-                                    <span class="label label-success"> {{pageCurrent}}/{{pageCount}}</span>
-                                </div>  
+                                @Html.Partial("PagePartialView")
                             </section>
                         </div>
                     </div>
@@ -186,8 +138,9 @@
         // view -> model
         // 在写回数据之前格式化值
         write: function (val, oldVal) {
-            var number = +val.replace(/[^\d]/g, '')
-            return isNaN(number) ? 1 : parseFloat(number.toFixed(2))
+            //var number = +val.replace(/[^\d]/g, '')
+            //return isNaN(number) ? 1 : parseFloat(number.toFixed(2))
+            return val;
         }
     })
 
@@ -278,16 +231,16 @@
                         }
                     }
 
-                    //测试数据 随机生成的
-                    var newPageInfo = [];
-                    for (var i = 0; i < this.pagesize; i++) {
-                        newPageInfo[newPageInfo.length] = {
-                            name: "test" + (i + (pageIndex - 1) * 20),
-                            age: (i + (pageIndex - 1) * 20)
-                        };
-                    }
+                    ////测试数据 随机生成的
+                    //var newPageInfo = [];
+                    //for (var i = 0; i < this.pagesize; i++) {
+                    //    newPageInfo[newPageInfo.length] = {
+                    //        name: "test" + (i + (pageIndex - 1) * 20),
+                    //        age: (i + (pageIndex - 1) * 20)
+                    //    };
+                    //}
                     this.pageCurrent = pageIndex;
-                    this.arrayData = newPageInfo;
+                    //this.arrayData = newPageInfo;
 
                     //计算分页按钮数据
                     if (this.pageCount > this.showPages) {

@@ -28,14 +28,23 @@ namespace aehyok.Core.Data
         /// <returns>操作影响的行数</returns>
         int SaveChanges();
 
-//#if NET45
+        /// <summary>
+        /// 提交当前单元操作的更改。
+        /// </summary>
+        /// <returns>操作影响的行数</returns>
+        int SaveChanges(bool acceptAllChangesOnSuccess);
+
         /// <summary>
         /// 异步提交当前单元操作的更改。
         /// </summary>
         /// <returns>操作影响的行数</returns>
         Task<int> SaveChangesAsync();
 
-//#endif
+        /// <summary>
+        /// 异步提交当前单元操作的更改。
+        /// </summary>
+        /// <returns>操作影响的行数</returns>
+        Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess);
         #endregion
     }
 }
