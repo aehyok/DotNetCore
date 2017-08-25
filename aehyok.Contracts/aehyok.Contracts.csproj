@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\aehyok.Core\aehyok.Core.csproj" />
     <ProjectReference Include="..\aehyok.Model\aehyok.Model.csproj" />
+    <ProjectReference Include="..\aehyok.ViewModel\aehyok.ViewModel.csproj" />
   </ItemGroup>
 
 </Project>
