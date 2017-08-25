@@ -57,7 +57,7 @@ namespace aehyok.Services
                 };
                 await this._articleTagRepository.InsertAsync(articleTag);
             }
-            return this.UnitOfWork.SaveChanges(false);
+            return this.UnitOfWork.SaveChanges(true);
         }
     }
 }

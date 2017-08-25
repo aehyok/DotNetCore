@@ -56,22 +56,22 @@ namespace aehyok.Core.Data.Entity
             builder.Entity<T>().HasQueryFilter(e => !e.IsDeleted);
         }
 
-        public override int SaveChanges()
-        {
-            if (TransactionEnabled)
-            {
-                return 0;
-            }
-            else
-            {
-                return base.SaveChanges();
-            }
-        }
+        //public override int SaveChanges()
+        //{
+        //    if (TransactionEnabled)
+        //    {
+        //        return 0;
+        //    }
+        //    else
+        //    {
+        //        return base.SaveChanges();
+        //    }
+        //}
 
-        public override int SaveChanges(bool acceptAllChangesOnSuccess)
-        {
-            return base.SaveChanges(acceptAllChangesOnSuccess);
-        }
+        //public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        //{
+        //    return base.SaveChanges(acceptAllChangesOnSuccess);
+        //}
 
         public async Task<int> SaveChangesAsync()
         {

@@ -41,33 +41,11 @@ namespace aehyok.Core.Data.Entity
             return exists;
         }
 
-        public int Delete(TEntity entity)
-        {
-            _dbSet.Remove(entity);
-            return _unitOfWork.SaveChanges();
-        }
-
-        public int Delete(TKey key)
-        {
-            TEntity entity = _dbSet.Find(key);
-            return entity == null ? 0 : Delete(entity);
-        }
-
-        public int Delete(Expression<Func<TEntity, bool>> predicate)
-        {
-            TEntity[] entities = _dbSet.Where(predicate).ToArray();
-            return entities.Length == 0 ? 0 : Delete(entities);
-        }
-
-        public int Delete(IEnumerable<TEntity> entities)
-        {
-            _dbSet.RemoveRange(entities);
-            return _unitOfWork.SaveChanges();
-        }
-
         public async Task<int> DeleteAsync(TEntity entity)
         {
-            _dbSet.Remove(entity);
+            //_dbSet.Remove(entity);
+            entity.IsDeleted = true;
+            _dbSet.Update(entity);
             return await _unitOfWork.SaveChangesAsync();
         }
 
@@ -85,13 +63,13 @@ namespace aehyok.Core.Data.Entity
 
         public async Task<int> DeleteAsync(IEnumerable<TEntity> entities)
         {
-            _dbSet.RemoveRange(entities);
+            //_dbSet.RemoveRange(entities);
+            foreach(var entity in entities)
+            {
+                entity.IsDeleted = true;
+            }
+            _dbSet.UpdateRange(entities);
             return await _unitOfWork.SaveChangesAsync();
-        }
-
-        public TEntity GetByKey(TKey key)
-        {
-            return _dbSet.Find(key);
         }
 
         public async Task<TEntity> GetByKeyAsync(TKey key)
@@ -109,18 +87,6 @@ namespace aehyok.Core.Data.Entity
             throw new NotImplementedException();
         }
 
-        public int Insert(TEntity entity)
-        {
-            _dbSet.Add(entity);
-            return _unitOfWork.SaveChanges();
-        }
-
-        public int Insert(IEnumerable<TEntity> entities)
-        {
-            _dbSet.AddRange(entities);
-            return _unitOfWork.SaveChanges();
-        }
-
         public Task<int> InsertAsync(TEntity entity)
         {
             _dbSet.Add(entity);
@@ -131,17 +97,6 @@ namespace aehyok.Core.Data.Entity
         {
             _dbSet.AddRange(entities);
             return _unitOfWork.SaveChangesAsync();
-        }
-
-        public int Update(TEntity entity)
-        {
-            ((DbContext)_unitOfWork).Update(entity);
-            return _unitOfWork.SaveChanges();
-        }
-
-        public int Update(Expression<Func<TEntity, object>> propertyExpresion, params TEntity[] entities)
-        {
-            throw new NotImplementedException();
         }
 
         public Task<int> UpdateAsync(TEntity entity)
