@@ -39,6 +39,17 @@ namespace aehyok.WebApi.Controllers
 
         private readonly IRepository<PostRole, int> _postRoleRepository;
 
+        /// <summary>
+        /// 授权控制器构造函数
+        /// </summary>
+        /// <param name="roleRepository"></param>
+        /// <param name="menuRepository"></param>
+        /// <param name="organizeRepository"></param>
+        /// <param name="roleMenuRepository"></param>
+        /// <param name="authorizationService"></param>
+        /// <param name="postRepository"></param>
+        /// <param name="userPostRepository"></param>
+        /// <param name="postRoleRepository"></param>
         public AuthorizeController(IRepository<Role, int> roleRepository,
             IRepository<Menu, int> menuRepository,
             IRepository<Organize, int> organizeRepository,
@@ -60,6 +71,10 @@ namespace aehyok.WebApi.Controllers
 
 
         #region Role角色管理
+        /// <summary>
+        /// 获取角色列表
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("Role")]
         public List<Role> GetRoleList()
@@ -177,6 +192,10 @@ namespace aehyok.WebApi.Controllers
         #endregion
 
         #region Menu菜单管理
+        /// <summary>
+        /// 获取菜单列表
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("Menu")]
         public IActionResult GetMenuList()
@@ -294,6 +313,10 @@ namespace aehyok.WebApi.Controllers
         #endregion
 
         #region Organize组织机构管理
+        /// <summary>
+        /// 获取组织机构列表
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("Organize")]
         public IActionResult GetOrganizeList()
@@ -313,7 +336,7 @@ namespace aehyok.WebApi.Controllers
         }
 
         /// <summary>
-        /// 删除菜单
+        /// 删除组织机构
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -325,7 +348,7 @@ namespace aehyok.WebApi.Controllers
         }
 
         /// <summary>
-        /// 保存菜单
+        /// 保存组织机构
         /// </summary>
         /// <param name="organize"></param>
         /// <returns></returns>
