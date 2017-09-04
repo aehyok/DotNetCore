@@ -548,8 +548,8 @@ namespace aehyok.WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("SavePostRole")]
-        public async Task SavePostRole([FromBody] OneToMany model)
-        {
+        public async Task SavePostRole(OneToMany model)
+        {   
             try
             {
                 await this._authorizationService.SavePostRole(model);
@@ -560,13 +560,12 @@ namespace aehyok.WebApi.Controllers
             }
         }
         #endregion
-
+           
         #region Users 用户管理
 
         /// <summary>
         /// 获取用户下配置的岗位列表
         /// </summary>
-        /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("UserPost")]

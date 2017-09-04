@@ -58,8 +58,8 @@
                                                 <td>{{Article.updateTime}}</td>
                                                 <td>{{Article.count}}</td>
                                                 <td>
-                                                    <button class="btn btn-primary btn-xs"><i class="icon-pencil"></i></button>
-                                                    <button class="btn btn-danger btn-xs"><i class="icon-trash "></i></button>
+                                                    <button class="btn btn-primary btn-xs" v-on:click="editBlog(index,Article)"><i class="icon-pencil"></i></button>
+                                                    <button class="btn btn-danger btn-xs"  v-on:click="deleteBlog(index,Article)"><i class="icon-trash "></i></button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -157,7 +157,9 @@
 
     //http://www.jianshu.com/p/addd2bab739f?from=timeline 样例
     Vue.prototype.$http = axios;
-    var url = "http://localhost:5001/api/Blog/Article/";
+    var url = "http://localhost:5001" +"/api/Blog/";
+    var selectUrl =url +"Article/";
+    var deleteUrl = url+"Article";
     var vue=new Vue({
         el: "#BlogList",
         data: {  
@@ -190,7 +192,7 @@
         },//这里我们声明了一个计算属性 remaining,通过返回this.num的值做为未完成总数
         methods: {//VUE事件处理器
             getArticleData(url, pageCurrent,pageSize) {
-                var tempUrl = url + pageCurrent + "/" + pageSize;
+                var tempUrl = selectUrl + pageCurrent + "/" + pageSize;
                 this.$http.get(tempUrl).then((response) => {
                     this.ArticleList = response.data.articleList;
                     this.totalCount = response.data.count;
@@ -263,7 +265,16 @@
                     console.log("showPagesStart:" + this.showPagesStart + ",showPageEnd:" + this.showPageEnd + ",pageIndex:" + pageIndex);
                 }
             },//分页方法
+            editBlog(index,id)
+            {
+                console.log("index" + index );
 
+            },
+
+            deleteBlog(index,id)
+            {
+                console.log("index" + index);
+            },
             addTodo(newTodo) {
                 this.ArticleList.push(newTodo);
                 this.totalCount++;
