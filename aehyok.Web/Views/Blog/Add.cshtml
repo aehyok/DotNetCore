@@ -105,17 +105,54 @@
         });
     }
 
-    //var BlogViewModel=function() {
-    //    var self = this;
-    //    self.Id = ko.observable(0);
-    //    self.Title = ko.observable("");
-    //    self.Content = ko.observable("");
-    //    self.Tags = ko.observableArray();
-    //    self.GetBlog=function() {
-    //        debugger;
-    //        var id = Common.GetQueryString("id");
-    //    }
-    //    self.GetBlog();
-    //}
-    //ko.applyBindings(new BlogViewModel(), document.getElementById("BlogAdd"));
+    Vue.prototype.$http = axios;
+    var url = "http://localhost:5001" + "/api/Blog/";
+    var editUrl = url + "Add/";
+    var deleteUrl = url + "Article/";
+    var vue = new Vue({
+        el: "#BlogAdd",
+        data: {
+            id: 0,
+            title: "",
+            content: "",
+            Tags:[]
+        },
+        mounted() {
+            var id = Util.GetUrlRegExp("id");
+            if (id == null || id == "")
+            {
+                return;
+
+            }
+            else
+            {
+                this.getArticleData(id);//通过this.getData的URL取得API数据
+            }
+            
+        },
+        methods: {//VUE事件处理器
+            getArticleData(id) {
+                var tempUrl = editUrl+id;
+                this.$http.get(tempUrl).then((response) =>
+                {
+
+                });
+            },//this.getData取得数据库数据，并取得未完成事件总数
+
+            editBlog(index, item) {
+                var url = "../Blog/Add?menuId=BlogAdd&type=header&id=" + item.id;
+                window.open(url, "_self", "", false);
+                console.log("index" + index);
+            },
+
+            deleteBlog(index, item) {
+                var tempUrl = deleteUrl + item.id;
+                this.$http.delete(tempUrl).then((response) => {
+                    toastr.success("删除成功！");
+                    this.getArticleData(url, this.pageCurrent, this.pagesize);
+                });
+                console.log("index" + index);
+            }
+        }
+    });
 </script>

@@ -159,7 +159,7 @@
     Vue.prototype.$http = axios;
     var url = "http://localhost:5001" +"/api/Blog/";
     var selectUrl =url +"Article/";
-    var deleteUrl = url+"Article";
+    var deleteUrl = url+"Article/";
     var vue=new Vue({
         el: "#BlogList",
         data: {  
@@ -265,14 +265,20 @@
                     console.log("showPagesStart:" + this.showPagesStart + ",showPageEnd:" + this.showPageEnd + ",pageIndex:" + pageIndex);
                 }
             },//分页方法
-            editBlog(index,id)
+            editBlog(index, item)
             {
+                var url = "../Blog/Add?menuId=BlogAdd&type=header&id=" + item.id;
+                window.open(url, "_self", "", false);
                 console.log("index" + index );
-
             },
 
-            deleteBlog(index,id)
+            deleteBlog(index,item)
             {
+                var tempUrl = deleteUrl + item.id;
+                this.$http.delete(tempUrl).then((response) => {
+                    toastr.success("删除成功！");
+                    this.getArticleData(url, this.pageCurrent, this.pagesize);
+                });
                 console.log("index" + index);
             },
             addTodo(newTodo) {
