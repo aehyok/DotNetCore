@@ -7,7 +7,7 @@
 <script src="~/scripts/kindeditor/kindeditor-all.js"></script>
 <script src="~/scripts/kindeditor/lang/zh_CN.js"></script>
 <script src="~/scripts/select2/select2.min.js"></script>
-<div style="padding-bottom:50px;" id="BlogAdd">
+<div style="padding-bottom:50px;" >
     <div class="portlet box green-meadow">
         <div class="portlet-title">
             <div class="caption">
@@ -18,34 +18,24 @@
             <div class="row">
                 <form role="form" id="default">
                     <div class="form-body col-md-12">
-                        <div style="display: none">
+                        <div style="display:none;" >
                             @{
                                 //string id = (Model.Id > 0) ? Model.Id.ToString() : "0";
                                 string id = "0";
                             }
-                            <input type="text" id="Id" name="Id" value="@id" />
+                            <input type="text" v-model="id" />
                         </div>
                         <div class="form-group">
                             <label for="Title">标题</label>
-                            <input type="text" id="Title" class="form-control" name="Title"  />
+                            <input type="text"  class="form-control" v-model="title" />
                         </div>
                         <div class="form-group">
-                            <label for="Content">内容(Kindeditor编辑器)</label>
-                            <textarea name="Content" id="Content" class="form-control" cols="60" rows="25"></textarea>
+                            <label for="content">内容(Kindeditor编辑器)</label>
+                            <textarea class="form-control" cols="60" rows="25" id="content" v-model="content"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="Tag">标签</label>
-                            <select class="form-control select" multiple="multiple" id="Tag"></select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="Tag">标签标签</label>
-                            <select class="form-control" multiple="multiple" id="cest">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="AL1">Alabama1</option>
-                                <option value="WY1">Wyoming1</option>
-                            </select>
+                            <select class="form-control select" multiple="multiple"></select>
                         </div>
                         <div class="form-group pull-right">
                             <button type="button" class="btn btn-success" onclick="BtnSave_Click() ">保存</button>
@@ -60,30 +50,119 @@
     //var tag = ViewData["TagList"] as string;
 }
 <script type="text/javascript">
-    var url = "http://localhost:5001";
+    var tempUrl = "http://localhost:5001";
+
+    initkindEditor();
+    //初始化富文本
+    function initkindEditor() {
+        KindEditor.ready(function (K) {
+            var editor = K.create('#content', {
+                themeType: "simple",
+                uploadJson: "../Blog/UploadImage",//上传文件方法(注意这两个路径)
+                fileManagerJson: "../Blog/ProcessRequest",  ///浏览文件方法
+                resizeType: 1,
+                pasteType: 2,
+                syncType: "",
+                filterMode: true,
+                allowPreviewEmoticons: false,
+                //items: [
+                //    'source', 'undo', 'redo', 'plainpaste', 'wordpaste', 'clearhtml', 'quickformat',
+                //    'selectall', 'fullscreen', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor',
+                //    'bold', 'italic', 'underline', 'hr', 'removeformat', '|', 'justifyleft', 'justifycenter',
+                //    'justifyright', 'insertorderedlist', 'insertunorderedlist', '|', 'link', 'image',
+                //    'unlink', 'baidumap', 'emoticons'
+                //],
+                afterCreate: function () {
+                    this.sync();
+                },
+                afterBlur: function () {
+                    this.sync();
+                },
+                afterChange: function () {
+                    //富文本输入区域的改变事件，一般用来编写统计字数等判断
+                    K('.word_count1').html("最多20000个字符,已输入" + this.count() + "个字符");
+                },
+                afterUpload: function (url) {
+                    //上传图片后的代码
+                },
+                allowFileManager: false,
+                allowFlashUpload: false,
+                allowMediaUpload: false,
+                allowFileUpload: false
+            });
+        });
+    }
+
+
+
+    //var editor;
+    //editor = KindEditor.create('#content', {
+    //    afterCreate: function ()
+    //    {
+    //        this.sync();
+    //    },
+    //    afterBlur: function () {
+    //        this.sync();
+    //    },
+    //    allowFileManager: true, //是否可以浏览上传文件
+    //    allowUpload: true, //是否可以上传
+    //    fileManagerJson: "../Blog/ProcessRequest",  ///浏览文件方法
+    //    uploadJson: "../Blog/UploadImage"//上传文件方法(注意这两个路径)
+    //});
+
+    Vue.prototype.$http = axios;
+    var url = "http://localhost:5001" + "/api/Blog/";
+    var editUrl = url + "Add/";
+    var deleteUrl = url + "Article/";
+    var vue = new Vue({
+        el: "#default",
+        data: {
+            id: 0,
+            title: "1",
+            content: "KindEditor",
+            tags: []
+        },
+        mounted() {
+            var id = Util.GetUrlRegExp("id");
+            if (id == null || id == "") {
+                return;
+
+            }
+            else {
+                this.getArticleData(id);//通过this.getData的URL取得API数据
+            }
+
+        },
+        methods: {//VUE事件处理器
+            getArticleData(id) {
+                var tempUrl = editUrl + id;
+                this.$http.get(tempUrl).then((response) => {
+                    console.log(response.data);
+                    this.id = response.data.article.id;
+                    this.title = response.data.article.title;
+                    this.content = response.data.article.content;
+                    this.tags = response.data.tags.tagId;
+                    console.log(this.data);
+                    KindEditor.html('#content', response.data.article.content);
+                });
+            }
+        }
+    });
+
     $(document).ready(function () {
         //http://www.cnblogs.com/wuhuacong/p/4761637.html  select2使用
-        $.get(url+"/api/Blog/TagList", {}, function (data) {
+        $.get(tempUrl + "/api/Blog/TagList", {}, function (data) {
             debugger;
             $("#Tag").select2(
                 {
-                tags: true,
-                data: data,
-                language: "zh-CN"
-            });
+                    tags: true,
+                    data: data,
+                    language: "zh-CN"
+                });
             @*var tag = "@tag".split(',');
             $("#Tag").select2("val", tag);*@
         });
         $("#cest").select2();
-    });
-
-    var editor;
-    editor = KindEditor.create('textarea[name="Content"]', {
-        afterBlur: function () { this.sync(); },
-        allowFileManager: true, //是否可以浏览上传文件
-        allowUpload: true, //是否可以上传
-        fileManagerJson: "../Blog/ProcessRequest",  ///浏览文件方法
-        uploadJson: "../Blog/UploadImage"//上传文件方法(注意这两个路径)
     });
     function BtnSave_Click() {
         var json = { "Id":$("#Id").val(),"Title": $("#Title").val(), "Content": $("#Content").val() };
@@ -104,55 +183,4 @@
             contentType: 'application/json; charset=utf-8'
         });
     }
-
-    Vue.prototype.$http = axios;
-    var url = "http://localhost:5001" + "/api/Blog/";
-    var editUrl = url + "Add/";
-    var deleteUrl = url + "Article/";
-    var vue = new Vue({
-        el: "#BlogAdd",
-        data: {
-            id: 0,
-            title: "",
-            content: "",
-            Tags:[]
-        },
-        mounted() {
-            var id = Util.GetUrlRegExp("id");
-            if (id == null || id == "")
-            {
-                return;
-
-            }
-            else
-            {
-                this.getArticleData(id);//通过this.getData的URL取得API数据
-            }
-            
-        },
-        methods: {//VUE事件处理器
-            getArticleData(id) {
-                var tempUrl = editUrl+id;
-                this.$http.get(tempUrl).then((response) =>
-                {
-
-                });
-            },//this.getData取得数据库数据，并取得未完成事件总数
-
-            editBlog(index, item) {
-                var url = "../Blog/Add?menuId=BlogAdd&type=header&id=" + item.id;
-                window.open(url, "_self", "", false);
-                console.log("index" + index);
-            },
-
-            deleteBlog(index, item) {
-                var tempUrl = deleteUrl + item.id;
-                this.$http.delete(tempUrl).then((response) => {
-                    toastr.success("删除成功！");
-                    this.getArticleData(url, this.pageCurrent, this.pagesize);
-                });
-                console.log("index" + index);
-            }
-        }
-    });
 </script>

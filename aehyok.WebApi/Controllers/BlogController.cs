@@ -98,7 +98,7 @@ namespace aehyok.WebApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost]    //不加[HttpPost] Swagger访问报错
+        [HttpGet]    //不加[HttpPost] Swagger访问报错
         [Route("Add/{id:int}")]
         public CreateArticle GetCreateArticle(int id = 0)
         {
