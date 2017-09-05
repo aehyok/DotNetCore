@@ -153,7 +153,7 @@ namespace aehyok.WebApi.Controllers
             var list = _blogTagRepository.Entities.Select(item => new
             {
                 id = item.Id,
-                text = item.Name
+                name = item.Name
             }).ToList();
             //var json = JsonConvert.SerializeObject(list);
             //return Ok(json);

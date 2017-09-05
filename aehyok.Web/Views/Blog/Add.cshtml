@@ -7,6 +7,10 @@
 <script src="~/scripts/kindeditor/kindeditor-all.js"></script>
 <script src="~/scripts/kindeditor/lang/zh_CN.js"></script>
 <script src="~/scripts/select2/select2.min.js"></script>
+<script src="~/lib/vue-select/vue-select.js"></script>
+
+
+
 <div style="padding-bottom:50px;" >
     <div class="portlet box green-meadow">
         <div class="portlet-title">
@@ -37,6 +41,12 @@
                             <label for="Tag">标签</label>
                             <select class="form-control select" multiple="multiple"></select>
                         </div>
+                        <div class="form-group">
+                            <label for="Tag">标签</label>
+                            <v-select v-model="selected" multiple :options="options"></v-select>
+                            @*<v-select multiple:value.sync="selected" :options="options"></v-select>*@
+                        </div>
+                       
                         <div class="form-group pull-right">
                             <button type="button" class="btn btn-success" onclick="BtnSave_Click() ">保存</button>
                         </div>
@@ -109,7 +119,9 @@
     //    fileManagerJson: "../Blog/ProcessRequest",  ///浏览文件方法
     //    uploadJson: "../Blog/UploadImage"//上传文件方法(注意这两个路径)
     //});
-
+    //vue-select 使用说明 http://sagalbot.github.io/vue-select/#install
+    //select2使用 http://www.cnblogs.com/wuhuacong/p/4761637.html
+    Vue.component('v-select', VueSelect.VueSelect);
     Vue.prototype.$http = axios;
     var url = "http://localhost:5001" + "/api/Blog/";
     var editUrl = url + "Add/";
@@ -120,7 +132,9 @@
             id: 0,
             title: "1",
             content: "KindEditor",
-            tags: []
+            tags: [],
+            selected:[],
+            options: []
         },
         mounted() {
             var id = Util.GetUrlRegExp("id");
@@ -129,9 +143,9 @@
 
             }
             else {
-                this.getArticleData(id);//通过this.getData的URL取得API数据
+                this.getTagList();
+                this.getArticleData(id);//通过this.getArticleData的URL取得API数据
             }
-
         },
         methods: {//VUE事件处理器
             getArticleData(id) {
@@ -141,29 +155,24 @@
                     this.id = response.data.article.id;
                     this.title = response.data.article.title;
                     this.content = response.data.article.content;
-                    this.tags = response.data.tags.tagId;
+                    this.selected = response.data.tags.tagId;
                     console.log(this.data);
                     KindEditor.html('#content', response.data.article.content);
+                });
+            },
+            getTagList()
+            {
+                var url = tempUrl + "/api/Blog/TagList";
+                this.$http.get(url).then((response) => {
+                    this.options = response.data;
+                    console.log(response.data);
                 });
             }
         }
     });
 
-    $(document).ready(function () {
-        //http://www.cnblogs.com/wuhuacong/p/4761637.html  select2使用
-        $.get(tempUrl + "/api/Blog/TagList", {}, function (data) {
-            debugger;
-            $("#Tag").select2(
-                {
-                    tags: true,
-                    data: data,
-                    language: "zh-CN"
-                });
-            @*var tag = "@tag".split(',');
-            $("#Tag").select2("val", tag);*@
-        });
-        $("#cest").select2();
-    });
+    
+
     function BtnSave_Click() {
         var json = { "Id":$("#Id").val(),"Title": $("#Title").val(), "Content": $("#Content").val() };
         var tag = { "TagId": $("#Tag").val().toString() };
