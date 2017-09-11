@@ -7,7 +7,7 @@
 <script src="~/scripts/kindeditor/kindeditor-all.js"></script>
 <script src="~/scripts/kindeditor/lang/zh_CN.js"></script>
 <script src="~/scripts/select2/select2.min.js"></script>
-<script src="~/lib/vue-select/vue-select.js"></script>
+<script src="~/lib/vue-select/dist/vue-select.js"></script>
 
 
 
@@ -43,7 +43,14 @@
                         </div>
                         <div class="form-group">
                             <label for="Tag">标签</label>
-                            <v-select v-model="selected" multiple :options="options"></v-select>
+                            @*<v-select v-model="selected" multiple :options="options"></v-select>*@
+                            <v-select multiple v-model="selected"
+                                      :debounce="250"
+                                      :on-search="getTagList"
+                                      :options="options"
+                                      placeholder="Search GitHub Repositories..."
+                                      label="name">
+                            </v-select>
                             @*<v-select multiple:value.sync="selected" :options="options"></v-select>*@
                         </div>
                        
