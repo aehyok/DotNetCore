@@ -190,6 +190,7 @@ namespace aehyok.WebApi.Controllers
         /// <param name="article"></param>
         /// <returns></returns>
         [HttpPost]
+        [Produces("application/json")]
         [Route("SaveBlogArticle")]
         //http://www.cnblogs.com/babycool/p/3922738.html
         public async Task SaveBlogArticle([FromBody]CreateArticle article)

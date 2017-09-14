@@ -43,7 +43,6 @@
                         </div>
                         <div class="form-group">
                             <label for="Tag">标签</label>
-                            @*<v-select v-model="selected" multiple :options="options"></v-select>*@
                             <v-select multiple v-model="selected"
                                       :debounce="250"
                                       :on-search="getTagList"
@@ -51,11 +50,10 @@
                                       placeholder="Search GitHub Repositories..."
                                       label="name">
                             </v-select>
-                            @*<v-select multiple:value.sync="selected" :options="options"></v-select>*@
                         </div>
                        
                         <div class="form-group pull-right">
-                            <button type="button" class="btn btn-success" onclick="BtnSave_Click() ">保存</button>
+                            <button type="button" class="btn btn-success"  v-on:click="BtnSave_Click()">保存</button>
                         </div>
                     </div>
                 </form>
@@ -144,13 +142,13 @@
             options: []
         },
         mounted() {
+            this.getTagList();
             var id = Util.GetUrlRegExp("id");
             if (id == null || id == "") {
                 return;
 
             }
             else {
-                this.getTagList();
                 this.getArticleData(id);//通过this.getArticleData的URL取得API数据
             }
         },
@@ -174,29 +172,36 @@
                     this.options = response.data;
                     console.log(response.data);
                 });
+            },
+            BtnSave_Click()
+            {
+                var json = { "Id": this.id, "Title": this.title, "Content": this.content };
+                var array = this.selected;
+                var tagArray = [];
+                array.forEach(function (item, index, input) {
+                    tagArray.push(item.id);
+                })
+                var tag = { "TagId": tagArray.join(',').toString() }; 
+
+                //var json = { "Id": $("#Id").val(), "Title": $("#Title").val(), "Content": $("#Content").val() };
+                //var tag = { "TagId": $("#Tag").val().toString() };
+                $.ajax({
+                    type: 'POST',
+                    url: url + 'SaveBlogArticle',
+                    data: JSON.stringify({ Article: json, Tags: tag }),
+                    success: function (data) {
+                        //abp.message.success("保存成功！", "博文信息");
+                        toastr.success("保存成功！");
+                        return false;
+                    },
+                    error: function (data) {
+                        toastr.success("保存失败！");
+                    },
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8'
+                });
+
             }
         }
     });
-
-    
-
-    function BtnSave_Click() {
-        var json = { "Id":$("#Id").val(),"Title": $("#Title").val(), "Content": $("#Content").val() };
-        var tag = { "TagId": $("#Tag").val().toString() };
-        $.ajax({
-            type: 'POST',
-            url: url+'/api/Blog/SaveBlogArticle',
-            data: JSON.stringify({ Article: json, Tags: tag }),
-            success: function (data) {
-                //abp.message.success("保存成功！", "博文信息");
-                toastr.success("保存成功！");
-                return false;
-            },
-            error: function (data) {
-                toastr.success("保存失败！");
-            },
-            dataType: 'json',
-            contentType: 'application/json; charset=utf-8'
-        });
-    }
 </script>
