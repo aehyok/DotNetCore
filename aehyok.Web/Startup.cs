@@ -32,6 +32,9 @@ namespace aehyok.Web
             //添加MVC
             services.AddMvc();
 
+            //添加SignalR
+            services.AddSignalR();
+
             //单独注册HttpContext，上面services.AddMvc()中已经进行过注册
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
@@ -53,6 +56,11 @@ namespace aehyok.Web
                     name: "default",
                     template: "{Controller=Home}/{action=Index}/{id?}"
                 );
+            });
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<Chat>("hubs");
             });
 
             //原有入口测试页面进行注释
