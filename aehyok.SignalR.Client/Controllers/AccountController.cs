@@ -1,5 +1,6 @@
 ﻿using aehyok.Users.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace aehyok.Users.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Login(string returnUrl)
+        public ActionResult Login(string returnUrl)
         {
             if (HttpContext.User.Identity.IsAuthenticated)
             {
@@ -44,6 +45,13 @@ namespace aehyok.Users.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginModel details, string returnUrl)
         {
+            //var appuser = new AppUser();
+            //appuser.Id = "1";
+            //appuser.UserName = "aehyok";
+            //appuser.Email = "aehyok@vip.qq.com";
+            //var results=await _userManager.CreateAsync(appuser, "Aehyok_Test0");
+
+
             if (ModelState.IsValid)
             {
                 //检查用户是否存在
@@ -55,19 +63,21 @@ namespace aehyok.Users.Controllers
                 }
                 else
                 {
+
                     //登录用户检查通过后生成ClaimsIdentity对象
-                    ClaimsIdentity ident = null;
-                    //ClaimsIdentity ident = await UserManager.CreateIdentityAsync(user,
-                    //            DefaultAuthenticationTypes.ApplicationCookie);
-                    //ident.AddClaims(LocationClaimsProvider.GetClaims(ident));
-                    //ident.AddClaims(ClaimsRoles.CreateRolesFromClaims(ident));
+                    var user = await _userManager.FindByNameAsync(details.Name);
+                    var ident = await _signInManager.CreateUserPrincipalAsync(user);
                     await _signInManager.SignOutAsync();
-                    var user = _userManager.FindByNameAsync(details.Name);
-                    await _signInManager.SignInAsync(user.Result, new AuthenticationProperties
-                    {
-                        IsPersistent = false
-                    });
-                    return Redirect(returnUrl);
+
+                    var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                    identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                    //https://digitalmccullough.com/posts/aspnetcore-auth-system-demystified.html
+
+                    //await HttpContext.Authentication.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, ident);
+
+                    return RedirectToAction("Index","Home");
                 }
             }
             ViewBag.returnUrl = returnUrl;
