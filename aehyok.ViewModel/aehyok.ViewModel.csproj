@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LoginUser.cs" />
+    <Compile Include="LoginViewModel.cs" />
     <Compile Include="MenuViewModel.cs" />
     <Compile Include="OneToMany.cs" />
     <Compile Include="RegisterUser.cs" />

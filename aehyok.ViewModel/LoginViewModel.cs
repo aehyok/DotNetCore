@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace aehyok.ViewModel
 {
-    public class LoginUser
+    public class LoginViewModel
     {
         public string UserName { get; set; }
 
         public string Password { get; set; }
 
         public string Ticket { get; set; }
+
+        public bool RememberMe { get; set; }
     }
 }
