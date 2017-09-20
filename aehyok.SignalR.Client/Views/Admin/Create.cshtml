@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "Create";
+}
+
+@model aehyok.Users.Models.CreateModel
+
+<div class="page-bar">
+    <ul class="page-breadcrumb">
+        <li>
+            <i class="icon-home"></i>
+            <a href="#">授权管理</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <span>添加用户</span>
+        </li>
+    </ul>
+    <div class="page-toolbar">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
+                Actions
+                <i class="fa fa-angle-down"></i>
+            </button>
+            <ul class="dropdown-menu pull-right" role="menu">
+                <li>
+                    <a href="#">
+                        <i class="icon-bell"></i> Action
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-shield"></i> Another action
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-user"></i> Something else here
+                    </a>
+                </li>
+                <li class="divider"> </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-bag"></i> Separated link
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+@Html.ValidationSummary(false)
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable-line boxless tabbable-reversed">
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_0">
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>添加用户
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse"> </a>
+                                <a href="#portlet-config" data-toggle="modal" class="config"> </a>
+                                <a href="javascript:;" class="reload"> </a>
+                                <a href="javascript:;" class="remove"> </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <form action="../Admin/Create" method="POST" class="form-horizontal">
+                                <div class="form-body">
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">Name</label>
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon input-circle-left">
+                                                    <i class="fa fa-user"></i>
+                                                </span>
+                                                <input type="text" class="form-control input-circle-right" name="Name" placeholder="Enter Name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">Email</label>
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon input-circle-left">
+                                                    <i class="fa fa-envelope"></i>
+                                                </span>
+                                                <input type="email" class="form-control input-circle-right" placeholder="Email Address" name="Email">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">Password</label>
+                                        <div class="col-md-4">
+                                            <input type="password" class="form-control input-circle" placeholder="Password" name="Password">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button type="submit" class="btn btn-circle green">Submit</button>
+                                            <button type="button" class="btn btn-circle grey-salsa btn-outline">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- END FORM-->
+                        </div>
+                    </div>
+                    <!-- BEGIN FORM-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

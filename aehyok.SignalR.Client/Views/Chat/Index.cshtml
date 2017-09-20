@@ -1,0 +1,159 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<link href="../theme/assets/apps/css/inbox.min.css" rel="stylesheet" type="text/css" />
+
+<!--jQuery引用版本 以及顺序，包括在模版中引用的上下-->
+@*<script src="~/Scripts/jquery-1.10.2.min.js"></script>*@
+<script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
+<script src="~/signalr/hubs"></script>
+<script type="text/javascript">
+    var chat;
+    var roomcount = 0;
+
+    $(function () {
+        //建立一个代理对象
+        chat = $.connection.GroupHub;
+
+        //进入页面后与Signalr进行握手建立连接
+        $.connection.hub.start().done(function () {
+            $('#CreatRoom').click(function () {
+                if (roomcount < 15) {
+                    chat.server.creatRoom($("#Roomname").val());
+                    roomcount++;
+                } else {
+                    alert("聊天窗口只允许有15个");
+                };
+            });
+        });
+        //
+        chat.client.showMessage = function (roomname) {
+            $("#ChatRoomName").html(roomname);
+            $("#BtnSubmitMessage").attr("data-id", roomname);
+            var cont = $('#chats');
+            var list = $('.chats', cont);
+            list.find("li").remove();
+        }
+
+        //服务端向所有在线客户端推送消息
+        chat.client.sendMessage = function (roomname, username, message, time) {
+            var cont = $('#chats');
+            var list = $('.chats', cont);
+            var html = '<li class=\"in\"><img class=\"avatar\" alt=\"\" src=\"../theme/assets/layouts/layout/img/avatar2.jpg\" />' 
+                + '<div class=\"message\"><span class=\"arrow\"> </span><a href=\"javascript:;\" class=\"name\"> ' + username + ' </a>'
+                + '<span class=\"datetime\">'+time+' </span><span class=\"body\">' + message + '</span></div></li>';
+            list.append(html);
+            var getLastPostPos = function () {
+                var height = 0;
+                cont.find("li.out, li.in").each(function () {
+                    height = height + $(this).outerHeight();
+                });
+
+                return height;
+            }
+
+            cont.find('.scroller').slimScroll({
+                scrollTo: getLastPostPos()
+            });
+        }
+
+        //聊天室人数为0后，此聊天室自动移除
+        chat.client.removeRoom = function (data) {
+            alert(data);
+        }
+
+        //服务端向客户端推送房间
+        chat.client.addRoom = function (roomname) {
+            $("#ChatRoomName").html(roomname);
+            $("#BtnSubmitMessage").attr("data-id", roomname);
+            var cont = $('#chats');
+            var list = $('.chats', cont);
+            list.find("li").remove();
+        }
+
+        //注册查询房间列表的方法
+        chat.client.getRoomlist = function (data) {
+            if (data) {
+                var jsondata = $.parseJSON(data);
+                $("#roomlist").html(" ");
+                var firstLi = "<li class=\"divider margin-bottom-5\"></li>";
+                $("#roomlist").append();
+                for (var i = 0; i < jsondata.length; i++) {
+                    var html = '<li><a href=\"javascript:void(0);\" onclick=\'AddRoom("' + jsondata[i].RoomName + '")\'><img class=\"contact-pic\" src=\"../theme/assets/pages/media/users/avatar7.jpg\">' +
+                               '<span class=\"contact-name\">' + jsondata[i].RoomName + '</span>' +
+                               '<span class=\"contact-status bg-green\"></span></a></li>';
+                    $("#roomlist").append(html);
+                }
+            }
+        }
+    });
+
+    //点击发送按钮并调用服务进行推送消息（此处注意SendMessage方法定义在Dashboard.js中）
+    function SendMessage(message) {
+        var roomname = $("#BtnSubmitMessage").attr("data-id");
+        chat.server.sendMessage(roomname, message);
+    }
+    function RemoveRoom(btn) {
+        var room = $(btn).parent();
+        var roomname = $(room).attr("roomname");
+        chat.server.removeFromRoom(roomname);
+    }
+    function AddRoom(roomname) {
+        chat.server.addToRoom(roomname);
+    }
+</script>
+
+<div style="display: none;">
+    <div class="row">
+        <div style="float: left;">名称:</div>
+        <div style="float: left;" id="username">@HttpContext.Current.User.Identity.Name</div>
+    </div>
+</div>
+    输入聊天室名:
+<input type="text" value="asdasd" id="Roomname" />
+<button id="CreatRoom" class="btn btn-primary green fa fa-edit">创建聊天室</button>
+
+<div class="row">
+    <div class="col-md-2">
+        <div class="inbox">
+            <div class="inbox-sidebar">
+                <a href="javascript:;" data-title="Compose" class="btn red compose-btn btn-block">
+                    <i class="fa "></i> 聊天室列表
+                </a>
+                <ul class="inbox-contacts" id="roomlist"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10">
+        <div class="row" >
+            <div class="col-md-12 col-sm-12">
+                <div class="portlet light ">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="icon-bubble font-red-sunglo"></i>
+                            <span class="caption-subject font-red-sunglo bold uppercase" id="ChatRoomName">Chats</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body" id="chats">
+                        <div class="scroller" style="height: 385px;" data-always-visible="1" data-rail-visible="0">
+                            <ul class="chats">
+                            </ul>
+                        </div>
+                        <div class="chat-form">
+                            <div class="input-cont">
+                                <input class="form-control" type="text" placeholder="Type a message here..." />
+                            </div>
+                            <div class="btn-cont">
+                                <span class="arrow"> </span>
+                                <a href="" class="btn blue icn-only" data-id="1" id="BtnSubmitMessage">
+                                    <i class="fa fa-check icon-white"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
