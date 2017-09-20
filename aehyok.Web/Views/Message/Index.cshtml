@@ -14,7 +14,7 @@
             let hubConnection = new signalR.HubConnection(httpConnection);
 
             //接收消息
-            hubConnection.on('ReveiveMessage', data => {
+            hubConnection.on('ReceiveMessage', data => {
                 $('#reports').append($('<li>').text(data));
             });
 
