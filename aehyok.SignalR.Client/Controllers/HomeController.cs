@@ -5,33 +5,69 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using aehyok.SignalR.Client.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace aehyok.SignalR.Client.Controllers
 {
+
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        [Authorize]
+        public ActionResult Index()
         {
+            return View(GetData("Index"));
+        }
+
+        [Authorize(Roles = "aehyok")]
+        public ActionResult OtherAction()
+        {
+            return View("Index", GetData("OtherAction"));
+        }
+
+        private Dictionary<string, object> GetData(string actionName)
+        {
+            Dictionary<string, object> dict
+                = new Dictionary<string, object>();
+            dict.Add("Action", actionName);
+            dict.Add("User", HttpContext.User.Identity.Name);
+            dict.Add("Authenticated", HttpContext.User.Identity.IsAuthenticated);
+            dict.Add("Auth Type", HttpContext.User.Identity.AuthenticationType);
+            dict.Add("In Users Role", HttpContext.User.IsInRole("Users"));
+            return dict;
+        }
+
+        [Authorize]
+        public ActionResult UserProps()
+        {
+            //return View(CurrentUser);
             return View();
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
+        //[Authorize]
+        //[HttpPost]
+        //public async Task<ActionResult> UserProps(Cities city)
+        //{
+        //    AppUser user = CurrentUser;
+        //    user.City = city;
+        //    user.SetCountryFromCity(city);
+        //    await UserManager.UpdateAsync(user);
+        //    return View(user);
+        //}
 
-            return View();
-        }
+        //private AppUser CurrentUser
+        //{
+        //    get
+        //    {
+        //        return UserManager.FindByName(HttpContext.User.Identity.Name);
+        //    }
+        //}
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        //private AppUserManager UserManager
+        //{
+        //    get
+        //    {
+        //        return HttpContext.GetOwinContext().GetUserManager<AppUserManager>();
+        //    }
+        //}
     }
 }

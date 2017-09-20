@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using aehyok.Users.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using aehyok.Users.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace aehyok.SignalR.Client
 {
@@ -22,6 +26,20 @@ namespace aehyok.SignalR.Client
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            services.AddAuthentication("MyCookieAuthenticationScheme")
+                .AddCookie("MyCookieAuthenticationScheme", options =>
+                {
+                    //options.AccessDeniedPath = "/Account/Forbidden/";
+                    options.LoginPath = "/Account/Login/";
+                });
+            // Add framework services.
+            services.AddDbContext<AppIdentityDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppIdentityDbContext>()
+                .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
