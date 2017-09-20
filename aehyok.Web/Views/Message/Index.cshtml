@@ -1,7 +1,33 @@
 ﻿
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<h2>Index</h2>
+<script src="~/signalr-client.min.js"></script>
+<ul id="reports"></ul>
 
+    <script>
+        $(function () {
+            let hubUrl = 'http://localhost:5004/chat';
+            let httpConnection = new signalR.HttpConnection(hubUrl);
+            let hubConnection = new signalR.HubConnection(httpConnection);
+
+            //接收消息
+            hubConnection.on('ReveiveMessage', data => {
+                $('#reports').append($('<li>').text(data));
+            });
+
+            $("#SendMessage").click(function () {
+                hubConnection.invoke('SendMessage', $('#reportName').val());
+            });
+
+            hubConnection.start();
+        });
+    </script>
+
+
+
+
+<input type="text" id="reportName" placeholder="Enter report name" />
+<input type="button" id="SendMessage" value="Send" />

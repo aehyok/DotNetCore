@@ -33,6 +33,7 @@ namespace aehyok.SignalR.Server
             app.UseSignalR(routes =>  // <-- SignalR
             {
                 routes.MapHub<Chat>("Chat");
+                routes.MapHub<GroupChat>("GroupChat");
             });
         }
     }

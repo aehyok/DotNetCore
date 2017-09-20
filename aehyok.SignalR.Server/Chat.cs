@@ -47,9 +47,9 @@ namespace aehyok.SignalR.Server
             return Clients.Client(Context.ConnectionId).InvokeAsync("Send", $"{Context.ConnectionId}: {message}");
         }
 
-        public Task PublishReport(string reportName)
+        public Task SendMessage(string reportName)
         {
-            return Clients.All.InvokeAsync("OnReportPublished", reportName);
+            return Clients.All.InvokeAsync("ReceiveMessage", reportName);
         }
     }
 }
