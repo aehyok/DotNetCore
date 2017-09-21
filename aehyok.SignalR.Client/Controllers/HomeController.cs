@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Authorization;
 namespace aehyok.SignalR.Client.Controllers
 {
 
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        //[Authorize]
+        [Authorize]
         public ActionResult Index()
         {
             return View(GetData("Index"));

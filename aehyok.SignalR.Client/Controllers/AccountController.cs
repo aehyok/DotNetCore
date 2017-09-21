@@ -67,14 +67,21 @@ namespace aehyok.Users.Controllers
                     //登录用户检查通过后生成ClaimsIdentity对象
                     var user = await _userManager.FindByNameAsync(details.Name);
                     var ident = await _signInManager.CreateUserPrincipalAsync(user);
-                    await _signInManager.SignOutAsync();
+                    //await _signInManager.SignInAsync(user,
+                    //    new AuthenticationProperties
+                    //    {
+                    //        IsPersistent = true
+                    //    });
 
                     var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                     identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
 
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity),
+                        new AuthenticationProperties
+                        {
+                            IsPersistent = true
+                        });
                     //https://digitalmccullough.com/posts/aspnetcore-auth-system-demystified.html
-
                     //await HttpContext.Authentication.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, ident);
 
                     return RedirectToAction("Index","Home");

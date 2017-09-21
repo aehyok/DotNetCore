@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using aehyok.Users.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace aehyok.SignalR.Client
 {
@@ -29,10 +30,10 @@ namespace aehyok.SignalR.Client
             services.AddMvc();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie("MyCookieAuthenticationScheme", options =>
+                .AddCookie(options =>
                 {
                     //options.AccessDeniedPath = "/Account/Forbidden/";
-                    options.LoginPath = "/Account/Login/";
+                    options.LoginPath = new PathString("/account/login"); ;
                 });
             // Add framework services.
             services.AddDbContext<AppIdentityDbContext>(options =>
@@ -58,14 +59,14 @@ namespace aehyok.SignalR.Client
 
             app.UseStaticFiles();
 
+            app.UseAuthentication();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            app.UseAuthentication();
         }
     }
 }

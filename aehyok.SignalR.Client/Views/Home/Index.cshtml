@@ -2,17 +2,17 @@
 @{
     ViewBag.Title = "Index";
 }
-
+@model Dictionary<string,object>
 <div class="panel panel-primary">
     <div class="panel-heading">User Details</div>
     <table class="table table-striped">
-        @*@foreach (string key in Model.Keys)
+        @foreach (string key in Model.Keys)
         {
             <tr>
                 <th>@key</th>
                 <td>@Model[key]</td>
             </tr>
-        }*@
+        }
     </table>
 </div>
 
