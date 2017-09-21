@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Web;
 //using System.Web.Mvc;
 
-namespace aehyok.Users.Controllers
+namespace aehyok.SignalR.Client.Controllers
 {
     public class ClaimsController : Controller
     {

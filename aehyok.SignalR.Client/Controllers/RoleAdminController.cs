@@ -12,11 +12,12 @@ using aehyok.Users.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using aehyok.SignalR.Client.Controllers;
 
-namespace aehyok.Users.Controllers
+namespace aehyok.SignalR.Client.Controllers
 {
-    [Authorize(Roles = "Administrators")]
-    public class RoleAdminController : Controller
+    [Authorize]
+    public class RoleAdminController : BaseController
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
@@ -62,7 +63,7 @@ namespace aehyok.Users.Controllers
         public async Task<ActionResult> Edit(string id)
         {
             AppRole role = await _roleManager.FindByIdAsync(id);
-            string[] memberIDs = role.Users.Select(x => x.Id).ToArray();
+            string[] memberIDs = (role.Users != null) ? role.Users.Select(x => x.Id).ToArray() : null; ;
             IEnumerable<AppUser> members
                     = _userManager.Users.Where(x => memberIDs.Any(y => y == x.Id));
             IEnumerable<AppUser> nonMembers = _userManager.Users.Except(members);

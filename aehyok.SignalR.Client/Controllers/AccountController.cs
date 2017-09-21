@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace aehyok.Users.Controllers
+namespace aehyok.SignalR.Client.Controllers
 {
     [Authorize]
     public class AccountController : Controller

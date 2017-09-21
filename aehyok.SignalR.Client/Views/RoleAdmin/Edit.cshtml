@@ -12,14 +12,14 @@
     <div class="panel panel-primary">
         <div class="panel-heading">Add To @Model.Role.Name</div>
         <table class="table table-striped">
-            @if (!Model.NonMembers.Any())
+            @*@if (!Model.NonMembers.Any())
             {
                 <tr><td colspan="2">All Users Are Members</td></tr>
             }
-            else
+            else*@
             {
                 <tr><td>User ID</td><td>Add To Role</td></tr>
-                foreach (AppUser user in Model.NonMembers)
+                @foreach (AppUser user in Model.NonMembers)
                 {
                     <tr>
                         <td>@user.UserName</td>

@@ -6,12 +6,12 @@ using System.Linq;
 using System.Web;
 //using System.Web.Mvc;
 
-namespace aehyok.Users.Controllers
+namespace aehyok.SignalR.Client.Controllers
 {
+    [Authorize]
     public class ChatController : Controller
     {
         // GET: Chat
-        [Authorize]
         public ActionResult Index()
         {
             return View();

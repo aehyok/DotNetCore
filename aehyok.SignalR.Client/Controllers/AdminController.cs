@@ -12,9 +12,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 
-namespace aehyok.Users.Controllers
+namespace aehyok.SignalR.Client.Controllers
 {
-    [Authorize(Roles = "Administrators")]
+    [Authorize]
     public class AdminController : Controller
     {
         private readonly UserManager<AppUser> _userManager;

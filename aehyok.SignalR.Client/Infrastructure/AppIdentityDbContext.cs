@@ -14,7 +14,7 @@ namespace aehyok.Users.Infrastructure
     /// <summary>
     /// IdentityDbContext最终还是继承DbContext
     /// </summary>
-    public class AppIdentityDbContext : IdentityDbContext<AppUser>
+    public class AppIdentityDbContext : IdentityDbContext<AppUser,AppRole,string>
     {
 
         public AppIdentityDbContext(DbContextOptions options) : base(options) { }
