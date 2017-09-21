@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 //using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace aehyok.Users.Models
 {

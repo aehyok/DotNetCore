@@ -63,7 +63,7 @@ namespace aehyok.SignalR.Client.Controllers
         public async Task<ActionResult> Edit(string id)
         {
             AppRole role = await _roleManager.FindByIdAsync(id);
-            string[] memberIDs = (role.Users != null) ? role.Users.Select(x => x.Id).ToArray() : null; ;
+            string[] memberIDs = role.Users?.Select(x => x.Id).ToArray(); ;
             IEnumerable<AppUser> members
                     = _userManager.Users.Where(x => memberIDs.Any(y => y == x.Id));
             IEnumerable<AppUser> nonMembers = _userManager.Users.Except(members);

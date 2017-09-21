@@ -12,17 +12,18 @@
             let hubUrl = 'http://localhost:5004/chat';
             let httpConnection = new signalR.HttpConnection(hubUrl);
             let hubConnection = new signalR.HubConnection(httpConnection);
+            hubConnection.start();
+
 
             //接收消息
             hubConnection.on('ReceiveMessage', data => {
                 $('#reports').append($('<li>').text(data));
             });
 
+            //发送消息
             $("#SendMessage").click(function () {
                 hubConnection.invoke('SendMessage', $('#reportName').val());
             });
-
-            hubConnection.start();
         });
     </script>
 

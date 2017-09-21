@@ -3,70 +3,77 @@
     ViewBag.Title = "Personal";
 }
 
-@{
-    ViewBag.Title = "Index";
-}
 <link href="../theme/assets/apps/css/inbox.min.css" rel="stylesheet" type="text/css" />
 
-<!--jQuery引用版本 以及顺序，包括在模版中引用的上下-->
-@*<script src="~/Scripts/jquery-1.10.2.min.js"></script>*@
-<script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
-<script src="~/signalr/hubs"></script>
-<script type="text/javascript">
-    var chat;
-    $(function () {
-        //建立一个代理对象
-        chat = $.connection.PersonToPersonHub;   
+<script src="~/signalr-client.min.js"></script>
 
-        //进入页面后与Signalr进行握手建立连接
-        $.connection.hub.start().done(function () {
-            chat.server.getUserList();
+<script type="text/javascript">
+    //聊天链接
+    let hubConnection;
+    $(function () {
+        //建立链接
+        let hubUrl = 'http://192.168.1.23:5004/chat?userName=aehyok';
+        let httpConnection = new signalR.HttpConnection(hubUrl);
+        hubConnection = new signalR.HubConnection(httpConnection);
+
+        //1、进行握手
+        hubConnection.start();
+
+        //3、握手后的服务端回调Except
+        hubConnection.on('OnConnectionedExcept', data => {
+            $("#roomlist li").remove();
+            for (var i = 0; i < data.length; i++)
+            {
+                AddChatUser(data[i].ContextId, data[i].Name);
+            }
         });
 
-        //服务端调用客户端显示信息
-        chat.client.showMessage = function (message) {
-            alert(message);
-        };
+        //3、握手后的服务端回调Me
+        hubConnection.on('OnConnectionedMe', data => {
 
-        //服务端调用客户端添加聊天消息内容
-        chat.client.addMessage = function (contextId, userName, message, time) {
-            var cont = $('#chats');
-            var list = $('.chats', cont);
-            var html = '<li class=\"in\"><img class=\"avatar\" alt=\"\" src=\"../theme/assets/layouts/layout/img/avatar2.jpg\" />'
-                + '<div class=\"message\"><span class=\"arrow\"> </span><a href=\"javascript:;\" class=\"name\"> ' + userName + ' </a>'
-                + '<span class=\"datetime\">' + time + ' </span><span class=\"body\">' + message + '</span></div></li>';
-            list.append(html);
-            var getLastPostPos = function () {
-                var height = 0;
-                cont.find("li.out, li.in").each(function () {
-                    height = height + $(this).outerHeight();
-                });
-                return height;
-            }
+            var parameter = new Object();
+            var userName = $("#UserIdentityName").html();
+            parameter.ContextId = data;
+            parameter.Name = userName;
+            //4、链接建立后处理信息
+            hubConnection.invoke('OnConnectionedAfter', parameter);
+        });
 
-            cont.find('.scroller').slimScroll({
-                scrollTo: getLastPostPos()
-            });
-        };
 
-        //服务端调用客户端更新联系人列表
-        chat.client.getUserlist = function (data) {
-            if (data) {
-                var jsonData = $.parseJSON(data);
-                $("#roomlist").html(" ");
+        //断开链接监听事件
+        hubConnection.on('OnDisconneted', data => {
+            $("#Li" + data).parentNode.removeChild($("#Li" + data));
+        });
 
-                for (var i = 0; i < jsonData.length; i++) {
-                    if ($("#ChatRoomName").val() == jsonData[i].Name) {
-                        $("#BtnSubmitMessage").attr("data-id", jsonData[i].ContextId);
-                    }
-                    var html = '<li><a href=\"javascript:void(0);\" onclick=\'AddRoom("' + jsonData[i].ContextId + '","' + jsonData[i].Name + '")\'><img class=\"contact-pic\" src=\"../theme/assets/pages/media/users/avatar7.jpg\">' +
-                               '<span class=\"contact-name\">' + jsonData[i].Name + '</span>' +
-                               '<span class=\"contact-status bg-green\"></span></a></li>';
-                    $("#roomlist").append(html);
-                }
-            }
-        }
+        ////发送消息
+        //$("#SendMessage").click(function () {
+        //    hubConnection.invoke('SendMessage', $('#reportName').val());
+        //});
     });
+    //点击发送按钮并调用服务进行推送消息（此处注意SendMessage方法定义在Dashboard.js中）
+    function SendMessage(message) {
+        var contextId = $("#BtnSubmitMessage").attr("data-id");
+
+        hubConnection.invoke('SendMessage', $('#reportName').val());
+    }
+
+    function OnDisconneted()
+    {
+        
+
+    }
+
+
+    function AddChatUser(connectionId,userName)
+    {
+        if ($("#ChatRoomName").val() == userName) {
+            $("#BtnSubmitMessage").attr("data-id", connectionId);
+        }
+        var html = '<li id=\"li"+"' + connectionId + '\"><a href=\"javascript:void(0);\" onclick=\'AddRoom("' + connectionId + '","' + userName + '")\'><img class=\"contact-pic\" src=\"../theme/assets/pages/media/users/avatar7.jpg\">' +
+            '<span class=\"contact-name\">' + userName + '</span>' +
+            '<span class=\"contact-status bg-green\"></span></a></li>';
+        $("#roomlist").append(html);
+    }
 
     //与指定联系人建立显示聊天窗口
     function AddRoom(contextId, name) {
@@ -76,18 +83,12 @@
         var list = $('.chats', cont);
         list.find("li").remove();
     }
-   
-    //点击发送按钮并调用服务进行推送消息（此处注意SendMessage方法定义在Dashboard.js中）
-    function SendMessage(message) {
-        var contextId = $("#BtnSubmitMessage").attr("data-id");
-        chat.server.sendMessage(contextId, message);
-    }
 </script>
 
 <div style="display: none;">
     <div class="row">
         <div style="float: left;">名称:</div>
-        <div style="float: left;" id="UserName">@HttpContext.Current.User.Identity.Name</div>
+        <div style="float: left;" id="UserName">@User.Identity.Name</div>
         <div>用户唯一编码:<p id="ConID"></p></div>
     </div>
 </div>
@@ -98,7 +99,21 @@
                 <a href="javascript:;" data-title="Compose" class="btn red compose-btn btn-block">
                     <i class="fa "></i> 通讯录列表
                 </a>
-                <ul class="inbox-contacts" id="roomlist"></ul>
+                <ul class="inbox-contacts" id="roomlist">
+                    @*<li>
+                        @{
+                            foreach (var item in Model)
+                            {
+                                <a href="javascript:void(0);">
+                                    <img class="contact-pic\" src="../theme/assets/pages/media/users/avatar7.jpg">
+                                    <span class="contact-name\">@item.UserName</span>
+                                    <span class="contact-status bg-green"></span>
+                                </a>
+                            }
+                        }
+
+                    </li>*@
+                </ul>
             </div>
         </div>
     </div>

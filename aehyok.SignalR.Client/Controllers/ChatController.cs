@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using aehyok.Users.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,13 @@ namespace aehyok.SignalR.Client.Controllers
     [Authorize]
     public class ChatController : Controller
     {
+        private readonly UserManager<AppUser> _userManager;
+
+        public ChatController(UserManager<AppUser> userManager)
+        {
+            _userManager = userManager;
+        }
+
         // GET: Chat
         public ActionResult Index()
         {
@@ -19,7 +28,9 @@ namespace aehyok.SignalR.Client.Controllers
 
         public ActionResult Personal()
         {
-            return View();
+            var userName = HttpContext.User.Identity.Name;
+            var userList = _userManager.Users.Where(item => item.UserName != userName).ToList();
+            return View(userList);
         }
     }
 }

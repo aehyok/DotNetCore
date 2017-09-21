@@ -67,6 +67,7 @@ namespace aehyok.SignalR.Client
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
 }
