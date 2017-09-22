@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace aehyok.Users.SignalR
 {
-    public class UserContext
+    public class GroupContext
     {
-        public UserContext()
+        public GroupContext()
         {
             Users = new List<User>();
             Rooms = new List<ConversationRoom>();

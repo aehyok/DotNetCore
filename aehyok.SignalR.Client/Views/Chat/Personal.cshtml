@@ -11,6 +11,7 @@
     //聊天链接
     let hubConnection;
     $(function () {
+
         //建立链接
         let hubUrl = 'http://192.168.1.23:5004/chat';
         let httpConnection = new signalR.HttpConnection(hubUrl);
@@ -39,7 +40,7 @@
 
         //断开链接监听事件
         hubConnection.on('OnDisconneted', data => {
-            $("#Li" + data).parentNode.removeChild($("#Li" + data));
+            $("#Li" + data).parent.removeNode($("#Li" + data));
         });
 
         //接收并显示消息
@@ -65,12 +66,8 @@
                 scrollTo: getLastPostPos()
             });
         });
-
-        ////发送消息
-        //$("#SendMessage").click(function () {
-        //    hubConnection.invoke('SendMessage', $('#reportName').val());
-        //});
     });
+
     //点击发送按钮并调用服务进行推送消息（此处注意SendMessage方法定义在Dashboard.js中）
     function SendMessage(content) {
         var connectionId = $("#BtnSubmitMessage").attr("data-id");
@@ -80,18 +77,8 @@
         hubConnection.invoke('SendMessage', parameter);
     }
 
-    function OnDisconneted()
-    {
-        
-
-    }
-
-
     function AddChatUser(connectionId,userName)
     {
-        ////if ($("#ChatRoomName").val() == userName) {
-        //    $("#BtnSubmitMessage").attr("data-id", connectionId);
-        //}//
         var html = '<li id=\"li"+"' + connectionId + '\"><a href=\"javascript:void(0);\" onclick=\'AddRoom("' + connectionId + '","' + userName + '")\'><img class=\"contact-pic\" src=\"../theme/assets/pages/media/users/avatar7.jpg\">' +
             '<span class=\"contact-name\">' + userName + '</span>' +
             '<span class=\"contact-status bg-green\"></span></a></li>';
@@ -136,7 +123,6 @@
             + ":"
             + seconds;
     }
-
 </script>
 
 <div style="display: none;">
