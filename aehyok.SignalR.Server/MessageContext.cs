@@ -10,22 +10,27 @@ namespace aehyok.SignalR.Server
     public class MessageContext
     {
         /// <summary>
-        /// 发送人链接ID
+        /// 发送人链接
         /// </summary>
-        public string ConnectionId { get; set; }
+        public string SendConnectionId { get; set; }
 
         /// <summary>
-        /// 消息内容
+        /// 接收人链接
+        /// </summary>
+        public string ReceiveConnectionId { get; set; }
+
+        /// <summary>
+        /// 发送人消息内容
         /// </summary>
         public string Content { get; set; }
 
         /// <summary>
-        /// 消息发送时间
+        /// 发送消息时间
         /// </summary>
         public DateTime SendTime { get; set; }
 
         /// <summary>
-        /// 用户名
+        /// 发送人用户名
         /// </summary>
         public string UserName { get; set; }
     }

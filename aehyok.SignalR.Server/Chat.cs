@@ -106,13 +106,14 @@ namespace aehyok.SignalR.Server
         public async Task SendMessage(MessageContext context)
         {
             context.SendTime = DateTime.Now;
-            var user = UserList.FirstOrDefault(u => u.ConnectionId == context.ConnectionId);
+            var user = UserList.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
             context.UserName = user.UserName;
+            context.ReceiveConnectionId = context.ReceiveConnectionId;
             //判断用户是否存在,存在则发送
             if (user != null)
             {
                 //给指定用户发送,把自己的ID传过去
-                await Clients.Client(context.ConnectionId).InvokeAsync("ReceiveMessage", context);
+                await Clients.Client(context.ReceiveConnectionId).InvokeAsync("ReceiveMessage", context);
             }
         }
     }

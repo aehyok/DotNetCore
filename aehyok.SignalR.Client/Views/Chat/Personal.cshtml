@@ -72,11 +72,11 @@
         //});
     });
     //点击发送按钮并调用服务进行推送消息（此处注意SendMessage方法定义在Dashboard.js中）
-    function SendMessage(message) {
-        var contextId = $("#BtnSubmitMessage").attr("data-id");
+    function SendMessage(content) {
+        var connectionId = $("#BtnSubmitMessage").attr("data-id");
         var parameter = new Object();
-        parameter.ConnectionId = contextId;
-        parameter.Content = message;
+        parameter.ReceiveConnectionId = connectinId;
+        parameter.Content = content;
         hubConnection.invoke('SendMessage', parameter);
     }
 
@@ -89,9 +89,9 @@
 
     function AddChatUser(connectionId,userName)
     {
-        if ($("#ChatRoomName").val() == userName) {
-            $("#BtnSubmitMessage").attr("data-id", connectionId);
-        }
+        ////if ($("#ChatRoomName").val() == userName) {
+        //    $("#BtnSubmitMessage").attr("data-id", connectionId);
+        //}//
         var html = '<li id=\"li"+"' + connectionId + '\"><a href=\"javascript:void(0);\" onclick=\'AddRoom("' + connectionId + '","' + userName + '")\'><img class=\"contact-pic\" src=\"../theme/assets/pages/media/users/avatar7.jpg\">' +
             '<span class=\"contact-name\">' + userName + '</span>' +
             '<span class=\"contact-status bg-green\"></span></a></li>';
@@ -99,9 +99,9 @@
     }
 
     //与指定联系人建立显示聊天窗口
-    function AddRoom(contextId, userName) {
+    function AddRoom(connectionId, userName) {
         $("#ChatRoomName").html(userName);
-        $("#BtnSubmitMessage").attr("data-id", contextId);
+        $("#BtnSubmitMessage").attr("data-id", connectionId);
         var cont = $('#chats');
         var list = $('.chats', cont);
         list.find("li").remove();
