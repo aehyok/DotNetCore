@@ -75,7 +75,7 @@
     function SendMessage(content) {
         var connectionId = $("#BtnSubmitMessage").attr("data-id");
         var parameter = new Object();
-        parameter.ReceiveConnectionId = connectinId;
+        parameter.ReceiveConnectionId = connectionId;
         parameter.Content = content;
         hubConnection.invoke('SendMessage', parameter);
     }

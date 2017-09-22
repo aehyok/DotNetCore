@@ -114,6 +114,7 @@ namespace aehyok.SignalR.Server
             {
                 //给指定用户发送,把自己的ID传过去
                 await Clients.Client(context.ReceiveConnectionId).InvokeAsync("ReceiveMessage", context);
+                await Clients.Client(Context.ConnectionId).InvokeAsync("ReceiveMessage", context);
             }
         }
     }
