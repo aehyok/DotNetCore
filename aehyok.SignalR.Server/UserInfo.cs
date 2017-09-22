@@ -9,7 +9,7 @@ namespace aehyok.Users.SignalR
     public class UserInfo
     {
         [Key]
-        public string ContextId { get; set; }
-        public string Name { get; set; }
+        public string ConnectionId { get; set; }
+        public string UserName { get; set; }
     }
 }

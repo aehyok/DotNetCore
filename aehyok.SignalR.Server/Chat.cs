@@ -19,22 +19,22 @@ namespace aehyok.SignalR.Server
         public override async Task OnConnectedAsync()
         {
 
-            var user = UserList.SingleOrDefault(item => item.ContextId == Context.ConnectionId);  //查找已认证的用户是否存在于用户列表
+            var user = UserList.SingleOrDefault(item => item.ConnectionId == Context.ConnectionId);  //查找已认证的用户是否存在于用户列表
             if (user != null)
             {
-                user.ContextId = Context.ConnectionId;
+                user.ConnectionId = Context.ConnectionId;
             }
             else
             {
                 // 查询用户。
-                user = UserList.SingleOrDefault(u => u.ContextId == Context.ConnectionId);
+                user = UserList.SingleOrDefault(u => u.ConnectionId == Context.ConnectionId);
                 //判断用户是否存在,否则添加进集合
                 if (user == null)
                 {
                     user = new UserInfo()
                     {
-                        Name = Context.User.Identity.Name,
-                        ContextId = Context.ConnectionId
+                        UserName = Context.User.Identity.Name,
+                        ConnectionId = Context.ConnectionId
                     };
                     UserList.Add(user);
                 }
@@ -53,8 +53,8 @@ namespace aehyok.SignalR.Server
         /// <returns></returns>
         public async Task OnConnectionedAfter(UserInfo parameter)
         {
-            var user=UserList.SingleOrDefault(item => item.ContextId == parameter.ContextId);
-            user.Name = parameter.Name;
+            var user=UserList.SingleOrDefault(item => item.ConnectionId == parameter.ConnectionId);
+            user.UserName = parameter.UserName;
 
             List<string> list = new List<string>();
             list.Add(Context.ConnectionId);
@@ -64,7 +64,7 @@ namespace aehyok.SignalR.Server
 
         public override async Task OnDisconnectedAsync(Exception ex)
         {
-            var user = UserList.FirstOrDefault(u => u.ContextId == Context.ConnectionId);
+            var user = UserList.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
 
             //判断用户是否存在,存在则删除
             if (user != null)
@@ -103,9 +103,17 @@ namespace aehyok.SignalR.Server
             return Clients.Client(Context.ConnectionId).InvokeAsync("Send", $"{Context.ConnectionId}: {message}");
         }
 
-        public Task SendMessage(string reportName)
+        public async Task SendMessage(MessageContext context)
         {
-            return Clients.All.InvokeAsync("ReceiveMessage", reportName);
+            context.SendTime = DateTime.Now;
+            var user = UserList.FirstOrDefault(u => u.ConnectionId == context.ConnectionId);
+            context.UserName = user.UserName;
+            //判断用户是否存在,存在则发送
+            if (user != null)
+            {
+                //给指定用户发送,把自己的ID传过去
+                await Clients.Client(context.ConnectionId).InvokeAsync("ReceiveMessage", context);
+            }
         }
     }
 }

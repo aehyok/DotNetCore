@@ -12,7 +12,7 @@
     let hubConnection;
     $(function () {
         //建立链接
-        let hubUrl = 'http://192.168.1.23:5004/chat?userName=aehyok';
+        let hubUrl = 'http://192.168.1.23:5004/chat';
         let httpConnection = new signalR.HttpConnection(hubUrl);
         hubConnection = new signalR.HubConnection(httpConnection);
 
@@ -22,27 +22,48 @@
         //3、握手后的服务端回调Except
         hubConnection.on('OnConnectionedExcept', data => {
             $("#roomlist li").remove();
-            for (var i = 0; i < data.length; i++)
-            {
-                AddChatUser(data[i].ContextId, data[i].Name);
+            for (var i = 0; i < data.length; i++) {
+                AddChatUser(data[i].ConnectionId, data[i].UserName);
             }
         });
 
         //3、握手后的服务端回调Me
         hubConnection.on('OnConnectionedMe', data => {
-
             var parameter = new Object();
             var userName = $("#UserIdentityName").html();
-            parameter.ContextId = data;
-            parameter.Name = userName;
+            parameter.ConnectionId = data;
+            parameter.UserName = userName;
             //4、链接建立后处理信息
             hubConnection.invoke('OnConnectionedAfter', parameter);
         });
 
-
         //断开链接监听事件
         hubConnection.on('OnDisconneted', data => {
             $("#Li" + data).parentNode.removeChild($("#Li" + data));
+        });
+
+        //接收并显示消息
+        hubConnection.on('ReceiveMessage', data => {
+            var userName = data.UserName;
+            var content = data.Content;
+            var time = ChangeDateFormat(data.SendTime);
+            var cont = $('#chats');
+            var list = $('.chats', cont);
+            var html = '<li class=\"in\"><img class=\"avatar\" alt=\"\" src=\"../theme/assets/layouts/layout/img/avatar2.jpg\" />'
+                + '<div class=\"message\"><span class=\"arrow\"> </span><a href=\"javascript:;\" class=\"name\"> ' + userName + ' </a>'
+                + '<span class=\"datetime\">' + time + ' </span><span class=\"body\">' + content + '</span></div></li>';
+            list.append(html);
+            var getLastPostPos = function () {
+                var height = 0;
+                cont.find("li.out, li.in").each(function () {
+                    height = height + $(this).outerHeight();
+                });
+                return height;
+            }
+
+            cont.find('.scroller').slimScroll({
+                scrollTo: getLastPostPos()
+            });
         });
 
         ////发送消息
@@ -53,8 +74,10 @@
     //点击发送按钮并调用服务进行推送消息（此处注意SendMessage方法定义在Dashboard.js中）
     function SendMessage(message) {
         var contextId = $("#BtnSubmitMessage").attr("data-id");
-
-        hubConnection.invoke('SendMessage', $('#reportName').val());
+        var parameter = new Object();
+        parameter.ConnectionId = contextId;
+        parameter.Content = message;
+        hubConnection.invoke('SendMessage', parameter);
     }
 
     function OnDisconneted()
@@ -76,13 +99,44 @@
     }
 
     //与指定联系人建立显示聊天窗口
-    function AddRoom(contextId, name) {
-        $("#ChatRoomName").html(name);
+    function AddRoom(contextId, userName) {
+        $("#ChatRoomName").html(userName);
         $("#BtnSubmitMessage").attr("data-id", contextId);
         var cont = $('#chats');
         var list = $('.chats', cont);
         list.find("li").remove();
     }
+
+    //日期格式转换
+    function ChangeDateFormat(jsondate) {
+        if (jsondate === "") { return ""; }
+        jsondate = jsondate.replace("/Date(", "").replace(")/", "");
+        if (jsondate.indexOf("+") > 0) {
+            jsondate = jsondate.substring(0, jsondate.indexOf("+"));
+        }
+        else if (jsondate.indexOf("-") > 0) {
+            jsondate = jsondate.substring(0, jsondate.indexOf("-"));
+        }
+        var date = new Date(parseInt(jsondate, 10));
+        var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+        var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+        var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+        var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+        var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+        return date.getFullYear()
+            + "年"
+            + month
+            + "月"
+            + currentDate
+            + "日"
+            + " "
+            + hours
+            + ":"
+            + minutes
+            + ":"
+            + seconds;
+    }
+
 </script>
 
 <div style="display: none;">
