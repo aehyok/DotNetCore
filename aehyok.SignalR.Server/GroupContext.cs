@@ -41,6 +41,8 @@ namespace aehyok.Users.SignalR
             [Key]
             //用户名
             public string UserName { get; set; }
+
+            public string ConnectionId { get; set; }
             //用户房间集合
             public virtual List<ConversationRoom> Rooms { get; set; }
             public User()

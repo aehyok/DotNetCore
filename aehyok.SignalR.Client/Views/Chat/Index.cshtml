@@ -28,7 +28,6 @@
 
         //注册查询房间列表的方法
         hubConnection.on('GetRoomlist', data => {
-            debugger;
             if (data) {
                 var jsondata = $.parseJSON(data);
                 $("#roomlist").html(" ");
@@ -40,6 +39,9 @@
                         '<span class=\"contact-status bg-green\"></span></a></li>';
                     $("#roomlist").append(html);
                 }
+
+                var userName = $("#UserIdentityName").html();
+                hubConnection.invoke('OnConnectionedAfter', userName);
             }
         });
 

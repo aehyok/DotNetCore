@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace aehyok.SignalR.Server
 {
+    //User.Identity.Name
+    //https://stackoverflow.com/questions/22002092/context-user-identity-name-is-null-with-signalr-2-x-x-how-to-fix-it/22028296#22028296
     public class GroupChat:Hub
     {
         public static GroupContext Db = new GroupContext();
@@ -16,25 +18,35 @@ namespace aehyok.SignalR.Server
         public override async Task OnConnectedAsync()
         {
             // 查询用户。
-            var user = Db.Users.SingleOrDefault(u => u.UserName == Context.ConnectionId);
+            var user = Db.Users.SingleOrDefault(u => u.ConnectionId == Context.ConnectionId);
 
             //判断用户是否存在,否则添加
             if (user == null)
             {
                 user = new GroupContext.User()
                 {
-                    UserName = Context.ConnectionId
+                    ConnectionId = Context.ConnectionId
                 };
                 Db.Users.Add(user);
             }
 
             //发送房间列表
-            var itme = from a in Db.Rooms
+            var roomList = from a in Db.Rooms
                        select new { a.RoomName };
             //Clients.Client(this.Context.ConnectionId).getRoomlist(JsonConvert.SerializeObject(itme.ToList()));
-            await Clients.Client(this.Context.ConnectionId).InvokeAsync("getRoomlist",(JsonConvert.SerializeObject(itme.ToList())));
+            await Clients.Client(this.Context.ConnectionId).InvokeAsync("getRoomlist",(JsonConvert.SerializeObject(roomList.ToList())));
         }
 
+        public async Task OnConnectionedAfter(string userName)
+        {
+            var user = Db.Users.SingleOrDefault(item => item.ConnectionId == Context.ConnectionId);
+            user.UserName = userName;
+
+            //List<string> list = new List<string>();
+            //list.Add(Context.ConnectionId);
+            //await Clients.AllExcept(list).InvokeAsync("OnConnectionedExcept", UserList);
+            //await Clients.All.InvokeAsync("OnConnectionedExcept", UserList);
+        }
 
         /// <summary>
         /// 更新所有用户的房间列表
@@ -100,11 +112,11 @@ namespace aehyok.SignalR.Server
             if (room != null)
             {
                 //查找房间中是否存在此用户
-                var isuser = room.Users.FirstOrDefault(a => a.UserName == Context.ConnectionId);
+                var isuser = room.Users.FirstOrDefault(a => a.ConnectionId == Context.ConnectionId);
                 //不存在则加入
                 if (isuser == null)
                 {
-                    var user = Db.Users.Find(a => a.UserName == Context.ConnectionId);
+                    var user = Db.Users.Find(a => a.ConnectionId == Context.ConnectionId);
                     user.Rooms.Add(room);
                     room.Users.Add(user);
                     await Groups.AddAsync(Context.ConnectionId, roomName);
@@ -121,7 +133,7 @@ namespace aehyok.SignalR.Server
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            var user = Db.Users.FirstOrDefault(u => u.UserName == Context.ConnectionId);
+            var user = Db.Users.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
 
             //判断用户是否存在,存在则删除
             if (user != null)
@@ -178,7 +190,7 @@ namespace aehyok.SignalR.Server
             if (room != null)
             {
                 //查找要删除的用户
-                var user = room.Users.FirstOrDefault(a => a.UserName == Context.ConnectionId);
+                var user = room.Users.FirstOrDefault(a => a.ConnectionId == Context.ConnectionId);
                 //移除此用户
                 room.Users.Remove(user);
                 //如果房间人数为0,则删除房间
