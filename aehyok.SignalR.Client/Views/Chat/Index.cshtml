@@ -43,6 +43,15 @@
             }
         });
 
+
+        hubConnection.on("AddRoom", roomname => {
+            $("#ChatRoomName").html(roomname);
+            $("#BtnSubmitMessage").attr("data-id", roomname);
+            var cont = $('#chats');
+            var list = $('.chats', cont);
+            list.find("li").remove();
+        });
+
         hubConnection.on('ShowMessage', data => {
             $("#ChatRoomName").html(data);
             $("#BtnSubmitMessage").attr("data-id", data);
@@ -59,10 +68,10 @@
         //    list.find("li").remove();
         //}
 
-        hubConnection.on('SendMessage', data => {
+        hubConnection.on('SendMessage',data => {
             var userName = data.UserName;
             var content = data.Content;
-            var time = ChangeDateFormat(data.SendTime);
+            var time = data.SendTime;
             var cont = $('#chats');
             var list = $('.chats', cont);
             var html = '<li class=\"in\"><img class=\"avatar\" alt=\"\" src=\"../theme/assets/layouts/layout/img/avatar2.jpg\" />'
@@ -131,10 +140,41 @@
         var roomname = $("#BtnSubmitMessage").attr("data-id");
         hubConnection.invoke('SendMessage',roomname, message);
     }
+
     function RemoveRoom(btn) {
         var room = $(btn).parent();
         var roomname = $(room).attr("roomname");
         chat.server.removeFromRoom(roomname);
+    }
+
+    //日期格式转换
+    function ChangeDateFormat(jsondate) {
+        if (jsondate === "") { return ""; }
+        jsondate = jsondate.replace("/Date(", "").replace(")/", "");
+        if (jsondate.indexOf("+") > 0) {
+            jsondate = jsondate.substring(0, jsondate.indexOf("+"));
+        }
+        else if (jsondate.indexOf("-") > 0) {
+            jsondate = jsondate.substring(0, jsondate.indexOf("-"));
+        }
+        var date = new Date(parseInt(jsondate, 10));
+        var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+        var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+        var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+        var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+        var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+        return date.getFullYear()
+            + "年"
+            + month
+            + "月"
+            + currentDate
+            + "日"
+            + " "
+            + hours
+            + ":"
+            + minutes
+            + ":"
+            + seconds;
     }
 </script>
 

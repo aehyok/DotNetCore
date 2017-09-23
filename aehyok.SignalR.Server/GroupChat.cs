@@ -79,7 +79,13 @@ namespace aehyok.SignalR.Server
         /// <param name="message">信息</param>
         public void SendMessage(string room, string message)
         {
-            Clients.Group(room).InvokeAsync("SendMessage",room,"test", message, DateTime.Now.ToString());
+            var obj = new
+            {
+                RoomName = room,
+                Content = message,
+                SendTime = DateTime.Now.ToString()
+            };
+            Clients.Group(room).InvokeAsync("SendMessage", obj);
         }
 
         /// <summary>
