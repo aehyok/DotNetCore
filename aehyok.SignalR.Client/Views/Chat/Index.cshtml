@@ -19,7 +19,7 @@
         //进入页面后与Signalr进行握手建立连接
         $('#CreatRoom').click(function () {
             if (roomcount < 15) {
-                hubConnection.invoke('CreateRoom', $("#Roomname").val());
+                hubConnection.invoke('CreateRoom', $("#RoomName").val());
                 roomcount++;
             } else {
                 alert("聊天窗口只允许有15个");
@@ -46,9 +46,9 @@
         });
 
 
-        hubConnection.on("AddRoom", roomname => {
-            $("#ChatRoomName").html(roomname);
-            $("#BtnSubmitMessage").attr("data-id", roomname);
+        hubConnection.on("AddRoom", roomName => {
+            $("#ChatRoomName").html(roomName);
+            $("#BtnSubmitMessage").attr("data-id", roomName);
             var cont = $('#chats');
             var list = $('.chats', cont);
             list.find("li").remove();
@@ -133,20 +133,20 @@
         
     });
 
-    function AddRoom(roomname) {
-        hubConnection.invoke('addToRoom', roomname);
+    function AddRoom(roomName) {
+        hubConnection.invoke('addToRoom', roomName);
     }
 
     //点击发送按钮并调用服务进行推送消息（此处注意SendMessage方法定义在Dashboard.js中）
     function SendMessage(message) {
-        var roomname = $("#BtnSubmitMessage").attr("data-id");
-        hubConnection.invoke('SendMessage',roomname, message);
+        var roomName = $("#BtnSubmitMessage").attr("data-id");
+        hubConnection.invoke('SendMessage', roomName, message);
     }
 
     function RemoveRoom(btn) {
         var room = $(btn).parent();
-        var roomname = $(room).attr("roomname");
-        chat.server.removeFromRoom(roomname);
+        var roomName = $(room).attr("roomName");
+        chat.server.removeFromRoom(roomName);
     }
 
     //日期格式转换
@@ -186,8 +186,8 @@
         <div style="float: left;" id="username">@User.Identity.Name</div>
     </div>
 </div>
-    输入聊天室名:
-<input type="text" value="asdasd" id="Roomname" />
+    房间名:
+<input type="text" value="Hello" id="RoomName" />
 <button id="CreatRoom" class="btn btn-primary green fa fa-edit">创建聊天室</button>
 
 <div class="row">
