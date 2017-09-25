@@ -39,8 +39,10 @@ namespace aehyok.SignalR.Server
                     UserList.Add(user);
                 }
             }
-            List<string> list = new List<string>();
-            list.Add(Context.ConnectionId);
+            List<string> list = new List<string>
+            {
+                Context.ConnectionId
+            };
             //await Clients.AllExcept(list).InvokeAsync("OnConnectionedExcept", $"{Context.ConnectionId}");
             await Clients.Client(Context.ConnectionId).InvokeAsync("OnConnectionedMe", $"{Context.ConnectionId}");
         }
@@ -56,8 +58,10 @@ namespace aehyok.SignalR.Server
             var user=UserList.SingleOrDefault(item => item.ConnectionId == parameter.ConnectionId);
             user.UserName = parameter.UserName;
 
-            List<string> list = new List<string>();
-            list.Add(Context.ConnectionId);
+            List<string> list = new List<string>
+            {
+                Context.ConnectionId
+            };
             //await Clients.AllExcept(list).InvokeAsync("OnConnectionedExcept", UserList);
             await Clients.All.InvokeAsync("OnConnectionedExcept", UserList);
         }

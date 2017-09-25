@@ -9,7 +9,7 @@
     let hubConnection;
     $(function () {
         //建立链接
-        let hubUrl = 'http://192.168.1.23:5004/GroupChat';
+        let hubUrl = 'http://192.168.1.80:5004/GroupChat';
         let httpConnection = new signalR.HttpConnection(hubUrl);
         hubConnection = new signalR.HubConnection(httpConnection);
 
@@ -77,7 +77,7 @@
             var cont = $('#chats');
             var list = $('.chats', cont);
             var html = '<li class=\"in\"><img class=\"avatar\" alt=\"\" src=\"../theme/assets/layouts/layout/img/avatar2.jpg\" />'
-                + '<div class=\"message\"><span class=\"arrow\"> </span><a href=\"javascript:;\" class=\"name\"> ' + username + ' </a>'
+                + '<div class=\"message\"><span class=\"arrow\"> </span><a href=\"javascript:;\" class=\"name\"> ' + userName + ' </a>'
                 + '<span class=\"datetime\">' + time + ' </span><span class=\"body\">' + content + '</span></div></li>';
             list.append(html);
             var getLastPostPos = function () {

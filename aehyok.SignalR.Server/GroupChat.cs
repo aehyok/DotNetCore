@@ -34,7 +34,7 @@ namespace aehyok.SignalR.Server
             var roomList = from a in Db.Rooms
                        select new { a.RoomName };
             //Clients.Client(this.Context.ConnectionId).getRoomlist(JsonConvert.SerializeObject(itme.ToList()));
-            await Clients.Client(this.Context.ConnectionId).InvokeAsync("getRoomlist",(JsonConvert.SerializeObject(roomList.ToList())));
+            await Clients.Client(this.Context.ConnectionId).InvokeAsync("GetRoomlist",(JsonConvert.SerializeObject(roomList.ToList())));
         }
 
         public async Task OnConnectionedAfter(string userName)
@@ -91,8 +91,11 @@ namespace aehyok.SignalR.Server
         /// <param name="message">信息</param>
         public void SendMessage(string room, string message)
         {
+            var user = Db.Users.FirstOrDefault(item => item.ConnectionId == Context.ConnectionId);
+            var userName = user.UserName;
             var obj = new
             {
+                UserName= userName,
                 RoomName = room,
                 Content = message,
                 SendTime = DateTime.Now.ToString()
