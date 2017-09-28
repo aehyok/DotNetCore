@@ -1,4 +1,5 @@
-﻿using aehyok.Users.SignalR;
+﻿using aehyok.NLog;
+using aehyok.Users.SignalR;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System;
@@ -13,10 +14,12 @@ namespace aehyok.SignalR.Server
     //https://stackoverflow.com/questions/22002092/context-user-identity-name-is-null-with-signalr-2-x-x-how-to-fix-it/22028296#22028296
     public class GroupChat:Hub
     {
+        private static LogWriter Logger = new LogWriter();
         public static GroupContext Db = new GroupContext();
 
         public override async Task OnConnectedAsync()
         {
+            Logger.Info("OnConnectedAsync");
             // 查询用户。
             var user = Db.Users.SingleOrDefault(u => u.ConnectionId == Context.ConnectionId);
 
@@ -39,6 +42,7 @@ namespace aehyok.SignalR.Server
 
         public async Task OnConnectionedAfter(string userName)
         {
+            Logger.Info("OnConnectionedAfter");
             var user = Db.Users.SingleOrDefault(item => item.ConnectionId == Context.ConnectionId);
             user.UserName = userName;
 
@@ -53,6 +57,7 @@ namespace aehyok.SignalR.Server
         /// </summary>
         private async Task GetRoomList()
         {
+            Logger.Info("GetRoomList");
             var itme = from a in Db.Rooms
                        select new { a.RoomName };
             string jsondata = JsonConvert.SerializeObject(itme.ToList());
@@ -65,6 +70,7 @@ namespace aehyok.SignalR.Server
         /// <param name="roomName"></param>
         public async Task CreateRoom(string roomName)
         {
+            Logger.Info("CreateRoom");
             var room = Db.Rooms.Find(a => a.RoomName == roomName);
             if (room == null)
             {
@@ -91,6 +97,7 @@ namespace aehyok.SignalR.Server
         /// <param name="message">信息</param>
         public void SendMessage(string room, string message)
         {
+            Logger.Info("SendMessage");
             var user = Db.Users.FirstOrDefault(item => item.ConnectionId == Context.ConnectionId);
             var userName = user.UserName;
             var obj = new
@@ -109,6 +116,7 @@ namespace aehyok.SignalR.Server
         /// <param name="roomName"></param>
         public async Task AddToRoom(string roomName)
         {
+            Logger.Info("AddToRoom");
             //查询聊天室
             var room = Db.Rooms.Find(a => a.RoomName == roomName);
             //存在则加入
@@ -136,6 +144,7 @@ namespace aehyok.SignalR.Server
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
+            Logger.Info("OnDisconnectedAsync");
             var user = Db.Users.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
 
             //判断用户是否存在,存在则删除
@@ -187,6 +196,7 @@ namespace aehyok.SignalR.Server
         /// <param name="roomName"></param>
         public async Task RemoveFromRoom(string roomName)
         {
+            Logger.Info("RemoveFromRoom");
             //查找房间是否存在
             var room = Db.Rooms.Find(a => a.RoomName == roomName);
             //存在则进入删除

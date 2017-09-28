@@ -1,4 +1,5 @@
-﻿using aehyok.Users.SignalR;
+﻿using aehyok.NLog;
+using aehyok.Users.SignalR;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace aehyok.SignalR.Server
 {
     public class Chat : Hub
     {
+        private static LogWriter Logger = new LogWriter();
         public static List<UserInfo> UserList = new List<UserInfo>();
 
         /// <summary>
@@ -18,7 +20,7 @@ namespace aehyok.SignalR.Server
         /// <returns></returns>
         public override async Task OnConnectedAsync()
         {
-
+            Logger.Info("OnConnectedAsync");
             var user = UserList.SingleOrDefault(item => item.ConnectionId == Context.ConnectionId);  //查找已认证的用户是否存在于用户列表
             if (user != null)
             {
@@ -55,6 +57,7 @@ namespace aehyok.SignalR.Server
         /// <returns></returns>
         public async Task OnConnectionedAfter(UserInfo parameter)
         {
+            Logger.Info("OnConnectionedAfter");
             var user=UserList.SingleOrDefault(item => item.ConnectionId == parameter.ConnectionId);
             user.UserName = parameter.UserName;
 
@@ -68,6 +71,7 @@ namespace aehyok.SignalR.Server
 
         public override async Task OnDisconnectedAsync(Exception ex)
         {
+            Logger.Info("OnDisconnectedAsync");
             var user = UserList.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
 
             //判断用户是否存在,存在则删除
@@ -78,37 +82,38 @@ namespace aehyok.SignalR.Server
             await Clients.All.InvokeAsync("OnDisconneted", $"{Context.ConnectionId}");
         }
 
-        public Task Send(string message)
-        {
-            return Clients.All.InvokeAsync("Send", $"{Context.ConnectionId}: {message}");
-        }
+        //public Task Send(string message)
+        //{
+        //    return Clients.All.InvokeAsync("Send", $"{Context.ConnectionId}: {message}");
+        //}
 
-        public Task SendToGroup(string groupName, string message)
-        {
-            return Clients.Group(groupName).InvokeAsync("Send", $"{Context.ConnectionId}@{groupName}: {message}");
-        }
+        //public Task SendToGroup(string groupName, string message)
+        //{
+        //    return Clients.Group(groupName).InvokeAsync("Send", $"{Context.ConnectionId}@{groupName}: {message}");
+        //}
 
-        public async Task JoinGroup(string groupName)
-        {
-            await Groups.AddAsync(Context.ConnectionId, groupName);
+        //public async Task JoinGroup(string groupName)
+        //{
+        //    await Groups.AddAsync(Context.ConnectionId, groupName);
 
-            await Clients.Group(groupName).InvokeAsync("Send", $"{Context.ConnectionId} joined {groupName}");
-        }
+        //    await Clients.Group(groupName).InvokeAsync("Send", $"{Context.ConnectionId} joined {groupName}");
+        //}
 
-        public async Task LeaveGroup(string groupName)
-        {
-            await Groups.RemoveAsync(Context.ConnectionId, groupName);
+        //public async Task LeaveGroup(string groupName)
+        //{
+        //    await Groups.RemoveAsync(Context.ConnectionId, groupName);
 
-            await Clients.Group(groupName).InvokeAsync("Send", $"{Context.ConnectionId} left {groupName}");
-        }
+        //    await Clients.Group(groupName).InvokeAsync("Send", $"{Context.ConnectionId} left {groupName}");
+        //}
 
-        public Task Echo(string message)
-        {
-            return Clients.Client(Context.ConnectionId).InvokeAsync("Send", $"{Context.ConnectionId}: {message}");
-        }
+        //public Task Echo(string message)
+        //{
+        //    return Clients.Client(Context.ConnectionId).InvokeAsync("Send", $"{Context.ConnectionId}: {message}");
+        //}
 
         public async Task SendMessage(MessageContext context)
         {
+            Logger.Info("SendMessage");
             context.SendTime = DateTime.Now;
             var user = UserList.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
             context.UserName = user.UserName;
