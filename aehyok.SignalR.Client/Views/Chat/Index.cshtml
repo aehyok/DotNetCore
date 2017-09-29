@@ -13,10 +13,10 @@
         let httpConnection = new signalR.HttpConnection(hubUrl);
         hubConnection = new signalR.HubConnection(httpConnection);
 
-        //1、进行握手
+        //进行握手
         hubConnection.start();
 
-        //进入页面后与Signalr进行握手建立连接
+        //（监听服务端消息）进入页面后与Signalr进行握手建立连接
         $('#CreatRoom').click(function () {
             if (roomcount < 15) {
                 hubConnection.invoke('CreateRoom', $("#RoomName").val());
@@ -26,7 +26,7 @@
             };
         });
 
-        //注册查询房间列表的方法
+        //（监听服务端消息）注册查询房间列表的方法
         hubConnection.on('GetRoomlist', data => {
             if (data) {
                 var jsondata = $.parseJSON(data);
@@ -45,7 +45,7 @@
             }
         });
 
-
+        //（监听服务端消息）
         hubConnection.on("AddRoom", roomName => {
             $("#ChatRoomName").html(roomName);
             $("#BtnSubmitMessage").attr("data-id", roomName);
@@ -54,6 +54,7 @@
             list.find("li").remove();
         });
 
+        //（监听服务端消息）
         hubConnection.on('ShowMessage', data => {
             $("#ChatRoomName").html(data);
             $("#BtnSubmitMessage").attr("data-id", data);
@@ -61,20 +62,12 @@
             var list = $('.chats', cont);
             list.find("li").remove();
         });
-        //
-        //chat.client.showMessage = function (roomname) {
-        //    $("#ChatRoomName").html(roomname);
-        //    $("#BtnSubmitMessage").attr("data-id", roomname);
-        //    var cont = $('#chats');
-        //    var list = $('.chats', cont);
-        //    list.find("li").remove();
-        //}
 
-        hubConnection.on('SendMessage',data => {
+        //（监听服务端消息）接收处理消息
+        hubConnection.on('ReceiveMessage',data => {
             var userName = data.UserName;
             var content = data.Content;
             var time = data.SendTime;
-            debugger;
             var cont = $('#chats');
             var list = $('.chats', cont);
             var html = '<li class=\"in\"><img class=\"avatar\" alt=\"\" src=\"../theme/assets/layouts/layout2/img/avatar2.jpg\" />'
@@ -94,44 +87,6 @@
                 scrollTo: getLastPostPos()
             });
         });
-
-        ////服务端向所有在线客户端推送消息
-        //chat.client.sendMessage = function (roomname, username, message, time) {
-        //    var cont = $('#chats');
-        //    var list = $('.chats', cont);
-        //    var html = '<li class=\"in\"><img class=\"avatar\" alt=\"\" src=\"../theme/assets/layouts/layout/img/avatar2.jpg\" />' 
-        //        + '<div class=\"message\"><span class=\"arrow\"> </span><a href=\"javascript:;\" class=\"name\"> ' + username + ' </a>'
-        //        + '<span class=\"datetime\">'+time+' </span><span class=\"body\">' + message + '</span></div></li>';
-        //    list.append(html);
-        //    var getLastPostPos = function () {
-        //        var height = 0;
-        //        cont.find("li.out, li.in").each(function () {
-        //            height = height + $(this).outerHeight();
-        //        });
-
-        //        return height;
-        //    }
-
-        //    cont.find('.scroller').slimScroll({
-        //        scrollTo: getLastPostPos()
-        //    });
-        //}
-
-        //聊天室人数为0后，此聊天室自动移除
-        //chat.client.removeRoom = function (data) {
-        //    alert(data);
-        //}
-
-        //服务端向客户端推送房间
-        //chat.client.addRoom = function (roomname) {
-        //    $("#ChatRoomName").html(roomname);
-        //    $("#BtnSubmitMessage").attr("data-id", roomname);
-        //    var cont = $('#chats');
-        //    var list = $('.chats', cont);
-        //    list.find("li").remove();
-        //}
-
-        
     });
 
     function AddRoom(roomName) {

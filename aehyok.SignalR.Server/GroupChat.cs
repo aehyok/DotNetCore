@@ -17,6 +17,10 @@ namespace aehyok.SignalR.Server
         private static LogWriter Logger = new LogWriter();
         public static GroupContext Db = new GroupContext();
 
+        /// <summary>
+        /// 客户端与服务端进行握手 产生链接
+        /// </summary>
+        /// <returns></returns>
         public override async Task OnConnectedAsync()
         {
             Logger.Info("OnConnectedAsync");
@@ -45,11 +49,6 @@ namespace aehyok.SignalR.Server
             Logger.Info("OnConnectionedAfter");
             var user = Db.Users.SingleOrDefault(item => item.ConnectionId == Context.ConnectionId);
             user.UserName = userName;
-
-            //List<string> list = new List<string>();
-            //list.Add(Context.ConnectionId);
-            //await Clients.AllExcept(list).InvokeAsync("OnConnectionedExcept", UserList);
-            //await Clients.All.InvokeAsync("OnConnectionedExcept", UserList);
         }
 
         /// <summary>
@@ -107,7 +106,7 @@ namespace aehyok.SignalR.Server
                 Content = message,
                 SendTime = DateTime.Now.ToString()
             };
-            Clients.Group(room).InvokeAsync("SendMessage", obj);
+            Clients.Group(room).InvokeAsync("ReceiveMessage", obj);
         }
 
         /// <summary>
@@ -141,7 +140,11 @@ namespace aehyok.SignalR.Server
             }
         }
 
-
+        /// <summary>
+        /// 断开链接 移除当前用户 退出聊天室
+        /// </summary>
+        /// <param name="exception"></param>
+        /// <returns></returns>
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             Logger.Info("OnDisconnectedAsync");
@@ -159,36 +162,6 @@ namespace aehyok.SignalR.Server
                 }
             }
         }
-
-        ///// <summary>
-        ///// 加入聊天室
-        ///// </summary>
-        ///// <param name="roomName"></param>
-        //public  async Task AddToRoom(string roomName)
-        //{
-        //    //查询聊天室
-        //    var room = Db.Rooms.Find(a => a.RoomName == roomName);
-        //    //存在则加入
-        //    if (room != null)
-        //    {
-        //        //查找房间中是否存在此用户
-        //        var isuser = room.Users.FirstOrDefault(a => a.UserName == Context.ConnectionId);
-        //        //不存在则加入
-        //        if (isuser == null)
-        //        {
-        //            var user = Db.Users.Find(a => a.UserName == Context.ConnectionId);
-        //            user.Rooms.Add(room);
-        //            room.Users.Add(user);
-        //            await Groups.AddAsync(Context.ConnectionId, roomName);
-        //            //调用此连接用户的本地JS(显示房间)
-        //           await Clients.Client(Context.ConnectionId).InvokeAsync("AddRoom",roomName);
-        //        }
-        //        else
-        //        {
-        //            await Clients.Client(Context.ConnectionId).InvokeAsync("showMessage",roomName);
-        //        }
-        //    }
-        //}
 
         /// <summary>
         /// 退出聊天室

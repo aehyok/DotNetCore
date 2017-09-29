@@ -81,7 +81,7 @@
         //进行握手
         hubConnection.start();
 
-        //握手后的服务端回调Except
+        //（监听服务端消息）握手后的服务端回调Except
         hubConnection.on('OnConnectionedExcept', data => {
             $("#roomlist li").remove();
             for (var i = 0; i < data.length; i++) {
@@ -89,7 +89,7 @@
             }
         });
 
-        //握手后的服务端回调Me
+        //（监听服务端消息）握手后的服务端回调Me
         hubConnection.on('OnConnectionedMe', data => {
             var parameter = new Object();
             var userName = $("#UserIdentityName").html();
@@ -99,12 +99,12 @@
             hubConnection.invoke('OnConnectionedAfter', parameter);
         });
 
-        //断开链接监听事件
+        //（监听服务端消息）断开链接监听事件
         hubConnection.on('OnDisconneted', data => {
             $("#Li" + data).parent.remove($("#Li" + data));
         });
 
-        //接收并显示消息
+        //（监听服务端消息）接收并显示消息
         hubConnection.on('ReceiveMessage', data => {
             var userName = data.UserName;
             var content = data.Content;
