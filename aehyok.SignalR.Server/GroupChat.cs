@@ -183,7 +183,6 @@ namespace aehyok.SignalR.Server
                 if (room.Users.Count <= 0)
                 {
                     Db.Rooms.Remove(room);
-
                 }
                 await Groups.RemoveAsync(Context.ConnectionId, roomName);
                 //提示客户端
