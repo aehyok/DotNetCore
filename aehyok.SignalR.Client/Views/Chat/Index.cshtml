@@ -9,7 +9,7 @@
     let hubConnection;
     $(function () {
         //建立链接
-        let hubUrl = 'http://aehyok.com:5004/GroupChat';
+        let hubUrl = 'http://localhost:5004/GroupChat';
         let httpConnection = new signalR.HttpConnection(hubUrl);
         hubConnection = new signalR.HubConnection(httpConnection);
 
@@ -74,6 +74,7 @@
             var userName = data.UserName;
             var content = data.Content;
             var time = data.SendTime;
+            debugger;
             var cont = $('#chats');
             var list = $('.chats', cont);
             var html = '<li class=\"in\"><img class=\"avatar\" alt=\"\" src=\"../theme/assets/layouts/layout2/img/avatar2.jpg\" />'

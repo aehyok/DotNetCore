@@ -27,7 +27,7 @@ namespace aehyok.SignalR.Server
         /// <summary>
         /// 发送消息时间
         /// </summary>
-        public DateTime SendTime { get; set; }
+        public string SendTime { get; set; }
 
         /// <summary>
         /// 发送人用户名

@@ -12,7 +12,7 @@ namespace aehyok.SignalR.Server
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("http://aehyok.com:5004")
+                .UseUrls("http://localhost:5004")
                 .Build();
     }
 }

@@ -11,11 +11,18 @@ namespace aehyok.SignalR.Server
 {
     public class Chat : Hub
     {
+        /// <summary>
+        /// 日志记录器
+        /// </summary>
         private static LogWriter Logger = new LogWriter();
+
+        /// <summary>
+        /// 用户列表
+        /// </summary>
         public static List<UserInfo> UserList = new List<UserInfo>();
 
         /// <summary>
-        /// 2、客户端开始与服务端进行握手 产生链接
+        /// 客户端开始与服务端进行握手 产生链接
         /// </summary>
         /// <returns></returns>
         public override async Task OnConnectedAsync()
@@ -45,12 +52,11 @@ namespace aehyok.SignalR.Server
             {
                 Context.ConnectionId
             };
-            //await Clients.AllExcept(list).InvokeAsync("OnConnectionedExcept", $"{Context.ConnectionId}");
             await Clients.Client(Context.ConnectionId).InvokeAsync("OnConnectionedMe", $"{Context.ConnectionId}");
         }
 
         /// <summary>
-        /// 5、客户端与服务端握手后的处理
+        /// 客户端与服务端握手后的处理（更新用户信息，以及通知在线用户）
         /// </summary>
         /// <param name="connectionId"></param>
         /// <param name="userName"></param>
@@ -65,10 +71,14 @@ namespace aehyok.SignalR.Server
             {
                 Context.ConnectionId
             };
-            //await Clients.AllExcept(list).InvokeAsync("OnConnectionedExcept", UserList);
             await Clients.All.InvokeAsync("OnConnectionedExcept", UserList);
         }
 
+        /// <summary>
+        /// 断开链接时在在线用户列表中移除用户
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <returns></returns>
         public override async Task OnDisconnectedAsync(Exception ex)
         {
             Logger.Info("OnDisconnectedAsync");
@@ -82,39 +92,15 @@ namespace aehyok.SignalR.Server
             await Clients.All.InvokeAsync("OnDisconneted", $"{Context.ConnectionId}");
         }
 
-        //public Task Send(string message)
-        //{
-        //    return Clients.All.InvokeAsync("Send", $"{Context.ConnectionId}: {message}");
-        //}
-
-        //public Task SendToGroup(string groupName, string message)
-        //{
-        //    return Clients.Group(groupName).InvokeAsync("Send", $"{Context.ConnectionId}@{groupName}: {message}");
-        //}
-
-        //public async Task JoinGroup(string groupName)
-        //{
-        //    await Groups.AddAsync(Context.ConnectionId, groupName);
-
-        //    await Clients.Group(groupName).InvokeAsync("Send", $"{Context.ConnectionId} joined {groupName}");
-        //}
-
-        //public async Task LeaveGroup(string groupName)
-        //{
-        //    await Groups.RemoveAsync(Context.ConnectionId, groupName);
-
-        //    await Clients.Group(groupName).InvokeAsync("Send", $"{Context.ConnectionId} left {groupName}");
-        //}
-
-        //public Task Echo(string message)
-        //{
-        //    return Clients.Client(Context.ConnectionId).InvokeAsync("Send", $"{Context.ConnectionId}: {message}");
-        //}
-
+        /// <summary>
+        /// 发送消息并通知接收用户接收消息
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async Task SendMessage(MessageContext context)
         {
             Logger.Info("SendMessage");
-            context.SendTime = DateTime.Now;
+            context.SendTime = DateTime.Now.ToString();
             var user = UserList.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
             context.UserName = user.UserName;
             context.ReceiveConnectionId = context.ReceiveConnectionId;
@@ -122,8 +108,8 @@ namespace aehyok.SignalR.Server
             if (user != null)
             {
                 //给指定用户发送,把自己的ID传过去
-                await Clients.Client(context.ReceiveConnectionId).InvokeAsync("ReceiveMessage", context);
-                await Clients.Client(Context.ConnectionId).InvokeAsync("ReceiveMessage", context);
+                await Clients.Client(context.ReceiveConnectionId).InvokeAsync("ReceiveMessage", context);  //接收用户接收消息
+                await Clients.Client(Context.ConnectionId).InvokeAsync("ReceiveMessage", context);         //将消息发送给自己（此处也可以直接通过前台JS变更消息记录）
             }
         }
     }

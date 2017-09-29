@@ -4,127 +4,6 @@
 }
 
 <link href="../theme/assets/apps/css/inbox.min.css" rel="stylesheet" type="text/css" />
-
-<script src="~/signalr-client.min.js"></script>
-
-<script type="text/javascript">
-    //聊天链接
-    let hubConnection;
-    $(function () {
-
-        //建立链接
-        let hubUrl = 'http://aehyok.com:5004/chat';
-        let httpConnection = new signalR.HttpConnection(hubUrl);
-        hubConnection = new signalR.HubConnection(httpConnection);
-
-        //1、进行握手
-        hubConnection.start();
-
-        //3、握手后的服务端回调Except
-        hubConnection.on('OnConnectionedExcept', data => {
-            $("#roomlist li").remove();
-            for (var i = 0; i < data.length; i++) {
-                AddChatUser(data[i].ConnectionId, data[i].UserName);
-            }
-        });
-
-        //3、握手后的服务端回调Me
-        hubConnection.on('OnConnectionedMe', data => {
-            var parameter = new Object();
-            var userName = $("#UserIdentityName").html();
-            parameter.ConnectionId = data;
-            parameter.UserName = userName;
-            //4、链接建立后处理信息
-            hubConnection.invoke('OnConnectionedAfter', parameter);
-        });
-
-        //断开链接监听事件
-        hubConnection.on('OnDisconneted', data => {
-            $("#Li" + data).parent.removeNode($("#Li" + data));
-        });
-
-        //接收并显示消息
-        hubConnection.on('ReceiveMessage', data => {
-            var userName = data.UserName;
-            var content = data.Content;
-            var time = ChangeDateFormat(data.SendTime);
-            var cont = $('#chats');
-            var list = $('.chats', cont);
-            var html = '<li class=\"in\"><img class=\"avatar\" alt=\"\" src=\"../theme/assets/layouts/layout2/img/avatar2.jpg\" />'
-                + '<div class=\"message\"><span class=\"arrow\"> </span><a href=\"javascript:;\" class=\"name\"> ' + userName + ' </a>'
-                + '<span class=\"datetime\">' + time + ' </span><span class=\"body\">' + content + '</span></div></li>';
-            list.append(html);
-            var getLastPostPos = function () {
-                var height = 0;
-                cont.find("li.out, li.in").each(function () {
-                    height = height + $(this).outerHeight();
-                });
-                return height;
-            }
-
-            cont.find('.scroller').slimScroll({
-                scrollTo: getLastPostPos()
-            });
-        });
-    });
-
-    //点击发送按钮并调用服务进行推送消息（此处注意SendMessage方法定义在Dashboard.js中）
-    function SendMessage(content) {
-        var connectionId = $("#BtnSubmitMessage").attr("data-id");
-        var parameter = new Object();
-        parameter.ReceiveConnectionId = connectionId;
-        parameter.Content = content;
-        hubConnection.invoke('SendMessage', parameter);
-    }
-
-    function AddChatUser(connectionId,userName)
-    {
-        var html = '<li id=\"li"+"' + connectionId + '\"><a href=\"javascript:void(0);\" onclick=\'AddRoom("' + connectionId + '","' + userName + '")\'><img class=\"contact-pic\" src=\"../theme/assets/pages/media/users/avatar7.jpg\">' +
-            '<span class=\"contact-name\">' + userName + '</span>' +
-            '<span class=\"contact-status bg-green\"></span></a></li>';
-        $("#roomlist").append(html);
-    }
-
-    //与指定联系人建立显示聊天窗口
-    function AddRoom(connectionId, userName) {
-        $("#ChatRoomName").html(userName);
-        $("#BtnSubmitMessage").attr("data-id", connectionId);
-        var cont = $('#chats');
-        var list = $('.chats', cont);
-        list.find("li").remove();
-    }
-
-    //日期格式转换
-    function ChangeDateFormat(jsondate) {
-        if (jsondate === "") { return ""; }
-        jsondate = jsondate.replace("/Date(", "").replace(")/", "");
-        if (jsondate.indexOf("+") > 0) {
-            jsondate = jsondate.substring(0, jsondate.indexOf("+"));
-        }
-        else if (jsondate.indexOf("-") > 0) {
-            jsondate = jsondate.substring(0, jsondate.indexOf("-"));
-        }
-        var date = new Date(parseInt(jsondate, 10));
-        var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
-        var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-        var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-        var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-        var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-        return date.getFullYear()
-            + "年"
-            + month
-            + "月"
-            + currentDate
-            + "日"
-            + " "
-            + hours
-            + ":"
-            + minutes
-            + ":"
-            + seconds;
-    }
-</script>
-
 <div style="display: none;">
     <div class="row">
         <div style="float: left;">名称:</div>
@@ -188,6 +67,99 @@
         </div>
     </div>
 </div>
+<script src="~/signalr-client.min.js"></script>
+<script type="text/javascript">
+    //聊天链接
+    let hubConnection;
+    $(function () {
+
+        //建立链接
+        let hubUrl = 'http://localhost:5004/chat';
+        let httpConnection = new signalR.HttpConnection(hubUrl);
+        hubConnection = new signalR.HubConnection(httpConnection);
+
+        //进行握手
+        hubConnection.start();
+
+        //握手后的服务端回调Except
+        hubConnection.on('OnConnectionedExcept', data => {
+            $("#roomlist li").remove();
+            for (var i = 0; i < data.length; i++) {
+                AddChatUser(data[i].ConnectionId, data[i].UserName);
+            }
+        });
+
+        //握手后的服务端回调Me
+        hubConnection.on('OnConnectionedMe', data => {
+            var parameter = new Object();
+            var userName = $("#UserIdentityName").html();
+            parameter.ConnectionId = data;
+            parameter.UserName = userName;
+            //链接建立后处理信息
+            hubConnection.invoke('OnConnectionedAfter', parameter);
+        });
+
+        //断开链接监听事件
+        hubConnection.on('OnDisconneted', data => {
+            $("#Li" + data).parent.remove($("#Li" + data));
+        });
+
+        //接收并显示消息
+        hubConnection.on('ReceiveMessage', data => {
+            var userName = data.UserName;
+            var content = data.Content;
+            var time = ChangeDateFormat(data.SendTime);
+            var cont = $('#chats');
+            var list = $('.chats', cont);
+            var html = '<li class=\"in\"><img class=\"avatar\" alt=\"\" src=\"../theme/assets/layouts/layout2/img/avatar2.jpg\" />'
+                + '<div class=\"message\"><span class=\"arrow\"> </span><a href=\"javascript:;\" class=\"name\"> ' + userName + ' </a>'
+                + '<span class=\"datetime\">' + time + ' </span><span class=\"body\">' + content + '</span></div></li>';
+            list.append(html);
+            var getLastPostPos = function () {
+                var height = 0;
+                cont.find("li.out, li.in").each(function () {
+                    height = height + $(this).outerHeight();
+                });
+                return height;
+            }
+
+            cont.find('.scroller').slimScroll({
+                scrollTo: getLastPostPos()
+            });
+        });
+    });
+
+    //点击发送按钮并调用服务进行推送消息（此处注意SendMessage方法定义在Dashboard.js中）
+    function SendMessage(content) {
+        var connectionId = $("#BtnSubmitMessage").attr("data-id");
+        var parameter = new Object();
+        parameter.ReceiveConnectionId = connectionId;
+        parameter.Content = content;
+        hubConnection.invoke('SendMessage', parameter);
+    }
+
+    function AddChatUser(connectionId, userName) {
+        var html = '<li id=\"li"+"' + connectionId + '\"><a href=\"javascript:void(0);\" onclick=\'AddRoom("' + connectionId + '","' + userName + '")\'><img class=\"contact-pic\" src=\"../theme/assets/pages/media/users/avatar7.jpg\">' +
+            '<span class=\"contact-name\">' + userName + '</span>' +
+            '<span class=\"contact-status bg-green\"></span></a></li>';
+        $("#roomlist").append(html);
+    }
+
+    //与指定联系人建立显示聊天窗口
+    function AddRoom(connectionId, userName) {
+        $("#ChatRoomName").html(userName);
+        $("#BtnSubmitMessage").attr("data-id", connectionId);
+        var cont = $('#chats');
+        var list = $('.chats', cont);
+        list.find("li").remove();
+    }
+
+    //日期格式转换
+    function ChangeDateFormat(jsondate) {
+        return jsondate;
+    }
+</script>
+
 
 
 
