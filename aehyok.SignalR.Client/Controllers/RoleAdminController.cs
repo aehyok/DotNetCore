@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using aehyok.SignalR.Client.Controllers;
+using System.Threading;
 
 namespace aehyok.SignalR.Client.Controllers
 {
@@ -21,13 +22,16 @@ namespace aehyok.SignalR.Client.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
+        private readonly AppIdentityDbContext _appIdentityDbContext;
+
 
         public RoleAdminController(
         UserManager<AppUser> userManager,
-        RoleManager<AppRole> roleManager)
+        RoleManager<AppRole> roleManager, AppIdentityDbContext appIdentityDbContext)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _appIdentityDbContext = appIdentityDbContext;
         }
 
 
@@ -63,7 +67,7 @@ namespace aehyok.SignalR.Client.Controllers
         public async Task<ActionResult> Edit(string id)
         {
             AppRole role = await _roleManager.FindByIdAsync(id);
-            string[] memberIDs = role.Users?.Select(x => x.Id).ToArray(); ;
+            string[] memberIDs = _appIdentityDbContext.UserRoles.Where(item => item.RoleId == role.Id).Select(Item=>Item.UserId).ToArray(); //null; //role.Users?.Select(x => x.Id).ToArray(); ;
             IEnumerable<AppUser> members
                     = _userManager.Users.Where(x => memberIDs.Any(y => y == x.Id));
             IEnumerable<AppUser> nonMembers = _userManager.Users.Except(members);
@@ -83,20 +87,26 @@ namespace aehyok.SignalR.Client.Controllers
             {
                 foreach (string userId in model.IdsToAdd ?? new string[] { })
                 {
-                    result = null; //await _userManager.AddToRoleAsync(userId, model.RoleName);
-                    if (!result.Succeeded)
+
+                    var userRole = new IdentityUserRole<string>
                     {
-                        return View("Error", result.Errors);
-                    }
+                        RoleId = model.RoleId,
+                        UserId = userId
+                    };
+
+                    await _appIdentityDbContext.UserRoles.AddAsync(userRole);
+                    await _appIdentityDbContext.SaveChangesAsync();
                 }
+
                 foreach (string userId in model.IdsToDelete ?? new string[] { })
                 {
-                    result = null;// await _userManager.RemoveFromRoleAsync(userId,
-                       //model.RoleName);
-                    if (!result.Succeeded)
+                    var userRole = new IdentityUserRole<string>
                     {
-                        return View("Error", result.Errors);
-                    }
+                        RoleId = model.RoleId,
+                        UserId = userId
+                    };
+                    _appIdentityDbContext.UserRoles.Remove(userRole);
+                    _appIdentityDbContext.SaveChanges();
                 }
                 return RedirectToAction("Index");
             }
@@ -132,21 +142,5 @@ namespace aehyok.SignalR.Client.Controllers
                 ModelState.AddModelError("", error.Description);
             }
         }
-
-        //private AppUserManager UserManager
-        //{
-        //    get
-        //    {
-        //        return HttpContext.GetOwinContext().GetUserManager<AppUserManager>();
-        //    }
-        //}
-
-        //private AppRoleManager RoleManager
-        //{
-        //    get
-        //    {
-        //        return HttpContext.GetOwinContext().GetUserManager<AppRoleManager>();
-        //    }
-        //}
     }
 }

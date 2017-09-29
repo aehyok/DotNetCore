@@ -8,15 +8,15 @@
 @Html.ValidationSummary()
 @using (Html.BeginForm())
 {
-    <input type="hidden" name="roleName" value="@Model.Role.Name" />
+    <input type="hidden" name="roleId" value="@Model.Role.Id" />
     <div class="panel panel-primary">
         <div class="panel-heading">Add To @Model.Role.Name</div>
         <table class="table table-striped">
-            @*@if (!Model.NonMembers.Any())
+            @if (!Model.NonMembers.Any())
             {
                 <tr><td colspan="2">All Users Are Members</td></tr>
             }
-            else*@
+            else
             {
                 <tr><td>User ID</td><td>Add To Role</td></tr>
                 @foreach (AppUser user in Model.NonMembers)

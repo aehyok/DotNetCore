@@ -14,7 +14,7 @@ namespace aehyok.Users.Models
 
         public AppRole(string name) : base(name) { }
 
-        public ICollection<AppUser> Users { get; set; }
+        //public ICollection<AppUser> Users { get; set; }
 
         public ICollection<AppMenu> Menus { get; set; }
     }

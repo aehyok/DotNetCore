@@ -46,17 +46,8 @@
                                         @*<td>@role.Id</td>*@
                                         <td>@role.Name</td>
                                         <td>
-                                            @if (role.Users == null || role.Users.Count == 0)
-                                            {
-                                                @: No Users in Role
-                                        }
-                                            else
-                                            {
-                                                <div>
-                                                    @*@string.Join(", ", role.Users.Select(x => Html.GetUserName(x.UserId)))*@
-                                                </div>
-                                            }
-                                    </td>
+
+                                        </td>
                                     <td>
                                         @using (Html.BeginForm("Delete", "RoleAdmin", new { id = role.Id }))
                                         {
