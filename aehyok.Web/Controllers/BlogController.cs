@@ -17,5 +17,15 @@ namespace aehyok.Web.Controllers
         {
             return View();
         }
+
+        public IActionResult TagIndex()
+        {
+            return View();
+        }
+
+        public IActionResult AddTag()
+        {
+            return View();
+        }
     }
 }
