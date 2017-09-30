@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.Web", "aehyok.Web\aehyok.Web.csproj", "{A25B2A99-A051-45F3-8C46-436494B0A48A}"
 EndProject
@@ -53,7 +53,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-DataBase", "5-DataBase", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.SignalR.Server", "aehyok.SignalR.Server\aehyok.SignalR.Server.csproj", "{3ED6984D-8CFC-4736-AAA8-E61E1641752E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.SignalR.Client", "aehyok.SignalR.Client\aehyok.SignalR.Client.csproj", "{7B3F191D-A842-4DF0-BAFB-F34FDF97EF09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.SignalR.Client", "aehyok.SignalR.Client\aehyok.SignalR.Client.csproj", "{7B3F191D-A842-4DF0-BAFB-F34FDF97EF09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.AliPay", "aehyok.AliPay\aehyok.AliPay.csproj", "{D3D296DE-111D-4B45-B93A-DFBD5638DF6B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -137,6 +139,10 @@ Global
 		{7B3F191D-A842-4DF0-BAFB-F34FDF97EF09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B3F191D-A842-4DF0-BAFB-F34FDF97EF09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B3F191D-A842-4DF0-BAFB-F34FDF97EF09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3D296DE-111D-4B45-B93A-DFBD5638DF6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3D296DE-111D-4B45-B93A-DFBD5638DF6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3D296DE-111D-4B45-B93A-DFBD5638DF6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3D296DE-111D-4B45-B93A-DFBD5638DF6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -161,6 +167,7 @@ Global
 		{33B31367-6C1F-486E-88E2-2F0AE7CDB6DC} = {6D3952E2-C26B-44C5-BECB-B9C7EC7AE623}
 		{3ED6984D-8CFC-4736-AAA8-E61E1641752E} = {28D18EC5-9238-470B-ADF1-2C0981669BDF}
 		{7B3F191D-A842-4DF0-BAFB-F34FDF97EF09} = {28D18EC5-9238-470B-ADF1-2C0981669BDF}
+		{D3D296DE-111D-4B45-B93A-DFBD5638DF6B} = {C36813B2-8C07-4648-91EC-0E8990F7156E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B16BE8D-B320-4179-BD82-C4100A7FBC09}
