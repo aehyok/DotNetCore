@@ -37,7 +37,14 @@ namespace aehyok.SignalR.Client.Controllers
 
         public ActionResult Index()
         {
-            return View(_roleManager.Roles);
+            var roleList = _roleManager.Roles;
+            foreach(var role in roleList)
+            {
+                var userIds = _appIdentityDbContext.UserRoles.Where(item => item.RoleId == role.Id).Select(item=>item.UserId).ToArray();
+                role.Users =string.Join( ',',_userManager.Users.Where(item => userIds.Contains(item.Id)).Select(item => item.UserName).ToArray());
+            }
+
+            return View(roleList);
         }
 
         public ActionResult Create()
