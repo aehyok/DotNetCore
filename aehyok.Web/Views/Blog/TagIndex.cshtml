@@ -30,7 +30,7 @@
                             <td>{{item.displayOrder}}</td>
                             <td>
                                 <button class="btn btn-primary btn-xs" v-on:click="edit(index,item)"><i class="icon-pencil"></i></button>
-                                <button class="btn btn-danger btn-xs" v-on:click="delete(index,item)"><i class="icon-trash "></i></button>
+                                <button class="btn btn-danger btn-xs" v-on:click="editTag(index,item)"><i class="icon-trash "></i></button>
                             </td>
                         </tr>
                     </tbody>
@@ -167,19 +167,23 @@
             },//分页方法
             edit(index, item)
             {
-                var url = "../Blog/Add?menuId=BlogAdd&type=header&id=" + item.id;
+                var url = "../Blog/AddTag?menuId=BlogAddTag&type=header&id=" + item.id;
                 window.open(url, "_self", "", false);
                 console.log("index" + index );
             },
-
-            deleteBlog(index,item)
-            {
-                var tempUrl = deleteUrl + item.id;
-                this.$http.delete(tempUrl).then((response) => {
-                    toastr.success("删除成功！");
-                    this.getTagData(url, this.pageCurrent, this.pagesize);
-                });
+            editTag(index, item) {
+                var url = "../Blog/Add?menuId=BlogAdd&type=header&id=" + item.id;
+                window.open(url, "_self", "", false);
                 console.log("index" + index);
+            },
+            delete(index, item)
+            {
+                //var tempUrl =  item.id;
+                ////this.$http.delete(tempUrl).then((response) => {
+                ////    toastr.success("删除成功！");
+                ////    this.getTagData(tagListUrl, this.pageCurrent, this.pagesize);
+                ////});
+                ////console.log("index" + index);
             },
             addTodo(newTodo) {
                 this.TagList.push(newTodo);
@@ -187,14 +191,6 @@
                 this.$http.post('/api/todo/PostTodo', newTodo).then(response => console.log(response));
                 this.newTodo = { id: null, Name: '', Task: false }
             },//添加任务，并且将数据post到URL
-
-            delete(index, id) {
-                if (!this.TagList[index].Task) {
-                    this.totalCount--;
-                }
-                this.$http.delete('/api/todo/DeleteTodo/' + id).then(response => console.log(response));
-                this.TagList.splice(index, 1);
-            },//删除任务，如果删除的任务是未完成的，那么将对未完成总数-1
 
             toggleTodo(index, id) {
                 var thistodo = !this.TagList[index].Task;

@@ -167,11 +167,18 @@ namespace aehyok.WebApi.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetTag/{Id:int}")]
+        [Route("Tag/{Id:int}")]
         public Tag GetTag(int id = 0)
         {
             var tag = this._blogTagRepository.Entities.FirstOrDefault(item => item.Id == id);
             return tag;
+        }
+
+        [HttpPost]
+        [Route("Tag")]
+        public async Task SaveTag(Tag tag)
+        {
+
         }
 
         /// <summary>

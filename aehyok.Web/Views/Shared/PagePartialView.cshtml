@@ -14,32 +14,32 @@
             <option value="40">40</option>
         </select>
     </span>
-    <template v-for="item in pageCount+1">
-        <span v-if="item==1" class="btn btn-default" v-on:click="showPage(1,$event)">
+    <template v-for="page in pageCount+1">
+        <span v-if="page==1" class="btn btn-default" v-on:click="showPage(1,$event)">
             首页
         </span>
-        <span v-if="item==1" class="btn btn-default" v-on:click="showPage(pageCurrent-1,$event)">
+        <span v-if="page==1" class="btn btn-default" v-on:click="showPage(pageCurrent-1,$event)">
             上一页
         </span>
-        <span v-if="item==1" class="btn btn-default" v-on:click="showPage(item,$event)">
-            {{item}}
+        <span v-if="page==1" class="btn btn-default" v-on:click="showPage(page,$event)">
+            {{page}}
         </span>
-        <span v-if="item==1&&item<showPagesStart-1" class="btn btn-default disabled">
+        <span v-if="page==1&&page<showPagesStart-1" class="btn btn-default disabled">
             ...
         </span>
-        <span v-if="item>1&&item<=pageCount-1&&item>=showPagesStart&&item<=showPageEnd&&item<=pageCount" class="btn btn-default" v-on:click="showPage(item,$event)">
-            {{item}}
+        <span v-if="page>1&&page<=pageCount-1&&page>=showPagesStart&&page<=showPageEnd&&page<=pageCount" class="btn btn-default" v-on:click="showPage(page,$event)">
+            {{page}}
         </span>
-        <span v-if="item==pageCount&&item>showPageEnd+1" class="btn btn-default disabled">
+        <span v-if="page==pageCount&&page>showPageEnd+1" class="btn btn-default disabled">
             ...
         </span>
-        <span v-if="item==pageCount" class="btn btn-default" v-on:click="showPage(item,$event)">
-            {{item}}
+        <span v-if="page==pageCount" class="btn btn-default" v-on:click="showPage(page,$event)">
+            {{page}}
         </span>
-        <span v-if="item==pageCount" class="btn btn-default" v-on:click="showPage(pageCurrent+1,$event)">
+        <span v-if="page==pageCount" class="btn btn-default" v-on:click="showPage(pageCurrent+1,$event)">
             下一页
         </span>
-        <span v-if="item==pageCount" class="btn btn-default" v-on:click="showPage(pageCount,$event)">
+        <span v-if="page==pageCount" class="btn btn-default" v-on:click="showPage(pageCount,$event)">
             尾页
         </span>
     </template>
