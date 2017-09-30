@@ -121,13 +121,14 @@ namespace aehyok.WebApi.Controllers
         /// <summary>
         /// 获取文章分类列表
         /// </summary>
-        /// <param name="pageIndex"></param>
+        /// <param name="pageIndex">第几页</param>
+        /// <param name="pageSize">一页多少行</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("Tag/{pageIndex:int}")]
-        public TagModel GetTagList(int pageIndex)
+        [Route("TagList/{pageIndex:int}/{pageSize:int}")]
+        public TagModel GetTagList(int pageIndex,int pageSize)
         {
-            var list = Utility.CollectionExtensions.Where<Tag, int>(_blogTagRepository.Entities, m => m.Id > 0, pageIndex, 8, out int total);
+            var list = Utility.CollectionExtensions.Where<Tag, int>(_blogTagRepository.Entities, m => m.Id > 0, pageIndex, pageSize, out int total);
             var result = list.ToList().Select(item => new Tag()
             {
                 Id = item.Id,

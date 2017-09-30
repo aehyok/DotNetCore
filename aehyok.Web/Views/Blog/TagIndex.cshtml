@@ -1,0 +1,212 @@
+﻿
+@{
+    ViewData["Title"] = "TagIndex";
+    var type = ViewBag.Type as string;
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<h2>TagIndex</h2>
+<div class="row" id="TagList">
+    <div class="col-lg-12">
+        <section class="panel">
+            <header class="panel-heading">
+                <button type="button" class="btn btn-info">添加标签</button>
+            </header>
+            <div class="adv-table">
+                <table class="table table-striped table-advance table-bordered">
+                    <thead>
+                        <tr>
+                            <th><i></i> Id</th>
+                            <th><i class="icon-question-sign"></i>Name</th>
+                            <th><i class="icon-bookmark"></i> DisplayOrder</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item,index) in TagList">
+                            <td>{{index+1}}</td>
+                            <td><a href="#">{{item.name}}</a></td>
+                            <td>{{item.displayOrder}}</td>
+                            <td>
+                                <button class="btn btn-primary btn-xs" v-on:click="edit(index,item)"><i class="icon-pencil"></i></button>
+                                <button class="btn btn-danger btn-xs" v-on:click="delete(index,item)"><i class="icon-trash "></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            @Html.Partial("PagePartialView")
+        </section>
+    </div>
+</div>
+<script>
+    //数组删除某项功能
+    Array.prototype.remove = function (dx) {
+        if (isNaN(dx) || dx > this.length) { return false; }
+        for (var i = 0, n = 0; i < this.length; i++) {
+            if (this[i] != this[dx]) {
+                this[n++] = this[i]
+            }
+        }
+        this.length -= 1
+    }
+
+    //http://www.jianshu.com/p/addd2bab739f?from=timeline 样例
+    Vue.prototype.$http = axios;
+    var url = "http://localhost:5001" + "/api/Blog/";
+
+    var tagListUrl = url + "TagList/";
+
+    var selectUrl =url +"Article/";
+    var deleteUrl = url+"Article/";
+    var vue=new Vue({
+        el: "#TagList",
+        data: {
+            TagList: [],//空的初始化数据
+
+            //总项目数
+            totalCount: 200,
+            //分页数
+            pageCount: 20,
+            //当前页面
+            pageCurrent: 1,
+            //分页大小
+            pagesize: 8,
+            //显示分页按钮数
+            showPages: 11,
+            //开始显示的分页按钮
+            showPagesStart: 1,
+            //结束显示的分页按钮
+            showPageEnd: 100,
+            newTodo: { id: null, Name: '', Task: false }//新建默认数据
+        },
+        mounted() {
+            //this.getTagData(tagListUrl, '1','3');//通过this.getData的URL取得API数据
+            this.showPage(1, null, true);
+        },
+        computed: {
+            remaining: function () {
+                return this.totalCount;
+            }
+        },//这里我们声明了一个计算属性 remaining,通过返回this.num的值做为未完成总数
+        methods: {//VUE事件处理器
+            getTagData(url, pageCurrent,pageSize) {
+                var tempUrl = tagListUrl + pageCurrent + "/" + pageSize;
+                this.$http.get(tempUrl).then((response) => {
+                    this.TagList = response.data.tagList;
+                    this.totalCount = response.data.count;
+                    this.pageCount = Math.ceil(this.totalCount / this.pagesize);
+                    this.showPages = this.pageCount-4;   //要显示的分页数
+                });
+            },//this.getData取得数据库数据，并取得未完成事件总数
+
+            showPage: function (pageIndex, $event, forceRefresh) {
+                console.log('当前页数为' + pageIndex);
+                this.getTagData(url, pageIndex, this.pagesize);
+                if (pageIndex > 0) {
+
+
+                    if (pageIndex > this.pageCount) {
+                        pageIndex = this.pageCount;
+                    }
+
+                    //判断数据是否需要更新
+                    var currentPageCount = Math.ceil(this.totalCount / this.pagesize);
+                    if (currentPageCount != this.pageCount) {
+                        pageIndex = 1;
+                        this.pageCount = currentPageCount;
+                    }
+                    else if (this.pageCurrent == pageIndex && currentPageCount == this.pageCount && typeof (forceRefresh) == "undefined") {
+                        console.log("not refresh");
+                        return;
+                    }
+
+                    //处理分页点中样式
+                    var buttons = $("#pager").find("span");
+                    for (var i = 0; i < buttons.length; i++) {
+                        if (buttons.eq(i).html() != pageIndex) {
+                            buttons.eq(i).removeClass("active");
+                        }
+                        else {
+                            buttons.eq(i).addClass("active");
+                        }
+                    }
+
+                    ////测试数据 随机生成的
+                    //var newPageInfo = [];
+                    //for (var i = 0; i < this.pagesize; i++) {
+                    //    newPageInfo[newPageInfo.length] = {
+                    //        name: "test" + (i + (pageIndex - 1) * 20),
+                    //        age: (i + (pageIndex - 1) * 20)
+                    //    };
+                    //}
+                    this.pageCurrent = pageIndex;
+                    //this.arrayData = newPageInfo;
+
+                    //计算分页按钮数据
+                    if (this.pageCount > this.showPages) {
+                        if (pageIndex <= (this.showPages - 1) / 2) {
+                            this.showPagesStart = 1;
+                            this.showPageEnd = this.showPages - 1;
+                            console.log("showPage1")
+                        }
+                        else if (pageIndex >= this.pageCount - (this.showPages - 3) / 2) {
+                            this.showPagesStart = this.pageCount - this.showPages + 2;
+                            this.showPageEnd = this.pageCount;
+                            console.log("showPage2")
+                        }
+                        else {
+                            console.log("showPage3")
+                            this.showPagesStart = pageIndex - (this.showPages - 3) / 2;
+                            this.showPageEnd = pageIndex + (this.showPages - 3) / 2;
+                        }
+                    }
+                    console.log("showPagesStart:" + this.showPagesStart + ",showPageEnd:" + this.showPageEnd + ",pageIndex:" + pageIndex);
+                }
+            },//分页方法
+            edit(index, item)
+            {
+                var url = "../Blog/Add?menuId=BlogAdd&type=header&id=" + item.id;
+                window.open(url, "_self", "", false);
+                console.log("index" + index );
+            },
+
+            deleteBlog(index,item)
+            {
+                var tempUrl = deleteUrl + item.id;
+                this.$http.delete(tempUrl).then((response) => {
+                    toastr.success("删除成功！");
+                    this.getTagData(url, this.pageCurrent, this.pagesize);
+                });
+                console.log("index" + index);
+            },
+            addTodo(newTodo) {
+                this.TagList.push(newTodo);
+                this.totalCount++;
+                this.$http.post('/api/todo/PostTodo', newTodo).then(response => console.log(response));
+                this.newTodo = { id: null, Name: '', Task: false }
+            },//添加任务，并且将数据post到URL
+
+            delete(index, id) {
+                if (!this.TagList[index].Task) {
+                    this.totalCount--;
+                }
+                this.$http.delete('/api/todo/DeleteTodo/' + id).then(response => console.log(response));
+                this.TagList.splice(index, 1);
+            },//删除任务，如果删除的任务是未完成的，那么将对未完成总数-1
+
+            toggleTodo(index, id) {
+                var thistodo = !this.TagList[index].Task;
+                var thisdata = {
+                    Name: this.TagList[index].Name,
+                    Task: thistodo
+                };
+                this.$http.put('/api/todo/puttodo/' + id, thisdata
+                ).then(response => console.log(response));
+                thistodo ? this.totalCount-- : this.totalCount++;
+                this.TagList[index].Task = thistodo;
+            }
+        },//完成任务或者撤销任务
+    });
+</script>
