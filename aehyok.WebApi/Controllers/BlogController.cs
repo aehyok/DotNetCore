@@ -176,9 +176,9 @@ namespace aehyok.WebApi.Controllers
 
         [HttpPost]
         [Route("Tag")]
-        public async Task SaveTag(Tag tag)
+        public async Task SaveTag([FromBody]Tag tag)
         {
-
+            await this._blogTagRepository.InsertAsync(tag);
         }
 
         /// <summary>
@@ -192,6 +192,7 @@ namespace aehyok.WebApi.Controllers
         {
             await this._blogTagRepository.DeleteAsync(id);
         }
+
         /// <summary>
         /// ±£´æ²©¿ÍÎÄÕÂ
         /// </summary>
