@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.Web", "aehyok.Web\aehyok.Web.csproj", "{A25B2A99-A051-45F3-8C46-436494B0A48A}"
 EndProject
@@ -56,6 +56,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.SignalR.Client", "aehyok.SignalR.Client\aehyok.SignalR.Client.csproj", "{8FF8872F-AFA3-4C9A-8F65-9948AF1A51D4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.AliPay", "aehyok.AliPay\aehyok.AliPay.csproj", "{1DC026A9-B867-4352-83C8-B6BC7475F00A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.IdentityServer4", "aehyok.IdentityServer4\aehyok.IdentityServer4.csproj", "{0C7BF96D-A203-4D56-A48A-36169CB93D44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,6 +145,10 @@ Global
 		{1DC026A9-B867-4352-83C8-B6BC7475F00A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DC026A9-B867-4352-83C8-B6BC7475F00A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DC026A9-B867-4352-83C8-B6BC7475F00A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C7BF96D-A203-4D56-A48A-36169CB93D44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C7BF96D-A203-4D56-A48A-36169CB93D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C7BF96D-A203-4D56-A48A-36169CB93D44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C7BF96D-A203-4D56-A48A-36169CB93D44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -168,6 +174,7 @@ Global
 		{3ED6984D-8CFC-4736-AAA8-E61E1641752E} = {28D18EC5-9238-470B-ADF1-2C0981669BDF}
 		{8FF8872F-AFA3-4C9A-8F65-9948AF1A51D4} = {28D18EC5-9238-470B-ADF1-2C0981669BDF}
 		{1DC026A9-B867-4352-83C8-B6BC7475F00A} = {C36813B2-8C07-4648-91EC-0E8990F7156E}
+		{0C7BF96D-A203-4D56-A48A-36169CB93D44} = {C36813B2-8C07-4648-91EC-0E8990F7156E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B16BE8D-B320-4179-BD82-C4100A7FBC09}
