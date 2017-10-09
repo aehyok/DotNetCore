@@ -4,6 +4,7 @@ using aehyok.Model.Blog;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -45,12 +46,65 @@ namespace aehyok.Core.Data.Entity
             //    var method = SetGlobalQueryMethod.MakeGenericMethod(type);
             //    method.Invoke(this, new object[] { builder });
             //}
+
+            foreach (var type in GetEntityTypes())
+            {
+
+                var method = SetGlobalQueryMethod.MakeGenericMethod(type);
+                method.Invoke(this, new object[] { builder });
+            }
+        }
+
+        private static IList<Type> _entityTypeCache;
+        private static IList<Type> GetEntityTypes()
+        {
+            if (_entityTypeCache != null)
+            {
+                return _entityTypeCache.ToList();
+            }
+
+            _entityTypeCache = (from a in GetReferencingAssemblies()
+                                from t in a.DefinedTypes
+                                where t.BaseType == typeof(EntityBase<int>)
+                                select t.AsType()).ToList();
+
+            return _entityTypeCache;
+        }
+
+        /// <summary>
+        /// 获取当前引用的dll文件列表
+        /// </summary>
+        /// <returns></returns>
+        private static IEnumerable<Assembly> GetReferencingAssemblies()
+        {
+            var assemblies = new List<Assembly>();
+            var dependencies = DependencyContext.Default.RuntimeLibraries;
+
+            foreach (var library in dependencies)
+            {
+                try
+                {
+                    if(library.Name.Contains("aehyok"))
+                    {
+                        var assembly = Assembly.Load(new AssemblyName(library.Name));
+                        assemblies.Add(assembly);
+                    }
+                }
+                catch (FileNotFoundException)
+                { }
+            }
+            return assemblies;
         }
 
         static readonly MethodInfo SetGlobalQueryMethod = typeof(CodeFirstDbContext).GetMethods(BindingFlags.Public | BindingFlags.Instance)
                                                         .Single(t => t.IsGenericMethod && t.Name == "SetGlobalQuery");
 
-        public void SetGlobalQuery<T>(ModelBuilder builder) where T :EntityBase<object>
+        /// <summary>
+        /// 设置全局查询过滤
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="builder"></param>
+        public void SetGlobalQuery<T>(ModelBuilder builder) where T :EntityBase<int>
         {
             builder.Entity<T>().HasKey(e => e.Id);
             builder.Entity<T>().HasQueryFilter(e => !e.IsDeleted);

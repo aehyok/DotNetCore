@@ -30,7 +30,7 @@
                             <td>{{item.displayOrder}}</td>
                             <td>
                                 <button class="btn btn-primary btn-xs" v-on:click="edit(index,item)"><i class="icon-pencil"></i></button>
-                                <button class="btn btn-danger btn-xs" v-on:click="editTag(index,item)"><i class="icon-trash "></i></button>
+                                <button class="btn btn-danger btn-xs" v-on:click="deleteTag(index,item)"><i class="icon-trash "></i></button>
                             </td>
                         </tr>
                     </tbody>
@@ -59,7 +59,7 @@
     var tagListUrl = url + "TagList/";
 
     var selectUrl =url +"Article/";
-    var deleteUrl = url+"Article/";
+    var deleteUrl = url+"Tag/";
     var vue=new Vue({
         el: "#TagList",
         data: {
@@ -72,7 +72,7 @@
             //当前页面
             pageCurrent: 1,
             //分页大小
-            pagesize: 8,
+            pageSize: 8,
             //显示分页按钮数
             showPages: 11,
             //开始显示的分页按钮
@@ -96,14 +96,14 @@
                 this.$http.get(tempUrl).then((response) => {
                     this.TagList = response.data.tagList;
                     this.totalCount = response.data.count;
-                    this.pageCount = Math.ceil(this.totalCount / this.pagesize);
+                    this.pageCount = Math.ceil(this.totalCount / this.pageSize);
                     this.showPages = this.pageCount-4;   //要显示的分页数
                 });
             },//this.getData取得数据库数据，并取得未完成事件总数
 
             showPage: function (pageIndex, $event, forceRefresh) {
                 console.log('当前页数为' + pageIndex);
-                this.getTagData(url, pageIndex, this.pagesize);
+                this.getTagData(url, pageIndex, this.pageSize);
                 if (pageIndex > 0) {
 
 
@@ -112,7 +112,7 @@
                     }
 
                     //判断数据是否需要更新
-                    var currentPageCount = Math.ceil(this.totalCount / this.pagesize);
+                    var currentPageCount = Math.ceil(this.totalCount / this.pageSize);
                     if (currentPageCount != this.pageCount) {
                         pageIndex = 1;
                         this.pageCount = currentPageCount;
@@ -171,9 +171,12 @@
                 window.open(url, "_self", "", false);
                 console.log("index" + index );
             },
-            editTag(index, item) {
-                var url = "../Blog/Add?menuId=BlogAdd&type=header&id=" + item.id;
-                window.open(url, "_self", "", false);
+            deleteTag(index, item) {
+                var tempUrl = deleteUrl+item.id;
+                this.$http.delete(tempUrl).then((response) => {
+                    toastr.success("删除成功！");
+                    this.getTagData(tagListUrl, this.pageCurrent, this.pageSize);
+                });
                 console.log("index" + index);
             },
             delete(index, item)
