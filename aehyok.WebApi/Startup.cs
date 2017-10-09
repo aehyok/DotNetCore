@@ -96,6 +96,14 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
                     item.DateFormatString = "yyyy年MM月dd日HH时mm分ss秒";
                 });
 
+            services.AddAuthentication("Bearer")
+            .AddIdentityServerAuthentication(options =>
+            {
+                options.Authority = "http://localhost:5000";
+                options.RequireHttpsMetadata = false;
+
+                options.ApiName = "api1";
+            });
             AddSwagger(services);
 
 
@@ -129,14 +137,6 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
 
             // this uses the policy called "default"
             app.UseCors("default");
-
-            //app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
-            //{
-            //    Authority = "http://localhost:5000",
-            //    RequireHttpsMetadata = false,
-
-            //    ApiName = "api1"
-            //});
 
             app.UseMvc();
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
