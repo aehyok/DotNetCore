@@ -46,8 +46,9 @@ namespace aehyok.Services
 
         public async Task<int> InsertBlog(Article article, string tags)
         {
-            this.UnitOfWork.TransactionEnabled = true;
+            
             await this._articleRepository.InsertAsync(article);
+            this.UnitOfWork.TransactionEnabled = true;
             foreach (var item in tags.Split(','))
             {
                 ArticleTag articleTag = new ArticleTag()

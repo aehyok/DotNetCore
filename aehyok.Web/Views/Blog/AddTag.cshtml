@@ -74,9 +74,11 @@
                     DisplayOrder: this.displayOrder
                 })
                     .then(function (response) {
+                        toastr.success("保存成功！");
                         console.log(response);
                     })
                     .catch(function (error) {
+                        toastr.success("保存失败！");
                         console.log(error);
                     });
             }

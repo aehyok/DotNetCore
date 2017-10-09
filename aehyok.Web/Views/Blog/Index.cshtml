@@ -172,7 +172,7 @@
             //当前页面
             pageCurrent: 1,
             //分页大小
-            pagesize: 8,
+            pageSize: 8,
             //显示分页按钮数
             showPages: 11,
             //开始显示的分页按钮
@@ -191,19 +191,19 @@
             }
         },//这里我们声明了一个计算属性 remaining,通过返回this.num的值做为未完成总数
         methods: {//VUE事件处理器
-            getArticleData(url, pageCurrent,pageSize) {
+            getArticleData(url, pageCurrent, pageSize) {
                 var tempUrl = selectUrl + pageCurrent + "/" + pageSize;
                 this.$http.get(tempUrl).then((response) => {
                     this.ArticleList = response.data.articleList;
                     this.totalCount = response.data.count;
-                    this.pageCount = Math.ceil(this.totalCount / this.pagesize);
+                    this.pageCount = Math.ceil(this.totalCount / this.pageSize);
                     this.showPages = this.pageCount-4;   //要显示的分页数
                 });
             },//this.getData取得数据库数据，并取得未完成事件总数
 
             showPage: function (pageIndex, $event, forceRefresh) {
                 console.log('当前页数为' + pageIndex);
-                this.getArticleData(url, pageIndex, this.pagesize);
+                this.getArticleData(url, pageIndex, this.pageSize);
                 if (pageIndex > 0) {
 
 
@@ -212,7 +212,7 @@
                     }
 
                     //判断数据是否需要更新
-                    var currentPageCount = Math.ceil(this.totalCount / this.pagesize);
+                    var currentPageCount = Math.ceil(this.totalCount / this.pageSize);
                     if (currentPageCount != this.pageCount) {
                         pageIndex = 1;
                         this.pageCount = currentPageCount;
@@ -274,11 +274,37 @@
 
             deleteBlog(index,item)
             {
-                var tempUrl = deleteUrl + item.id;
-                this.$http.delete(tempUrl).then((response) => {
-                    toastr.success("删除成功！");
-                    this.getArticleData(url, this.pageCurrent, this.pagesize);
-                });
+                var self = this;
+                swal({
+                    title: '你确定删除吗？',
+                    text: '一旦删除，将无法恢复！',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#DD6B55',
+                    confirmButtonText: '确定删除！',
+                    cancelButtonText: '取消操作！',
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            swal("删除！", "您的文件已经被删除！", 'success');
+                            var tempUrl = deleteUrl + item.id;
+                            self.$http.delete(tempUrl).then((response) => {
+                                toastr.success("删除成功！");
+                                self.getArticleData(url, self.pageCurrent, self.pageSize);
+                            });
+                        } else {
+                            swal('取消！', "您的文件是依然存在！", 'error');
+                        }
+                    }
+                )
+
+                //var tempUrl = deleteUrl + item.id;
+                //this.$http.delete(tempUrl).then((response) => {
+                //    toastr.success("删除成功！");
+                //    this.getArticleData(url, this.pageCurrent, this.pagesize);
+                //});
                 console.log("index" + index);
             },
             addTodo(newTodo) {

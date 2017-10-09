@@ -178,7 +178,14 @@ namespace aehyok.WebApi.Controllers
         [Route("Tag")]
         public async Task SaveTag([FromBody]Tag tag)
         {
-            await this._blogTagRepository.InsertAsync(tag);
+            if(tag.Id>0)
+            {
+                await this._blogTagRepository.UpdateAsync(tag);
+            }
+            else
+            {
+                await this._blogTagRepository.InsertAsync(tag);
+            }
         }
 
         /// <summary>

@@ -26,7 +26,7 @@
                     <tbody>
                         <tr v-for="(item,index) in TagList">
                             <td>{{index+1}}</td>
-                            <td><a href="#">{{item.name}}</a></td>
+                            <td>{{item.name}}</td>
                             <td>{{item.displayOrder}}</td>
                             <td>
                                 <button class="btn btn-primary btn-xs" v-on:click="edit(index,item)"><i class="icon-pencil"></i></button>
@@ -172,11 +172,33 @@
                 console.log("index" + index );
             },
             deleteTag(index, item) {
-                var tempUrl = deleteUrl+item.id;
-                this.$http.delete(tempUrl).then((response) => {
-                    toastr.success("删除成功！");
-                    this.getTagData(tagListUrl, this.pageCurrent, this.pageSize);
-                });
+                var self = this;
+                swal({
+                    title: '你确定删除吗？',
+                    text: '一旦删除，将无法恢复！',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#DD6B55',
+                    confirmButtonText: '确定删除！',
+                    cancelButtonText: '取消操作！',
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            swal("删除！", "您的文件已经被删除！", 'success');
+                            var tempUrl = deleteUrl + item.id;
+                            self.$http.delete(tempUrl).then((response) => {
+                                toastr.success("删除成功！");
+                                self.getTagData(tagListUrl, self.pageCurrent, self.pageSize);
+                            });
+                        } else {
+                            swal('取消！', "您的文件是依然存在！", 'error');
+                        }
+                    }
+                )
+
+
                 console.log("index" + index);
             },
             delete(index, item)
