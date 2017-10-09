@@ -83,6 +83,32 @@ namespace aehyok.Web.Controllers
             }
         }
 
+        #region 订单查询
+
+        [HttpGet]
+        public IActionResult Query()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult Query(string tradeno, string alipayTradeNo)
+        {
+            DefaultAopClient client = new DefaultAopClient(Config.Gatewayurl, Config.AppId, Config.PrivateKey, "json", "2.0",
+                Config.SignType, Config.AlipayPublicKey, Config.CharSet, false);
+            AlipayTradeQueryModel model = new AlipayTradeQueryModel();
+            model.OutTradeNo = tradeno;
+            model.TradeNo = alipayTradeNo;
+
+            AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
+            request.SetBizModel(model);
+
+            var response = client.Execute(request);
+            return Json(response.Body);
+        }
+
+        #endregion
+
         #region 支付同步回调
 
         /// <summary>
@@ -146,5 +172,99 @@ namespace aehyok.Web.Controllers
         }
 
         #endregion
+
+        #region 订单退款
+
+        [HttpGet]
+        public IActionResult Refund()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult Refund(string tradeno, string alipayTradeNo, string refundAmount, string refundReason, string refundNo)
+        {
+            DefaultAopClient client = new DefaultAopClient(Config.Gatewayurl, Config.AppId, Config.PrivateKey, "json", "2.0",
+                Config.SignType, Config.AlipayPublicKey, Config.CharSet, false);
+
+            AlipayTradeRefundModel model = new AlipayTradeRefundModel();
+            model.OutTradeNo = tradeno;
+            model.TradeNo = alipayTradeNo;
+            model.RefundAmount = refundAmount;
+            model.RefundReason = refundReason;
+            model.OutRequestNo = refundNo;
+
+            AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+            request.SetBizModel(model);
+
+            var response = client.Execute(request);
+            return Json(response.Body);
+        }
+
+        #endregion
+
+        #region 退款查询
+
+        /// <summary>
+        /// 退款查询
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult RefundQuery()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult RefundQuery(string tradeno, string alipayTradeNo, string refundNo)
+        {
+            DefaultAopClient client = new DefaultAopClient(Config.Gatewayurl, Config.AppId, Config.PrivateKey, "json", "2.0",
+                Config.SignType, Config.AlipayPublicKey, Config.CharSet, false);
+
+            if (string.IsNullOrEmpty(refundNo))
+            {
+                refundNo = tradeno;
+            }
+
+            AlipayTradeFastpayRefundQueryModel model = new AlipayTradeFastpayRefundQueryModel();
+            model.OutTradeNo = tradeno;
+            model.TradeNo = alipayTradeNo;
+            model.OutRequestNo = refundNo;
+
+            AlipayTradeFastpayRefundQueryRequest request = new AlipayTradeFastpayRefundQueryRequest();
+            request.SetBizModel(model);
+
+            var response = client.Execute(request);
+            return Json(response.Body);
+        }
+
+        #endregion
+
+        #region 订单关闭
+
+        public IActionResult OrderClose()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult OrderClose(string tradeno, string alipayTradeNo)
+        {
+            DefaultAopClient client = new DefaultAopClient(Config.Gatewayurl, Config.AppId, Config.PrivateKey, "json", "2.0",
+                Config.SignType, Config.AlipayPublicKey, Config.CharSet, false);
+
+            AlipayTradeCloseModel model = new AlipayTradeCloseModel();
+            model.OutTradeNo = tradeno;
+            model.TradeNo = alipayTradeNo;
+
+            AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
+            request.SetBizModel(model);
+
+            var response = client.Execute(request);
+            return Json(response.Body);
+        }
+
+        #endregion
+
+
     }
 }
