@@ -95,7 +95,7 @@ namespace QuickstartIdentityServer
                     RedirectUris = { "http://localhost:5003/callback.html" },
                     //PostLogoutRedirectUris = { "http://localhost:5003/index.html" }, //登出后跳转的页面(注释后可以跳转回原页面)
                     AllowedCorsOrigins = { "http://localhost:5003" },
-
+                    RequireConsent=false, //禁用 Consent 权限确认页面
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
