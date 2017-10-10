@@ -182,6 +182,7 @@
             newTodo: { id: null, Name: '', Task: false }//新建默认数据
         },
         mounted() {
+            console.log("mounted");
             //this.getArticleData(url, '1','3');//通过this.getData的URL取得API数据
             this.showPage(1, null, true);
         },
@@ -193,6 +194,7 @@
         methods: {//VUE事件处理器
             getArticleData(url, pageCurrent, pageSize) {
                 var tempUrl = selectUrl + pageCurrent + "/" + pageSize;
+                debugger;
                 this.$http.get(tempUrl).then((response) => {
                     this.ArticleList = response.data.articleList;
                     this.totalCount = response.data.count;
@@ -203,6 +205,7 @@
 
             showPage: function (pageIndex, $event, forceRefresh) {
                 console.log('当前页数为' + pageIndex);
+                console.log(mgr.getUser().profile.name);
                 this.getArticleData(url, pageIndex, this.pageSize);
                 if (pageIndex > 0) {
 

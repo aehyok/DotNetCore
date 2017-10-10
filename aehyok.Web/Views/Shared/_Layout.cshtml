@@ -51,6 +51,8 @@
     <script src="~/scripts/common.js"></script>
     <script src="~/lib/vue/dist/vue.js"></script>
     <script src="~/lib/axios/dist/axios.min.js"></script>
+    <script src="~/lib/oidc-client/dist/oidc-client.js"></script>
+    <script src="~/scripts/oidc_app.js"></script>
 </head>
 <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
     <div class="page-wrapper">
@@ -101,18 +103,3 @@
     <!-- END THEME LAYOUT SCRIPTS -->
 </body>
 </html>
-
-<script type="text/javascript">
-    function GetUrlRegExp(name) {
-        var reg = new RegExp("(^|\\?|&)" + name + "=([^&]*)(\\s|&|$)", "i");
-        if (reg.test(window.location.href)) return decodeURIComponent(RegExp.$2.replace(/\+/g, " ")); return "";
-    }
-
-    $(document).ready(function () {
-        var menuId = GetUrlRegExp("menuId");
-        if (menuId == null || menuId == "") {
-        } else {
-            Layout.setSidebarMenuActiveLink('click', $('#' + menuId));
-        }
-    });
-</script>

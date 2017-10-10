@@ -1,22 +1,25 @@
 ﻿// <reference path="oidc-client.js" />
 
-function log() {
-    document.getElementById('results').innerText = '';
-
-    Array.prototype.forEach.call(arguments, function (msg) {
-        if (msg instanceof Error) {
-            msg = "Error: " + msg.message;
-        }
-        else if (typeof msg !== 'string') {
-            msg = JSON.stringify(msg, null, 2);
-        }
-        document.getElementById('results').innerHTML += msg + '\r\n';
-    });
+function GetUrlRegExp(name) {
+    var reg = new RegExp("(^|\\?|&)" + name + "=([^&]*)(\\s|&|$)", "i");
+    if (reg.test(window.location.href)) return decodeURIComponent(RegExp.$2.replace(/\+/g, " ")); return "";
 }
 
-document.getElementById("login").addEventListener("click", login, false);
-document.getElementById("api").addEventListener("click", api, false);
-document.getElementById("logout").addEventListener("click", logout, false);
+//function log() {
+//    document.getElementById('results').innerText = '';
+
+//    Array.prototype.forEach.call(arguments, function (msg) {
+//        if (msg instanceof Error) {
+//            msg = "Error: " + msg.message;
+//        }
+//        else if (typeof msg !== 'string') {
+//            msg = JSON.stringify(msg, null, 2);
+//        }
+//        document.getElementById('results').innerHTML += msg + '\r\n';
+//    });
+//}
+
+
 
 var config = {
     authority: "http://localhost:5000",
@@ -28,19 +31,30 @@ var config = {
 };
 var mgr = new Oidc.UserManager(config);
 
-//获取当前用户是否有效，无效需登录
-mgr.getUser().then(function (user) {
-    if (user) {
-        log("User logged in", user.profile);
-        console.log("User logged in");
+$(document).ready(function () {
+    var menuId = GetUrlRegExp("menuId");
+    if (menuId == null || menuId == "") {
+    } else {
+        Layout.setSidebarMenuActiveLink('click', $('#' + menuId));
     }
-    else {
-        log("User not logged in");
-        console.log("User not logged in");
-        //用户无效进行跳转IdentityServer4登录
-        mgr.signinRedirect({ state: window.location.href });
-    }
+
+    //获取当前用户是否有效，无效需登录
+    mgr.getUser().then(function (user) {
+        if (user) {
+            //log("User logged in", user.profile);
+            $("#UserName").html(user.profile.name);
+            console.log("User logged in");
+        }
+        else {
+            //log("User not logged in");
+            console.log("User not logged in");
+            //用户无效进行跳转IdentityServer4登录
+            mgr.signinRedirect({ state: window.location.href });
+        }
+    });
 });
+
+
 
 function login() {
     console.info(window.location.href);
@@ -54,7 +68,7 @@ function api() {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
         xhr.onload = function () {
-            log(xhr.status, JSON.parse(xhr.responseText));
+            //log(xhr.status, JSON.parse(xhr.responseText));
         }
         xhr.setRequestHeader("Authorization", "Bearer " + user.access_token);
         xhr.send();
