@@ -1,4 +1,4 @@
-﻿/// <reference path="oidc-client.js" />
+﻿// <reference path="oidc-client.js" />
 
 function log() {
     document.getElementById('results').innerText = '';
@@ -46,7 +46,7 @@ function login() {
 function api() {
     mgr.getUser().then(function (user) {
         var url = "http://localhost:5001/api/Blog/Article/1/8/";
-
+        //var url = "http://localhost:5001/api/GuideLine";
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url);
         xhr.onload = function () {

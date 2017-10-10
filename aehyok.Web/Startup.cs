@@ -13,16 +13,17 @@ namespace aehyok.Web
 {
     public class Startup
     {
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
+            //var builder = new ConfigurationBuilder()
+            //    .SetBasePath(env.ContentRootPath)
+            //    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            //    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+            //    .AddEnvironmentVariables();
+            //Configuration = builder.Build();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -45,15 +46,8 @@ namespace aehyok.Web
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseStaticFiles();//使用默认文件夹wwwroot    
-            //app.UseDefaultFiles();
-            app.UseMvc(routes =>   //引入mvc路由  
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{Controller=Home}/{action=Index}/{id?}"
-                );
-            });
+            app.UseStaticFiles();
+            app.UseMvcWithDefaultRoute();
 
             //原有入口测试页面进行注释
             //app.Run(async (context) =>

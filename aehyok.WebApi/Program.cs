@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore;
 
 namespace aehyok.WebApi
 {
@@ -13,21 +14,38 @@ namespace aehyok.WebApi
     /// </summary>
     public class Program
     {
-        /// <summary>
-        /// 入口函数
-        /// </summary>
-        /// <param name="args"></param>
+        ///// <summary>
+        ///// 入口函数
+        ///// </summary>
+        ///// <param name="args"></param>
+        //public static void Main(string[] args)
+        //{
+        //    var host = new WebHostBuilder()
+        //        //.UseUrls("http://localhost:6666")
+        //        .UseKestrel()
+        //        .UseContentRoot(Directory.GetCurrentDirectory())
+        //        .UseIISIntegration()
+        //        .UseStartup<Startup>()
+        //        .UseApplicationInsights()
+        //        .Build();
+        //    host.Run();
+        //}
+
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder()
-                //.UseUrls("http://localhost:6666")
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .UseApplicationInsights()
-                .Build();
-            host.Run();
+            Console.Title = "API";
+
+            BuildWebHost(args).Run();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+
+        public static IWebHost BuildWebHost(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>()
+                .Build();
     }
 }

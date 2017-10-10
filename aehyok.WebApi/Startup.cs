@@ -31,22 +31,16 @@ namespace aehyok.WebApi
         /// <summary>
         /// 启动方法
         /// </summary>
-        /// <param name="env"></param>
-        public Startup(IHostingEnvironment env)
+        /// <param name="configuration"></param>
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
-
+            Configuration = configuration;
         }
 
         /// <summary>
         /// 配置根
         /// </summary>
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -62,21 +56,38 @@ namespace aehyok.WebApi
         /// <returns></returns>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<CodeFirstDbContext>(options =>
-options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  //设置数据库链接字符串
+            // Add framework services.
+            services.AddMvc();
 
-
-            //http://www.cnblogs.com/TomXu/p/4496440.html
-            //注册Identity
-            services.AddIdentity<IdentityUser, IdentityRole>(options => {
-                //options.Cookies.ApplicationCookie.AuthenticationScheme = "ApplicationCookie";
-                //options.Cookies.ApplicationCookie.CookieName = "Interop";
-            })
+            //影响AddAuthentication认证 接口调用
+            ////http://www.cnblogs.com/TomXu/p/4496440.html
+            ////注册Identity
+            services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<CodeFirstDbContext>()
             .AddDefaultTokenProviders();
 
-            // Add framework services.
-            services.AddMvc();
+            services.AddMvcCore()
+                .AddAuthorization()
+                .AddJsonFormatters(item => {
+                    item.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.MicrosoftDateFormat;
+                    item.DateFormatString = "yyyy年MM月dd日HH时mm分ss秒";
+                });
+
+            services.AddAuthentication("Bearer")
+                 .AddIdentityServerAuthentication(options =>
+                 {
+                     options.Authority = "http://localhost:5000";
+                     options.RequireHttpsMetadata = false;
+
+                     options.ApiName = "api1";
+                 });
+
+
+            services.AddDbContext<CodeFirstDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  //设置数据库链接字符串
+
+            //调用Api报错的问题，覆盖了AddAuthentication
+
 
             services.AddCors(options =>
             {
@@ -89,24 +100,7 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
                 });
             });
 
-            services.AddMvcCore()
-                .AddAuthorization()
-                .AddJsonFormatters(item=> {
-                    item.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.MicrosoftDateFormat;
-                    item.DateFormatString = "yyyy年MM月dd日HH时mm分ss秒";
-                });
-
-            services.AddAuthentication("Bearer")
-            .AddIdentityServerAuthentication(options =>
-            {
-                options.Authority = "http://localhost:5000";
-                options.RequireHttpsMetadata = false;
-
-                options.ApiName = "api1";
-            });
             AddSwagger(services);
-
-
 
             var builder = new ContainerBuilder();  // 构造容器构建类
             builder.Populate(services);  //将现有的Services路由到Autofac的管理集合中
@@ -121,24 +115,17 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));  
         ///  This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
         /// <param name="app"></param>
-        /// <param name="env"></param>
-        /// <param name="loggerFactory"></param>
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            app.UseCors("default");
 
-
-            // 使用了 CookieAuthentication 中间件做身份认证
             app.UseAuthentication();
 
             app.UseSwagger();
             app.UseSwaggerUi();
 
-            // this uses the policy called "default"
-            app.UseCors("default");
-
             app.UseMvc();
+
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetService<CodeFirstDbContext>();
