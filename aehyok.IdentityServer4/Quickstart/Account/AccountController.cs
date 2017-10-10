@@ -280,22 +280,18 @@ namespace IdentityServer4.Quickstart.UI
         }
 
         /// <summary>
-        /// Show logout page
+        /// 登出后跳转到原页面
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> Logout(string logoutId)
         {
             // build a model so the logout page knows what to display
             var vm = await _account.BuildLogoutViewModelAsync(logoutId);
-
-            if (vm.ShowLogoutPrompt == false)
-            {
-                // if the request for logout was properly authenticated from IdentityServer, then
-                // we don't need to show the prompt and can just log the user out directly.
-                return await Logout(vm);
-            }
-
-            return View(vm);
+            var user = HttpContext.User;
+            await HttpContext.SignOutAsync(); //登出
+            await _events.RaiseAsync(new UserLogoutSuccessEvent(user.GetSubjectId(), user.GetName()));
+            var refererUrl = Request.Headers["Referer"].ToString();
+            return Redirect(refererUrl);
         }
 
         /// <summary>

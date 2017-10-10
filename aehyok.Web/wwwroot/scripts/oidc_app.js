@@ -24,7 +24,7 @@ var config = {
     redirect_uri: "http://localhost:5003/callback.html",
     response_type: "id_token token",
     scope: "openid profile api1",
-    post_logout_redirect_uri: "http://localhost:5003/Home/Index",
+    //post_logout_redirect_uri: "http://localhost:5003/Home/Index", //登出后跳转的页面（注释后可以跳转回原页面）
 };
 var mgr = new Oidc.UserManager(config);
 

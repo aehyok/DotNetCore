@@ -93,7 +93,7 @@ namespace QuickstartIdentityServer
                     AllowAccessTokensViaBrowser = true,
 
                     RedirectUris = { "http://localhost:5003/callback.html" },
-                    PostLogoutRedirectUris = { "http://localhost:5003/index.html" },
+                    //PostLogoutRedirectUris = { "http://localhost:5003/index.html" }, //登出后跳转的页面(注释后可以跳转回原页面)
                     AllowedCorsOrigins = { "http://localhost:5003" },
 
                     AllowedScopes =
