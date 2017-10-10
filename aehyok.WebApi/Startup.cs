@@ -62,9 +62,9 @@ namespace aehyok.WebApi
             //影响AddAuthentication认证 接口调用
             ////http://www.cnblogs.com/TomXu/p/4496440.html
             ////注册Identity
-            services.AddIdentity<IdentityUser, IdentityRole>()
-            .AddEntityFrameworkStores<CodeFirstDbContext>()
-            .AddDefaultTokenProviders();
+            //services.AddIdentity<IdentityUser, IdentityRole>()
+            //.AddEntityFrameworkStores<CodeFirstDbContext>()
+            //.AddDefaultTokenProviders();
 
             services.AddMvcCore()
                 .AddAuthorization()
