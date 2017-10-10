@@ -28,17 +28,21 @@ var config = {
 };
 var mgr = new Oidc.UserManager(config);
 
+//获取当前用户是否有效，无效需登录
 mgr.getUser().then(function (user) {
     if (user) {
         log("User logged in", user.profile);
+        console.log("User logged in");
     }
     else {
         log("User not logged in");
+        console.log("User not logged in");
+        //用户无效进行跳转IdentityServer4登录
+        mgr.signinRedirect({ state: window.location.href });
     }
 });
 
 function login() {
-    //mgr.signinRedirect();
     console.info(window.location.href);
     mgr.signinRedirect({ state: window.location.href }); //登录后跳转到原来页面
 }
