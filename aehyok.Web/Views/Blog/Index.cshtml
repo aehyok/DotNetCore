@@ -156,204 +156,191 @@
     }
 
     //http://www.jianshu.com/p/addd2bab739f?from=timeline 样例
-    Vue.prototype.$http = axios;
+    
     var url = "http://localhost:5001" +"/api/Blog/";
     var selectUrl =url +"Article/";
     var deleteUrl = url + "Article/";
-    var currentUser=null;
-    var vue=new Vue({
-        el: "#BlogList",
-        data: {  
-            ArticleList: [],//空的初始化数据
+    var currentUser = null;
+    window.onload = function ()
+    {
+        var vue = new Vue({
+            el: "#BlogList",
+            data: {
+                ArticleList: [],//空的初始化数据
 
-            //总项目数
-            totalCount: 200,
-            //分页数
-            pageCount: 20,
-            //当前页面
-            pageCurrent: 1,
-            //分页大小
-            pageSize: 8,
-            //显示分页按钮数
-            showPages: 11,
-            //开始显示的分页按钮
-            showPagesStart: 1,
-            //结束显示的分页按钮
-            showPageEnd: 100,
-            newTodo: { id: null, Name: '', Task: false }//新建默认数据
-        },
-        mounted() {
-            console.log("mounted");
-            var self = this;
-            //获取当前用户是否有效，无效需登录
-            mgr.getUser().then(function (user) {
-                if (user) {
-                    //log("User logged in", user.profile);
-                    $("#UserName").html(user.profile.name);
-                    console.log("111User logged in");
-                    currentUser = user;
-                    self.showPage(1, null, true);
-                }
-                else {
-                    //log("User not logged in");
-                    console.log("111User not logged in");
-                    //用户无效进行跳转IdentityServer4登录
-                    mgr.signinRedirect({ state: window.location.href });
-                }
-            });
-
-            //this.getArticleData(url, '1','3');//通过this.getData的URL取得API数据
-        },
-        computed: {
-            remaining: function () {
-                return this.totalCount;
-            }
-        },//这里我们声明了一个计算属性 remaining,通过返回this.num的值做为未完成总数
-        methods: {//VUE事件处理器
-            getArticleData(url, pageCurrent, pageSize) {
-                var tempUrl = selectUrl + pageCurrent + "/" + pageSize;
-                console.log("mgr" + currentUser.profile.name);
-                this.$http.get(tempUrl, { headers: { "Authorization": "Bearer " + currentUser.access_token } }).then((response) => {
-                    this.ArticleList = response.data.articleList;
-                    this.totalCount = response.data.count;
-                    this.pageCount = Math.ceil(this.totalCount / this.pageSize);
-                    this.showPages = this.pageCount-4;   //要显示的分页数
-                });
-            },//this.getData取得数据库数据，并取得未完成事件总数
-
-            showPage: function (pageIndex, $event, forceRefresh) {
-                console.log('当前页数为' + pageIndex);
-                console.log("mgr" + currentUser.profile.name);
-                this.getArticleData(url, pageIndex, this.pageSize);
-                if (pageIndex > 0) {
-
-
-                    if (pageIndex > this.pageCount) {
-                        pageIndex = this.pageCount;
-                    }
-
-                    //判断数据是否需要更新
-                    var currentPageCount = Math.ceil(this.totalCount / this.pageSize);
-                    if (currentPageCount != this.pageCount) {
-                        pageIndex = 1;
-                        this.pageCount = currentPageCount;
-                    }
-                    else if (this.pageCurrent == pageIndex && currentPageCount == this.pageCount && typeof (forceRefresh) == "undefined") {
-                        console.log("not refresh");
-                        return;
-                    }
-
-                    //处理分页点中样式
-                    var buttons = $("#pager").find("span");
-                    for (var i = 0; i < buttons.length; i++) {
-                        if (buttons.eq(i).html() != pageIndex) {
-                            buttons.eq(i).removeClass("active");
-                        }
-                        else {
-                            buttons.eq(i).addClass("active");
-                        }
-                    }
-
-                    ////测试数据 随机生成的
-                    //var newPageInfo = [];
-                    //for (var i = 0; i < this.pagesize; i++) {
-                    //    newPageInfo[newPageInfo.length] = {
-                    //        name: "test" + (i + (pageIndex - 1) * 20),
-                    //        age: (i + (pageIndex - 1) * 20)
-                    //    };
-                    //}
-                    this.pageCurrent = pageIndex;
-                    //this.arrayData = newPageInfo;
-
-                    //计算分页按钮数据
-                    if (this.pageCount > this.showPages) {
-                        if (pageIndex <= (this.showPages - 1) / 2) {
-                            this.showPagesStart = 1;
-                            this.showPageEnd = this.showPages - 1;
-                            console.log("showPage1")
-                        }
-                        else if (pageIndex >= this.pageCount - (this.showPages - 3) / 2) {
-                            this.showPagesStart = this.pageCount - this.showPages + 2;
-                            this.showPageEnd = this.pageCount;
-                            console.log("showPage2")
-                        }
-                        else {
-                            console.log("showPage3")
-                            this.showPagesStart = pageIndex - (this.showPages - 3) / 2;
-                            this.showPageEnd = pageIndex + (this.showPages - 3) / 2;
-                        }
-                    }
-                    console.log("showPagesStart:" + this.showPagesStart + ",showPageEnd:" + this.showPageEnd + ",pageIndex:" + pageIndex);
-                }
-            },//分页方法
-            editBlog(index, item)
-            {
-                var url = "../Blog/Add?menuId=BlogAdd&type=header&id=" + item.id;
-                window.open(url, "_self", "", false);
-                console.log("index" + index );
+                //总项目数
+                totalCount: 200,
+                //分页数
+                pageCount: 20,
+                //当前页面
+                pageCurrent: 1,
+                //分页大小
+                pageSize: 8,
+                //显示分页按钮数
+                showPages: 11,
+                //开始显示的分页按钮
+                showPagesStart: 1,
+                //结束显示的分页按钮
+                showPageEnd: 100,
+                newTodo: { id: null, Name: '', Task: false }//新建默认数据
             },
-
-            deleteBlog(index,item)
-            {
+            mounted() {  //页面进入后执行
+                console.log("mounted");
                 var self = this;
-                swal({
-                    title: '你确定删除吗？',
-                    text: '一旦删除，将无法恢复！',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#DD6B55',
-                    confirmButtonText: '确定删除！',
-                    cancelButtonText: '取消操作！',
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                    function (isConfirm) {
-                        if (isConfirm) {
-                            swal("删除！", "您的文件已经被删除！", 'success');
-                            var tempUrl = deleteUrl + item.id;
-                            self.$http.delete(tempUrl).then((response) => {
-                                toastr.success("删除成功！");
-                                self.getArticleData(url, self.pageCurrent, self.pageSize);
-                            });
-                        } else {
-                            swal('取消！', "您的文件是依然存在！", 'error');
-                        }
-                    }
-                )
-
-                //var tempUrl = deleteUrl + item.id;
-                //this.$http.delete(tempUrl).then((response) => {
-                //    toastr.success("删除成功！");
-                //    this.getArticleData(url, this.pageCurrent, this.pagesize);
-                //});
-                console.log("index" + index);
+                self.showPage(1, null, true);
             },
-            addTodo(newTodo) {
-                this.ArticleList.push(newTodo);
-                this.totalCount++;
-                this.$http.post('/api/todo/PostTodo', newTodo).then(response => console.log(response));
-                this.newTodo = { id: null, Name: '', Task: false }
-            },//添加任务，并且将数据post到URL
-
-            deleteTodo(index, id) {
-                if (!this.ArticleList[index].Task) {
-                    this.totalCount--;
+            computed: {
+                remaining: function () {
+                    return this.totalCount;
                 }
-                this.$http.delete('/api/todo/DeleteTodo/' + id).then(response => console.log(response));
-                this.ArticleList.splice(index, 1);
-            },//删除任务，如果删除的任务是未完成的，那么将对未完成总数-1
+            },//这里我们声明了一个计算属性 remaining,通过返回this.num的值做为未完成总数
+            methods: {//VUE事件处理器
+                getArticleData(url, pageCurrent, pageSize) {
+                    var tempUrl = selectUrl + pageCurrent + "/" + pageSize;
 
-            toggleTodo(index, id) {
-                var thistodo = !this.ArticleList[index].Task;
-                var thisdata = {
-                    Name: this.ArticleList[index].Name,
-                    Task: thistodo
-                };
-                this.$http.put('/api/todo/puttodo/' + id, thisdata
-                ).then(response => console.log(response));
-                thistodo ? this.totalCount-- : this.totalCount++;
-                this.ArticleList[index].Task = thistodo;
-            }
-        },//完成任务或者撤销任务
-    });
+                    //单独测试请求Header中添加Bearer
+                    //, { headers: { "Authorization": "Bearer " + currentUser.access_token } }
+                    this.$http.get(tempUrl).then((response) => {
+                        this.ArticleList = response.data.articleList;
+                        this.totalCount = response.data.count;
+                        this.pageCount = Math.ceil(this.totalCount / this.pageSize);
+                        this.showPages = this.pageCount - 4;   //要显示的分页数
+                    });
+                },//this.getData取得数据库数据，并取得未完成事件总数
+
+                showPage: function (pageIndex, $event, forceRefresh) {
+                    console.log('当前页数为' + pageIndex);
+                    this.getArticleData(url, pageIndex, this.pageSize);
+                    if (pageIndex > 0) {
+
+
+                        if (pageIndex > this.pageCount) {
+                            pageIndex = this.pageCount;
+                        }
+
+                        //判断数据是否需要更新
+                        var currentPageCount = Math.ceil(this.totalCount / this.pageSize);
+                        if (currentPageCount != this.pageCount) {
+                            pageIndex = 1;
+                            this.pageCount = currentPageCount;
+                        }
+                        else if (this.pageCurrent == pageIndex && currentPageCount == this.pageCount && typeof (forceRefresh) == "undefined") {
+                            console.log("not refresh");
+                            return;
+                        }
+
+                        //处理分页点中样式
+                        var buttons = $("#pager").find("span");
+                        for (var i = 0; i < buttons.length; i++) {
+                            if (buttons.eq(i).html() != pageIndex) {
+                                buttons.eq(i).removeClass("active");
+                            }
+                            else {
+                                buttons.eq(i).addClass("active");
+                            }
+                        }
+
+                        ////测试数据 随机生成的
+                        //var newPageInfo = [];
+                        //for (var i = 0; i < this.pagesize; i++) {
+                        //    newPageInfo[newPageInfo.length] = {
+                        //        name: "test" + (i + (pageIndex - 1) * 20),
+                        //        age: (i + (pageIndex - 1) * 20)
+                        //    };
+                        //}
+                        this.pageCurrent = pageIndex;
+                        //this.arrayData = newPageInfo;
+
+                        //计算分页按钮数据
+                        if (this.pageCount > this.showPages) {
+                            if (pageIndex <= (this.showPages - 1) / 2) {
+                                this.showPagesStart = 1;
+                                this.showPageEnd = this.showPages - 1;
+                                console.log("showPage1")
+                            }
+                            else if (pageIndex >= this.pageCount - (this.showPages - 3) / 2) {
+                                this.showPagesStart = this.pageCount - this.showPages + 2;
+                                this.showPageEnd = this.pageCount;
+                                console.log("showPage2")
+                            }
+                            else {
+                                console.log("showPage3")
+                                this.showPagesStart = pageIndex - (this.showPages - 3) / 2;
+                                this.showPageEnd = pageIndex + (this.showPages - 3) / 2;
+                            }
+                        }
+                        console.log("showPagesStart:" + this.showPagesStart + ",showPageEnd:" + this.showPageEnd + ",pageIndex:" + pageIndex);
+                    }
+                },//分页方法
+                editBlog(index, item) {
+                    var url = "../Blog/Add?menuId=BlogAdd&type=header&id=" + item.id;
+                    window.open(url, "_self", "", false);
+                    console.log("index" + index);
+                },
+
+                deleteBlog(index, item) {
+                    var self = this;
+                    swal({
+                        title: '你确定删除吗？',
+                        text: '一旦删除，将无法恢复！',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#DD6B55',
+                        confirmButtonText: '确定删除！',
+                        cancelButtonText: '取消操作！',
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    },
+                        function (isConfirm) {
+                            if (isConfirm) {
+                                swal("删除！", "您的文件已经被删除！", 'success');
+                                var tempUrl = deleteUrl + item.id;
+                                self.$http.delete(tempUrl).then((response) => {
+                                    toastr.success("删除成功！");
+                                    self.getArticleData(url, self.pageCurrent, self.pageSize);
+                                });
+                            } else {
+                                swal('取消！', "您的文件是依然存在！", 'error');
+                            }
+                        }
+                    )
+
+                    //var tempUrl = deleteUrl + item.id;
+                    //this.$http.delete(tempUrl).then((response) => {
+                    //    toastr.success("删除成功！");
+                    //    this.getArticleData(url, this.pageCurrent, this.pagesize);
+                    //});
+                    console.log("index" + index);
+                },
+                addTodo(newTodo) {
+                    this.ArticleList.push(newTodo);
+                    this.totalCount++;
+                    this.$http.post('/api/todo/PostTodo', newTodo).then(response => console.log(response));
+                    this.newTodo = { id: null, Name: '', Task: false }
+                },//添加任务，并且将数据post到URL
+
+                deleteTodo(index, id) {
+                    if (!this.ArticleList[index].Task) {
+                        this.totalCount--;
+                    }
+                    this.$http.delete('/api/todo/DeleteTodo/' + id).then(response => console.log(response));
+                    this.ArticleList.splice(index, 1);
+                },//删除任务，如果删除的任务是未完成的，那么将对未完成总数-1
+
+                toggleTodo(index, id) {
+                    var thistodo = !this.ArticleList[index].Task;
+                    var thisdata = {
+                        Name: this.ArticleList[index].Name,
+                        Task: thistodo
+                    };
+                    this.$http.put('/api/todo/puttodo/' + id, thisdata
+                    ).then(response => console.log(response));
+                    thistodo ? this.totalCount-- : this.totalCount++;
+                    this.ArticleList[index].Task = thistodo;
+                }
+            },//完成任务或者撤销任务
+        });
+
+    }
+    
 </script>
