@@ -17,6 +17,11 @@ namespace aehyok.WebApi.ViewModel
         public Article Article { get; set; }
 
         /// <summary>
+        /// 博文标签列表
+        /// </summary>
+        public List<Tag> SelectList { get; set; }
+
+        /// <summary>
         /// 标签
         /// </summary>
         public Tags Tags { get; set; }

@@ -28,8 +28,8 @@ namespace aehyok.Services
 
         public async Task<int> UpdateBlog(Article article, string tags)
         {
-            this.UnitOfWork.TransactionEnabled = true;
             await this._articleRepository.UpdateAsync(article);
+            this.UnitOfWork.TransactionEnabled = true;
             await this._articleTagRepository.DeleteAsync(item => item.ArticleId == article.Id);
             foreach (var item in tags.Split(','))
             {

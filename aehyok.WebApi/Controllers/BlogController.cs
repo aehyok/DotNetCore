@@ -105,16 +105,17 @@ namespace aehyok.WebApi.Controllers
             CreateArticle createArticle = new CreateArticle()
             {
                 Article = new Article(),
-                Tags = new Tags()
+                SelectList = new List<Tag>()
             };
             if (id > 0)
             {
                 createArticle.Article = this._blogArticleRepository.Entities.FirstOrDefault(item => item.Id == id);
+                var list = from articleTags in this._articleTagRepository.Entities
+                           join tags in this._blogTagRepository.Entities on articleTags.TagId equals tags.Id
+                           where articleTags.ArticleId == id
+                           select tags;
 
-                var list = from tags in this._articleTagRepository.Entities.Where(item => item.ArticleId == id)
-                           select tags.TagId;
-                string tagList = string.Join(",", list.ToArray());
-                createArticle.Tags.TagId = tagList;
+                createArticle.SelectList = list.ToList();
             }
             return createArticle;
         }
@@ -174,6 +175,11 @@ namespace aehyok.WebApi.Controllers
             return tag;
         }
 
+        /// <summary>
+        /// ±£¥Ê±Í«©
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("Tag")]
         public async Task SaveTag([FromBody]Tag tag)

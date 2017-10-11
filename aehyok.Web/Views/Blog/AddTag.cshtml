@@ -36,53 +36,56 @@
     </div>
 </div>
 <script type="text/javascript">
-    Vue.prototype.$http = axios;
     var url = "http://localhost:5001" + "/api/Blog/Tag/";
-    var vue = new Vue({
-        el: "#default",
-        data: {
-            id: 0,
-            name: "",
-            displayOrder: "0",
-        },
-        mounted() {
-            var id = Util.GetUrlRegExp("id");
-            if (id == null || id == "") {
-                return;
-
-            }
-            else {
-                this.getTagData(id);
-            }
-        },
-        methods: {
-            getTagData(id) {
-                var tempUrl = url + id;
-                console.log(tempUrl);
-                this.$http.get(tempUrl).then((response) => {
-                    console.log(response.data);
-                    this.id = response.data.id;
-                    this.name = response.data.name;
-                    this.displayOrder = response.data.displayOrder;
-                    console.log(this.data);
-                });
+    window.onload = function ()
+    {
+        var vue = new Vue({
+            el: "#default",
+            data: {
+                id: 0,
+                name: "",
+                displayOrder: "0",
             },
-            BtnSave_Click() {
-                this.$http.post(url, {
-                    Id: this.id,
-                    Name: this.name,
-                    DisplayOrder: this.displayOrder
-                })
-                    .then(function (response) {
-                        toastr.success("保存成功！");
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        toastr.success("保存失败！");
-                        console.log(error);
+            mounted() {
+                var id = Util.GetUrlRegExp("id");
+                if (id == null || id == "") {
+                    return;
+
+                }
+                else {
+                    this.getTagData(id);
+                }
+            },
+            methods: {
+                getTagData(id) {
+                    var tempUrl = url + id;
+                    console.log(tempUrl);
+                    this.$http.get(tempUrl).then((response) => {
+                        console.log(response.data);
+                        this.id = response.data.id;
+                        this.name = response.data.name;
+                        this.displayOrder = response.data.displayOrder;
+                        console.log(this.data);
                     });
+                },
+                BtnSave_Click() {
+                    this.$http.post(url, {
+                        Id: this.id,
+                        Name: this.name,
+                        DisplayOrder: this.displayOrder
+                    })
+                        .then(function (response) {
+                            toastr.success("保存成功！");
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            toastr.success("保存失败！");
+                            console.log(error);
+                        });
+                }
             }
-        }
-    });
+        });
+    }
+    
 </script>
 
