@@ -159,7 +159,8 @@
     Vue.prototype.$http = axios;
     var url = "http://localhost:5001" +"/api/Blog/";
     var selectUrl =url +"Article/";
-    var deleteUrl = url+"Article/";
+    var deleteUrl = url + "Article/";
+    var currentUser=null;
     var vue=new Vue({
         el: "#BlogList",
         data: {  
@@ -183,8 +184,25 @@
         },
         mounted() {
             console.log("mounted");
+            var self = this;
+            //获取当前用户是否有效，无效需登录
+            mgr.getUser().then(function (user) {
+                if (user) {
+                    //log("User logged in", user.profile);
+                    $("#UserName").html(user.profile.name);
+                    console.log("111User logged in");
+                    currentUser = user;
+                    self.showPage(1, null, true);
+                }
+                else {
+                    //log("User not logged in");
+                    console.log("111User not logged in");
+                    //用户无效进行跳转IdentityServer4登录
+                    mgr.signinRedirect({ state: window.location.href });
+                }
+            });
+
             //this.getArticleData(url, '1','3');//通过this.getData的URL取得API数据
-            this.showPage(1, null, true);
         },
         computed: {
             remaining: function () {
@@ -194,8 +212,8 @@
         methods: {//VUE事件处理器
             getArticleData(url, pageCurrent, pageSize) {
                 var tempUrl = selectUrl + pageCurrent + "/" + pageSize;
-                debugger;
-                this.$http.get(tempUrl).then((response) => {
+                console.log("mgr" + currentUser.profile.name);
+                this.$http.get(tempUrl, { headers: { "Authorization": "Bearer " + currentUser.access_token } }).then((response) => {
                     this.ArticleList = response.data.articleList;
                     this.totalCount = response.data.count;
                     this.pageCount = Math.ceil(this.totalCount / this.pageSize);
@@ -205,7 +223,7 @@
 
             showPage: function (pageIndex, $event, forceRefresh) {
                 console.log('当前页数为' + pageIndex);
-                console.log(mgr.getUser().profile.name);
+                console.log("mgr" + currentUser.profile.name);
                 this.getArticleData(url, pageIndex, this.pageSize);
                 if (pageIndex > 0) {
 
