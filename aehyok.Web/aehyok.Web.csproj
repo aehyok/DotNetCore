@@ -37,7 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Account\" />
     <Folder Include="wwwroot\css\themes\" />
   </ItemGroup>
   <!--http://www.cnblogs.com/kzwrcom/p/6678674.html-->
