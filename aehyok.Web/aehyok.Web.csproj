@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="20171011143749_0358.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\content\logo.png" />
     <Content Include="wwwroot\css\components-rounded.css" />
     <Content Include="wwwroot\css\plugins.css" />
