@@ -116,27 +116,32 @@ namespace aehyok.Web.Controllers
             String currentPath = "";
             String currentUrl = "";
             String currentDirPath = "/";
-            String moveupDirPath = "/";
+            String moveupDirPath = "";
 
             //根据path参数，设置各路径和URL
             String path = Request.Query["path"];//Request.QueryString["path"];
             path = String.IsNullOrEmpty(path) ? "" : path;
-
-            var webPath = _hostingEnv.WebRootPath;
+            var tempPath = "";
+            var webPath =@""+ _hostingEnv.WebRootPath;
             if (path == "")
             {
                 
                 currentPath = webPath+"\\"+rootPath;// Server.MapPath(rootPath);
                 currentUrl = rootUrl;
-                currentDirPath = "";
+                currentDirPath = rootPath+"\\";
                 moveupDirPath = "";
             }
             else
             {
-                currentPath = webPath;// HttpContext.Current.Server.MapPath(rootPath) + path;
-                currentUrl = rootUrl + path;
-                currentDirPath = path;
-                moveupDirPath = Regex.Replace(currentDirPath, @"(.*?)[^\/]+\/$", "$1");
+                tempPath = path.Replace("/", "");
+                //path=path.Split
+                currentPath =  webPath + "\\" + tempPath;// HttpContext.Current.Server.MapPath(rootPath) + path;
+                currentUrl = tempPath;
+                currentDirPath = tempPath + "\\";
+                var array = tempPath.Split('\\');
+
+                moveupDirPath = "UploadImages/";
+                 //Regex.Replace(currentDirPath, @"(.*?)[^\/]+\/$", "$1");
             }
 
             //排序形式，name or size or type
@@ -146,20 +151,17 @@ namespace aehyok.Web.Controllers
             //不允许使用..移动到上一级目录
             if (Regex.IsMatch(path, @"\.\."))
             {
-                //HttpContext.Response.Body.Response.Write("Access is not allowed.");
-                //System.Web.HttpContext.Current.Response.End();
+                return Content("Access is not allowed.");
             }
             //最后一个字符不是/
             if (path != "" && !path.EndsWith("/"))
             {
-                //System.Web.HttpContext.Current.Response.Write("Parameter is not valid.");
-                //System.Web.HttpContext.Current.Response.End();
+                return Content("Parameter is not valid.");
             }
             //目录不存在或不是目录
             if (!Directory.Exists(currentPath))
             {
-                //System.Web.HttpContext.Current.Response.Write("Directory does not exist.");
-                //System.Web.HttpContext.Current.Response.End();
+                return Content("Directory does not exist.");
             }
 
             //遍历目录取得文件信息
@@ -184,8 +186,8 @@ namespace aehyok.Web.Controllers
             }
 
             Hashtable result = new Hashtable();
-            result["moveup_dir_path"] = "/"; //moveupDirPath;
-            result["current_dir_path"] = "/";// currentDirPath;
+            result["moveup_dir_path"] = moveupDirPath;     //上一级目录地址
+            result["current_dir_path"] = currentDirPath;   //当前目录地址
 
             string fileUrl = "http://" + Request.Host.Value + "/" + currentUrl+"/";
             result["current_url"] = fileUrl;
