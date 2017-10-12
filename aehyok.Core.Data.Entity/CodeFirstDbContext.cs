@@ -1,5 +1,6 @@
 ﻿using aehyok.Base;
 using aehyok.Core.Data.Entity.Configurations.Blog;
+using aehyok.Model;
 using aehyok.Model.Blog;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -20,7 +21,7 @@ namespace aehyok.Core.Data.Entity
     /// <summary>
     /// EntityFramework-CodeFirst数据上下文
     /// </summary>
-    public class CodeFirstDbContext : IdentityDbContext<IdentityUser,IdentityRole,string>, IUnitOfWork, IDependency
+    public class CodeFirstDbContext : IdentityDbContext<IdentityUser, IdentityRole,string>, IUnitOfWork, IDependency
     {
 
         public CodeFirstDbContext()

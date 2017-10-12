@@ -19,6 +19,7 @@ using IdentityServer4.Events;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Identity;
+using aehyok.Model;
 
 namespace IdentityServer4.Quickstart.UI
 {

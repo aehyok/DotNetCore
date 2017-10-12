@@ -85,8 +85,9 @@ namespace aehyok.WebApi
 
             services.AddDbContext<CodeFirstDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),  //设置数据库链接字符串
-                    item =>item.EnableRetryOnFailure(3));    //Connection连接失败，重试机制开启，可设置次数
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),  //设置数据库链接字符串
+                item => item.MigrationsAssembly("aehyok.Core.Data.Entity").EnableRetryOnFailure(3)
+                    );    //Connection连接失败，重试机制开启，可设置次数
             });
                 
                
