@@ -4,6 +4,7 @@
 using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
@@ -13,6 +14,13 @@ namespace QuickstartIdentityServer
     {
         public void ConfigureServices(IServiceCollection services)
         {
+    //        services.AddDbContext<ApplicationDbContext>(options =>
+    //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+    //        services.AddIdentity<ApplicationUser, IdentityRole>()
+    //            .AddEntityFrameworkStores<ApplicationDbContext>()
+    //            .AddDefaultTokenProviders();
+
             services.AddMvc();
 
             // configure identity server with in-memory stores, keys, clients and scopes
@@ -21,6 +29,7 @@ namespace QuickstartIdentityServer
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients())
+                //.AddAspNetIdentity<IdentityUser>();//
                 .AddTestUsers(Config.GetUsers());
 
             services.AddAuthentication()
