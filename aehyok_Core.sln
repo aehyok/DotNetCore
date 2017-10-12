@@ -41,12 +41,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.NPOI", "aehyok.NPOI\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.ViewModel", "aehyok.ViewModel\aehyok.ViewModel.csproj", "{33B31367-6C1F-486E-88E2-2F0AE7CDB6DC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-DataBase", "5-DataBase", "{2F5CB067-8AFC-4A27-8A29-A56BA88F660A}"
-	ProjectSection(SolutionItems) = preProject
-		aehyokCore2.mdf = aehyokCore2.mdf
-		aehyokCore2_log.ldf = aehyokCore2_log.ldf
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.SignalR.Server", "aehyok.SignalR.Server\aehyok.SignalR.Server.csproj", "{3ED6984D-8CFC-4736-AAA8-E61E1641752E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.SignalR.Client", "aehyok.SignalR.Client\aehyok.SignalR.Client.csproj", "{8FF8872F-AFA3-4C9A-8F65-9948AF1A51D4}"
