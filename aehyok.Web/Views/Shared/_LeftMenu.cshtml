@@ -7,7 +7,7 @@
     <li class="nav-item">
         <a href="javascript:;" class="nav-link nav-toggle">
             <i class="fa fa-home"></i>
-            <span class="title">工作助理</span>
+            <span class="title">商品管理</span>
             <span class="selected"></span>
             <span class="arrow"></span>
         </a>
@@ -15,7 +15,7 @@
             <li class="nav-item start active open">
                 <a href="~/Home/Index?menuId=homeindex" class="nav-link" target="_self" id="homeindex">
                     <i class="fa fa-pencil-square-o"></i>
-                    <span class="title">待办事项</span>
+                    <span class="title">商品列表</span>
                     <span class="selected"></span>
                     <span class="badge badge-success">10</span>
                 </a>
@@ -23,14 +23,14 @@
             <li class="nav-item start ">
                 <a href="~/Home/ResourceManage?menuId=ResourceManage" class="nav-link " target="_self" id="ResourceManage">
                     <i class="icon-bulb"></i>
-                    <span class="title">事务提醒</span>
+                    <span class="title">商品分类</span>
                     <span class="badge badge-success">15</span>
                 </a>
             </li>
             <li class="nav-item start ">
                 <a href="~/Home/ResourceManage?menuId=ResourceManage" class="nav-link " target="_self" id="ResourceManage">
                     <i class="fa fa-paw"></i>
-                    <span class="title">工作计划</span>
+                    <span class="title">商品评价</span>
                     <span class="badge badge-success">5</span>
                 </a>
             </li>
@@ -39,7 +39,7 @@
     <li class="nav-item">
         <a href="javascript:;" class="nav-link nav-toggle">
             <i class="fa fa-desktop"></i>
-            <span class="title">业务全景展示</span>
+            <span class="title">销售管理</span>
             <span class="selected"></span>
             <span class="arrow"></span>
         </a>
@@ -47,28 +47,32 @@
             <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
                     <i class="icon-bar-chart"></i>
-                    <span class="title">行政执法</span>
+                    <span class="title">订单管理</span>
                     <span class="arrow"></span>
                 </a>
-                <ul class="sub-menu">
-                    <li class="nav-item ">
-                        <a href="~/FullScreen/AdministrativeYear?menuId=AdministrativeYear" class="nav-link " target="_self" id="AdministrativeYear">年度统计</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a href="~/FullScreen/AdministrativeMonth?menuId=AdministrativeMonth" class="nav-link " target="_self" id="AdministrativeMonth"> 月度统计 </a>
-                    </li>
-                </ul>
             </li>
             <li class="nav-item start ">
                 <a href="~/Home/Panorama?menuId=Panorama" class="nav-link" target="_self" id="Panorama">
                     <i class="fa fa-contao"></i>
-                    <span class="title">刑事执法</span>
+                    <span class="title">发货管理</span>
                 </a>
             </li>
             <li class="nav-item start ">
                 <a href="~/Home/ResourceManage?menuId=ResourceManage" class="nav-link " target="_self" id="ResourceManage">
                     <i class="icon-bulb"></i>
-                    <span class="title">职能管理</span>
+                    <span class="title">退货管理</span>
+                </a>
+            </li>
+            <li class="nav-item start ">
+                <a href="~/Home/ResourceManage?menuId=ResourceManage" class="nav-link " target="_self" id="ResourceManage">
+                    <i class="icon-bulb"></i>
+                    <span class="title">购物车管理</span>
+                </a>
+            </li>
+            <li class="nav-item start ">
+                <a href="~/Home/ResourceManage?menuId=ResourceManage" class="nav-link " target="_self" id="ResourceManage">
+                    <i class="icon-bulb"></i>
+                    <span class="title">收藏夹管理</span>
                 </a>
             </li>
         </ul>
@@ -76,45 +80,45 @@
     <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
             <i class="icon-diamond"></i>
-            <span class="title">粤港两地牌车辆</span>
+            <span class="title">客户管理</span>
             <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
             <li class="nav-item">
                 <a href="javascript:;" class="nav-link nav-toggle">
-                    <span class="title">备案数据统计</span>
+                    <span class="title">客户列表</span>
                     <span class="arrow"></span>
                 </a>
                 <ul class="sub-menu">
                     <li class="nav-item ">
-                        <a href="~/TwoCar/RecordCarCount?menuId=RecordCarCount" class="nav-link " target="_self" id="RecordCarCount">车辆备案统计</a>
+                        <a href="~/TwoCar/RecordCarCount?menuId=RecordCarCount" class="nav-link " target="_self" id="RecordCarCount">客户角色</a>
                     </li>
                     <li class="nav-item ">
-                        <a href="~/TwoCar/RecordDriver?menuId=RecordDriver" class="nav-link " target="_self" id="RecordDriver"> 两地牌车涉案统计 </a>
+                        <a href="~/TwoCar/RecordDriver?menuId=RecordDriver" class="nav-link " target="_self" id="RecordDriver"> 供应商 </a>
                     </li>
 
                 </ul>
             </li>
             <li class="nav-item  ">
                 <a href="javascript:;" class="nav-link nav-toggle">
-                    <span class="title">车辆进出境统计</span>
+                    <span class="title">内容管理</span>
                     <span class="arrow"></span>
                 </a>
                 <ul class="sub-menu">
                     <li class="nav-item ">
-                        <a href="~/TwoCar/InAndOutRank?menuId=InAndOutRank" class="nav-link " target="_self" id="InAndOutRank">进出境统计</a>
+                        <a href="~/TwoCar/InAndOutRank?menuId=InAndOutRank" class="nav-link " target="_self" id="InAndOutRank">商城信息</a>
                     </li>
                     <li class="nav-item ">
-                        <a href="~/TwoCar/InAndOutRank?menuId=InAndOutRank" class="nav-link " target="_self" id="InAndOutRank">累计进境总次数排名  </a>
+                        <a href="~/TwoCar/InAndOutRank?menuId=InAndOutRank" class="nav-link " target="_self" id="InAndOutRank">新闻管理  </a>
                     </li>
                     <li class="nav-item ">
-                        <a href="~/TwoCar/InAndOutRank?menuId=InAndOutRank" class="nav-link " target="_self" id="InAndOutRank">每日累计进境次数排名 </a>
+                        <a href="~/TwoCar/InAndOutRank?menuId=InAndOutRank" class="nav-link " target="_self" id="InAndOutRank">博客管理 </a>
                     </li>
                     <li class="nav-item ">
-                        <a href="~/TwoCar/InAndOutRank?menuId=InAndOutRank" class="nav-link " target="_self" id="InAndOutRank"> 单日进境次数排名 </a>
+                        <a href="~/TwoCar/InAndOutRank?menuId=InAndOutRank" class="nav-link " target="_self" id="InAndOutRank"> 投票管理 </a>
                     </li>
                     <li class="nav-item ">
-                        <a href="~/TwoCar/InAndOutRank?menuId=InAndOutRank" class="nav-link " target="_self" id="InAndOutRank">滞留境内超3个月 </a>
+                        <a href="~/TwoCar/InAndOutRank?menuId=InAndOutRank" class="nav-link " target="_self" id="InAndOutRank">论坛管理 </a>
                     </li>
                 </ul>
             </li>
@@ -124,137 +128,21 @@
     <li class="nav-item  ">
         <a href="javascript:;" class="nav-link nav-toggle">
             <i class="icon-bar-chart"></i>
-            <span class="title">旅检快办系统</span>
+            <span class="title">商城配置</span>
             <span class="arrow"></span>
         </a>
         <ul class="sub-menu">
             <li class="nav-item  ">
                 <a href="#" class="nav-link ">
-                    <span class="title">案件统计</span>
+                    <span class="title">付款方式</span>
                 </a>
             </li>
             <li class="nav-item  ">
                 <a href="#" class="nav-link ">
-                    <span class="title">涉案物品</span>
+                    <span class="title">配送方式</span>
                 </a>
             </li>
 
-        </ul>
-    </li>
-    <li class="nav-item  ">
-        <a href="javascript:;" class="nav-link nav-toggle">
-            <i class="icon-settings"></i>
-            <span class="title">业务预警监督</span>
-            <span class="arrow"></span>
-        </a>
-        <ul class="sub-menu">
-            <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
-                    <span class="title">强制措施</span>
-                    <span class="arrow"></span>
-                </a>
-                <ul class="sub-menu">
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank">拘留（30天）</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank">监视居住  </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank"> 取保候审 </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank"> 逮捕 </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank"> 羁押 </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
-                    <span class="title">侦查措施</span>
-                    <span class="arrow"></span>
-                </a>
-                <ul class="sub-menu">
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank">冻结存款</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank">财物扣押  </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank"> 补充侦查 </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item  ">
-                <a href="javascript:;" class="nav-link nav-toggle">
-                    <span class="title">办案周期</span>
-                    <span class="arrow"></span>
-                </a>
-                <ul class="sub-menu">
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank">总周期</a>
-                    </li>
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank">受案周期  </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank"> 立案周期 </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank"> 侦查周期 </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank"> 预审移诉周期 </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank"> 起诉判决周期 </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a href="" class="nav-link " target="_blank"> 撤案审查周期 </a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </li>
-    <li class="nav-item  ">
-        <a href="javascript:;" class="nav-link nav-toggle">
-            <i class="icon-briefcase"></i>
-            <span class="title">案(事)件协办</span>
-            <span class="arrow"></span>
-        </a>
-        <ul class="sub-menu">
-            <li class="nav-item  ">
-                <a href="table_static_basic.html" class="nav-link ">
-                    <span class="title"></span>
-                </a>
-            </li>
-        </ul>
-    </li>
-    <li class="nav-item  ">
-        <a href="javascript:;" class="nav-link nav-toggle">
-            <i class="icon-puzzle"></i>
-            <span class="title">内务管理</span>
-            <span class="arrow"></span>
-        </a>
-        <ul class="sub-menu">
-            <li class="nav-item  ">
-                <a href="components_date_time_pickers.html" class="nav-link ">
-                    <span class="title">通知通告</span>
-                </a>
-            </li>
-            <li class="nav-item  ">
-                <a href="components_date_time_pickers.html" class="nav-link ">
-                    <span class="title">会议管理</span>
-                </a>
-            </li>
-            <li class="nav-item  ">
-                <a href="components_date_time_pickers.html" class="nav-link ">
-                    <span class="title">考勤管理</span>
-                </a>
-            </li>
         </ul>
     </li>
     <li class="nav-item  ">
