@@ -16,7 +16,7 @@ namespace aehyok.Model.Authorization
     {
         public int UserId { get; set; }
 
-        public IdentityUser User { get; set; }
+        public User User { get; set; }
 
         public int PostId { get; set; }
 

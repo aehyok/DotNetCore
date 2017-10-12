@@ -28,7 +28,7 @@ namespace QuickstartIdentityServer
             services.AddDbContext<CodeFirstDbContext>(options =>
     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<CodeFirstDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -40,7 +40,7 @@ namespace QuickstartIdentityServer
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients())
-                .AddAspNetIdentity<IdentityUser>();//.AddTestUsers(Config.GetUsers());
+                .AddAspNetIdentity<ApplicationUser>();//.AddTestUsers(Config.GetUsers());
 
             services.AddAuthentication()
                 .AddOpenIdConnect("oidc", "OpenID Connect", options =>

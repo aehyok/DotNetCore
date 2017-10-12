@@ -9,9 +9,9 @@ namespace aehyok.Model
     /// <summary>
     /// 用户实体
     /// </summary>
-    //public class ApplicationUser:IdentityUser
-    //{
-    //    [NotMapped]
-    //    public string Users { get; set; }
-    //}
+    public class ApplicationUser : IdentityUser
+    {
+        [NotMapped]
+        public string Users { get; set; }
+    }
 }

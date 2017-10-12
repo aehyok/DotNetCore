@@ -11,9 +11,10 @@ using System;
 namespace aehyok.Core.Data.Entity.Migrations
 {
     [DbContext(typeof(CodeFirstDbContext))]
-    partial class CodeFirstDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171012104514_IdentityUser_Update")]
+    partial class IdentityUser_Update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

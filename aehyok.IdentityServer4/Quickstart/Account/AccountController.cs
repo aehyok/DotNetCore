@@ -33,9 +33,9 @@ namespace IdentityServer4.Quickstart.UI
         private readonly IEventService _events;
         private readonly AccountService _account;
 
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
@@ -43,8 +43,8 @@ namespace IdentityServer4.Quickstart.UI
             IHttpContextAccessor httpContextAccessor,
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager)
+            SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager)
         {
             _interaction = interaction;
             _events = events;
