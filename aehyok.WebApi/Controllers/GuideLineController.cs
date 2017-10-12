@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace aehyok.WebApi.Controllers
 {
+    /// <summary>
+    /// 指标管理
+    /// </summary>
     [Produces("application/json")]
     [Route("api/GuideLine")]
     [AuthorizeBearer]
