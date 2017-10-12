@@ -1,10 +1,13 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+using aehyok.Core.Data.Entity;
 using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
@@ -12,14 +15,21 @@ namespace QuickstartIdentityServer
 {
     public class Startup
     {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
-    //        services.AddDbContext<ApplicationDbContext>(options =>
-    //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<CodeFirstDbContext>(options =>
+    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-    //        services.AddIdentity<ApplicationUser, IdentityRole>()
-    //            .AddEntityFrameworkStores<ApplicationDbContext>()
-    //            .AddDefaultTokenProviders();
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<CodeFirstDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddMvc();
 
@@ -29,8 +39,7 @@ namespace QuickstartIdentityServer
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients())
-                //.AddAspNetIdentity<IdentityUser>();//
-                .AddTestUsers(Config.GetUsers());
+                .AddAspNetIdentity<IdentityUser>();//.AddTestUsers(Config.GetUsers());
 
             services.AddAuthentication()
                 .AddOpenIdConnect("oidc", "OpenID Connect", options =>

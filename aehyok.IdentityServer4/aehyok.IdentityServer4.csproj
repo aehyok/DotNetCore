@@ -14,4 +14,10 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\aehyok.Base\aehyok.Base.csproj" />
+    <ProjectReference Include="..\aehyok.Core.Data.Entity\aehyok.Core.Data.Entity.csproj" />
+    <ProjectReference Include="..\aehyok.Core\aehyok.Core.csproj" />
+  </ItemGroup>
+
 </Project>
