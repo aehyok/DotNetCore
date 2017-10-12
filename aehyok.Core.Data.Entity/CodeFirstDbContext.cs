@@ -20,7 +20,7 @@ namespace aehyok.Core.Data.Entity
     /// <summary>
     /// EntityFramework-CodeFirst数据上下文
     /// </summary>
-    public class CodeFirstDbContext : IdentityDbContext<IdentityUser>, IUnitOfWork, IDependency
+    public class CodeFirstDbContext : IdentityDbContext<IdentityUser,IdentityRole,string>, IUnitOfWork, IDependency
     {
 
         public CodeFirstDbContext()
