@@ -11,7 +11,5 @@ namespace aehyok.Model
     /// </summary>
     public class ApplicationUser : IdentityUser
     {
-        [NotMapped]
-        public string Users { get; set; }
     }
 }

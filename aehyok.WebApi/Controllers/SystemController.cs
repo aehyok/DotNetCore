@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using aehyok.Core.Data;
+using aehyok.Model;
 
 namespace aehyok.WebApi.Controllers
 {
@@ -16,13 +17,13 @@ namespace aehyok.WebApi.Controllers
     [Route("api/System")]
     public class SystemController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        public SystemController(UserManager<IdentityUser> userManager,RoleManager<IdentityRole> roleManager)
+        public SystemController(UserManager<ApplicationUser> userManager,RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;

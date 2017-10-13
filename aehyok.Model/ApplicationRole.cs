@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace aehyok.Model
@@ -11,5 +12,7 @@ namespace aehyok.Model
     /// </summary>
     public class ApplicationRole:IdentityRole
     {
+        [NotMapped]
+        public string Users { get; set; }
     }
 }
