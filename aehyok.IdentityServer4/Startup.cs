@@ -28,7 +28,7 @@ namespace QuickstartIdentityServer
             services.AddDbContext<CodeFirstDbContext>(options =>
     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<CodeFirstDbContext>()
                 .AddDefaultTokenProviders();
 
