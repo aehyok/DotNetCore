@@ -8,6 +8,9 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Hosting;
 using System.Globalization;
+using System.Net.Http;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace aehyok.Web.Controllers
 {
@@ -37,6 +40,22 @@ namespace aehyok.Web.Controllers
         public IActionResult AddTag()
         {
             return View();
+        }
+
+
+        /// <summary>
+        /// Http Get 同步方法
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public static string HttpGet(string url, Encoding encoding = null)
+        {
+            HttpClient httpClient = new HttpClient();
+            var t = httpClient.GetByteArrayAsync(url);
+            t.Wait();
+            var ret = encoding.GetString(t.Result);
+            return ret;
         }
 
         [HttpPost]
@@ -95,7 +114,11 @@ namespace aehyok.Web.Controllers
                 file.CopyTo(fs);
                 fs.Flush();
             }
-            string fileUrl = "http://"+Request.Host.Value+"/"+savePath + "/"+ newFileName;
+            var qiniuUrl = "http://localhost:3000/qiniu/upload/"+newFileName;
+            var result=BlogController.HttpGet(qiniuUrl, Encoding.GetEncoding("utf-8"));
+            var jsonObject = JsonConvert.DeserializeObject<QiniuResult>(result);
+            http://aehyok.qiniudn.com/Chrysanthemum.jpg
+            string fileUrl = "http://aehyok.qiniudn.com/"+jsonObject.Key ;
 
             hash = new Hashtable();
             hash["error"] = 0;
@@ -125,7 +148,7 @@ namespace aehyok.Web.Controllers
             var webPath =@""+ _hostingEnv.WebRootPath;
             if (path == "")
             {
-                
+                var temp = _hostingEnv.WebRootPath + $@"\"+ rootPath;
                 currentPath = webPath+"\\"+rootPath;// Server.MapPath(rootPath);
                 currentUrl = rootUrl;
                 currentDirPath = rootPath+"\\";
@@ -226,6 +249,17 @@ namespace aehyok.Web.Controllers
             return Json(result);
         }
     }
+
+    public class QiniuResult
+    {
+        public string Hash { get; set; }
+        public string Key { get; set; }
+
+        public string GroupName { get; set; }
+
+        public string FileType { get; set; }
+    }
+
 
         public class NameSorter : IComparer
         {
