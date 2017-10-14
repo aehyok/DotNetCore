@@ -10,6 +10,18 @@ var path = require('path')
 qiniu.conf.ACCESS_KEY = 'TWRriEkY-rhTen4Mn5n88GpYYFwOXR8RecCyJFlp';
 qiniu.conf.SECRET_KEY = 'IIgxowC3Dx1Mb0Acy4-IchyDC2P_F8PC8on-ENeX';
 
+var accessKey = qiniu.conf.ACCESS_KEY;
+var secretKey = qiniu.conf.SECRET_KEY;
+var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+
+var config = new qiniu.conf.Config();
+// 空间对应的机房
+config.zone = qiniu.zone.Zone_z0;
+// 是否使用https域名
+//config.useHttpsDomain = true;
+// 上传是否使用cdn加速
+//config.useCdnDomain = true;
+
 //存储空间
 var bucket='aehyok';
 
@@ -19,13 +31,48 @@ router.use(function timeLog(req, res, next) {
     next();
   });
 
+router.get('/download/',function(req,res,next){
+    var bucketManager = new qiniu.rs.BucketManager(mac, config);
+    var options = {
+      limit: 10,
+      prefix: '',
+    };
+    
+    bucketManager.listPrefix(bucket, options, function(err, respBody, respInfo) {
+    if (err) {
+      console.log(err);
+      throw err;
+    }
+  
+    if (respInfo.statusCode == 200) {
+      //如果这个nextMarker不为空，那么还有未列举完毕的文件列表，下次调用listPrefix的时候，
+      //指定options里面的marker为这个值
+      var nextMarker = respBody.marker;
+      var commonPrefixes = respBody.commonPrefixes;
+      console.log(nextMarker);
+      console.log(commonPrefixes);
+      var items = respBody.items;
+      res.send(items);
+      items.forEach(function(item) {
+        console.log(item.putTime);
+        console.log(item.hash);
+        console.log(item.fsize);
+        console.log(item.mimeType);
+        console.log(item.endUser);
+        console.log(item.type);
+      });
+    } else {
+      console.log(respInfo.statusCode);
+      console.log(respBody);
+    }
+});
+});
+
+
 //传递参数
 router.get('/Upload/:filePath', function(req, res, next) {
     var filePath=req.params.filePath;
 
-    var accessKey = qiniu.conf.ACCESS_KEY;
-    var secretKey = qiniu.conf.SECRET_KEY;
-    var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
     var putPolicy = new qiniu.rs.PutPolicy({
     scope: bucket
     });
@@ -35,13 +82,6 @@ router.get('/Upload/:filePath', function(req, res, next) {
     var uploadToken = putPolicy.uploadToken(mac);
     console.log(uploadToken);
 
-    var config = new qiniu.conf.Config();
-    // 空间对应的机房
-    config.zone = qiniu.zone.Zone_z0;
-    // 是否使用https域名
-    //config.useHttpsDomain = true;
-    // 上传是否使用cdn加速
-    //config.useCdnDomain = true;
 
     var resumeUploader = new qiniu.resume_up.ResumeUploader(config);
     var putExtra = new qiniu.resume_up.PutExtra();
@@ -75,5 +115,3 @@ router.get('/Upload/:filePath', function(req, res, next) {
 });  
 
 module.exports = router;
-
-

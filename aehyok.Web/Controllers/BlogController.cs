@@ -43,6 +43,7 @@ namespace aehyok.Web.Controllers
         }
 
 
+        ///http://www.cnblogs.com/fishpro/p/how_to_using_httpclient_for_asp_net_core.html
         /// <summary>
         /// Http Get 同步方法
         /// </summary>
@@ -151,7 +152,7 @@ namespace aehyok.Web.Controllers
                 var temp = _hostingEnv.WebRootPath + $@"\"+ rootPath;
                 currentPath = webPath+"\\"+rootPath;// Server.MapPath(rootPath);
                 currentUrl = rootUrl;
-                currentDirPath = rootPath+"\\";
+                currentDirPath = "http://aehyok.qiniudn.com/"; //rootPath +"\\";
                 moveupDirPath = "";
             }
             else
@@ -213,7 +214,7 @@ namespace aehyok.Web.Controllers
             result["current_dir_path"] = currentDirPath;   //当前目录地址
 
             string fileUrl = "http://" + Request.Host.Value + "/" + currentUrl+"/";
-            result["current_url"] = fileUrl;
+            result["current_url"] = "http://aehyok.qiniudn.com/";
             result["total_count"] = dirList.Length + fileList.Length;
             List<Hashtable> dirFileList = new List<Hashtable>();
             result["file_list"] = dirFileList;
@@ -228,6 +229,23 @@ namespace aehyok.Web.Controllers
                 hash["filetype"] = "";
                 hash["filename"] = dir.Name;
                 hash["datetime"] = dir.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss");
+                dirFileList.Add(hash);
+            }
+
+            var downLoadUrl = "http://localhost:3000/qiniu/download";
+            var files = BlogController.HttpGet(downLoadUrl, Encoding.UTF8);
+
+            List<QiniuFile> list = JsonConvert.DeserializeObject<List<QiniuFile>>(files);
+            foreach(var item in list)
+            {
+                Hashtable hash = new Hashtable();
+                hash["is_dir"] = false;
+                hash["has_file"] = false;
+                hash["filesize"] = item.FSize;
+                hash["is_photo"] = true;// (Array.IndexOf(fileTypes.Split(','), file.Extension.Substring(1).ToLower()) >= 0);
+                hash["filetype"] = item.MimeType;
+                hash["filename"] = item.Key;
+                hash["datetime"] = item.PutTime; //.ToString("yyyy-MM-dd HH:mm:ss");
                 dirFileList.Add(hash);
             }
             for (int i = 0; i < fileList.Length; i++)
@@ -258,6 +276,21 @@ namespace aehyok.Web.Controllers
         public string GroupName { get; set; }
 
         public string FileType { get; set; }
+    }
+
+    public class QiniuFile
+    {
+        public string Hash { get; set; }
+
+        public string Key { get; set; }
+
+        public string FSize { get; set; }
+
+        public string MimeType { get; set; }
+
+        public string PutTime { get; set; }
+
+        public string Type { get; set; }
     }
 
 

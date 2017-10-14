@@ -16,13 +16,14 @@
     "js-cookie": "v2.1.4",
     "jquery-slimscroll": "slimScroll#v1.3.8",
     "spin": "v1.1.6",
-    "vue": "v2.4.2",
+    "vue": "v2.5.2",
     "axios": "v0.16.2",
     "select2": "4.0.3",
     "vue-select": "sagalbot-vue-select#v2.2.0",
     "blockui": "v2.65"
   },
   "resolutions": {
-    "jquery": "3.2.1"
+    "jquery": "3.2.1",
+    "vue": "v2.5.2"
   }
 }
