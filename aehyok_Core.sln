@@ -51,6 +51,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.IdentityServer4", "a
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aehyok.Qiniu", "aehyok.Qiniu\aehyok.Qiniu.csproj", "{061781A1-6D50-46A5-98FF-DFF1630E83B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aehyok.Zxingex", "aehyok.Zxingex\aehyok.Zxingex.csproj", "{9CF67E66-6445-440E-ACA3-59D193E0E376}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -137,6 +139,10 @@ Global
 		{061781A1-6D50-46A5-98FF-DFF1630E83B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{061781A1-6D50-46A5-98FF-DFF1630E83B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{061781A1-6D50-46A5-98FF-DFF1630E83B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CF67E66-6445-440E-ACA3-59D193E0E376}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CF67E66-6445-440E-ACA3-59D193E0E376}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CF67E66-6445-440E-ACA3-59D193E0E376}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CF67E66-6445-440E-ACA3-59D193E0E376}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -162,6 +168,7 @@ Global
 		{1DC026A9-B867-4352-83C8-B6BC7475F00A} = {C36813B2-8C07-4648-91EC-0E8990F7156E}
 		{0C7BF96D-A203-4D56-A48A-36169CB93D44} = {28D18EC5-9238-470B-ADF1-2C0981669BDF}
 		{061781A1-6D50-46A5-98FF-DFF1630E83B5} = {C36813B2-8C07-4648-91EC-0E8990F7156E}
+		{9CF67E66-6445-440E-ACA3-59D193E0E376} = {C36813B2-8C07-4648-91EC-0E8990F7156E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B16BE8D-B320-4179-BD82-C4100A7FBC09}
