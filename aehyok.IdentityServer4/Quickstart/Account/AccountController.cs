@@ -92,6 +92,7 @@ namespace IdentityServer4.Quickstart.UI
 
             if (ModelState.IsValid)  //登录操作
             {
+                //await _userManager.CreateAsync(new ApplicationUser() { UserName = "aehyok" }, "Aehyok_Test0");
                 var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: false);
                 if(result.Succeeded)
                 {

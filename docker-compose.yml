@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  aehyok.web:
+    image: aehyok.web
+    build:
+      context: ./aehyok.Web
+      dockerfile: Dockerfile

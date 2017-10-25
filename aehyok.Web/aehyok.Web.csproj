@@ -6,6 +6,7 @@
     <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
     <EnableDefaultContentItems>false</EnableDefaultContentItems>
     <AssemblyName></AssemblyName>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
