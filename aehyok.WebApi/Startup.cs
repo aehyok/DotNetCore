@@ -142,6 +142,8 @@ namespace aehyok.WebApi
                     //dbInitializer.LoadBasicInformationAsync().Wait();
                     //dbInitializer.LoadSampleDataAsync().Wait();
                 }
+                //设置半自动迁移http://www.cnblogs.com/stulzq/p/7729380.html EF6的AutomaticMigrationsEnabled 自动迁移还待研究
+                //dbContext.Database.Migrate();
             }
         }
 
