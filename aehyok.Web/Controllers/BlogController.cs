@@ -72,9 +72,11 @@ namespace aehyok.Web.Controllers
             var file = Request.Form.Files["imgFile"];
             if (file == null)
             {
-                hash = new Hashtable();
-                hash["error"] = 1;
-                hash["message"] = "请选择文件";
+                hash = new Hashtable
+                {
+                    ["error"] = 1,
+                    ["message"] = "请选择文件"
+                };
                 return Json(hash);
             }
 
@@ -93,17 +95,21 @@ namespace aehyok.Web.Controllers
 
             if (file.Length > maxSize)
             {
-                hash = new Hashtable();
-                hash["error"] = 1;
-                hash["message"] = "上传文件大小超过限制";
+                hash = new Hashtable
+                {
+                    ["error"] = 1,
+                    ["message"] = "上传文件大小超过限制"
+                };
                 return Json(hash);
             }
 
             if (string.IsNullOrEmpty(fileExt) || Array.IndexOf(fileTypes.Split(','), fileExt.Substring(1).ToLower()) == -1)
             {
-                hash = new Hashtable();
-                hash["error"] = 1;
-                hash["message"] = "上传文件扩展名是不允许的扩展名";
+                hash = new Hashtable
+                {
+                    ["error"] = 1,
+                    ["message"] = "上传文件扩展名是不允许的扩展名"
+                };
                 return Json(hash);
             }
 
@@ -121,9 +127,11 @@ namespace aehyok.Web.Controllers
             http://aehyok.qiniudn.com/Chrysanthemum.jpg
             string fileUrl = "http://aehyok.qiniudn.com/"+jsonObject.Key ;
 
-            hash = new Hashtable();
-            hash["error"] = 0;
-            hash["url"] = fileUrl;
+            hash = new Hashtable
+            {
+                ["error"] = 0,
+                ["url"] = fileUrl
+            };
 
             return Json(hash);
         }
@@ -209,9 +217,11 @@ namespace aehyok.Web.Controllers
                     break;
             }
 
-            Hashtable result = new Hashtable();
-            result["moveup_dir_path"] = moveupDirPath;     //上一级目录地址
-            result["current_dir_path"] = currentDirPath;   //当前目录地址
+            Hashtable result = new Hashtable
+            {
+                ["moveup_dir_path"] = moveupDirPath,     //上一级目录地址
+                ["current_dir_path"] = currentDirPath   //当前目录地址
+            };
 
             string fileUrl = "http://" + Request.Host.Value + "/" + currentUrl+"/";
             result["current_url"] = "http://aehyok.qiniudn.com/";
@@ -221,14 +231,16 @@ namespace aehyok.Web.Controllers
             for (int i = 0; i < dirList.Length; i++)
             {
                 DirectoryInfo dir = new DirectoryInfo(dirList[i]);
-                Hashtable hash = new Hashtable();
-                hash["is_dir"] = true;
-                hash["has_file"] = (dir.GetFileSystemInfos().Length > 0);
-                hash["filesize"] = 0;
-                hash["is_photo"] = false;
-                hash["filetype"] = "";
-                hash["filename"] = dir.Name;
-                hash["datetime"] = dir.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss");
+                Hashtable hash = new Hashtable
+                {
+                    ["is_dir"] = true,
+                    ["has_file"] = (dir.GetFileSystemInfos().Length > 0),
+                    ["filesize"] = 0,
+                    ["is_photo"] = false,
+                    ["filetype"] = "",
+                    ["filename"] = dir.Name,
+                    ["datetime"] = dir.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss")
+                };
                 dirFileList.Add(hash);
             }
 
@@ -238,27 +250,31 @@ namespace aehyok.Web.Controllers
             List<QiniuFile> list = JsonConvert.DeserializeObject<List<QiniuFile>>(files);
             foreach(var item in list)
             {
-                Hashtable hash = new Hashtable();
-                hash["is_dir"] = false;
-                hash["has_file"] = false;
-                hash["filesize"] = item.FSize;
-                hash["is_photo"] = true;// (Array.IndexOf(fileTypes.Split(','), file.Extension.Substring(1).ToLower()) >= 0);
-                hash["filetype"] = item.MimeType;
-                hash["filename"] = item.Key;
-                hash["datetime"] = item.PutTime; //.ToString("yyyy-MM-dd HH:mm:ss");
+                Hashtable hash = new Hashtable
+                {
+                    ["is_dir"] = false,
+                    ["has_file"] = false,
+                    ["filesize"] = item.FSize,
+                    ["is_photo"] = true,// (Array.IndexOf(fileTypes.Split(','), file.Extension.Substring(1).ToLower()) >= 0);
+                    ["filetype"] = item.MimeType,
+                    ["filename"] = item.Key,
+                    ["datetime"] = item.PutTime //.ToString("yyyy-MM-dd HH:mm:ss");
+                };
                 dirFileList.Add(hash);
             }
             for (int i = 0; i < fileList.Length; i++)
             {
                 FileInfo file = new FileInfo(fileList[i]);
-                Hashtable hash = new Hashtable();
-                hash["is_dir"] = false;
-                hash["has_file"] = false;
-                hash["filesize"] = file.Length;
-                hash["is_photo"] = (Array.IndexOf(fileTypes.Split(','), file.Extension.Substring(1).ToLower()) >= 0);
-                hash["filetype"] = file.Extension.Substring(1);
-                hash["filename"] = file.Name;
-                hash["datetime"] = file.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss");
+                Hashtable hash = new Hashtable
+                {
+                    ["is_dir"] = false,
+                    ["has_file"] = false,
+                    ["filesize"] = file.Length,
+                    ["is_photo"] = (Array.IndexOf(fileTypes.Split(','), file.Extension.Substring(1).ToLower()) >= 0),
+                    ["filetype"] = file.Extension.Substring(1),
+                    ["filename"] = file.Name,
+                    ["datetime"] = file.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss")
+                };
                 dirFileList.Add(hash);
             }
             //Response.AddHeader("Content-Type", "application/json; charset=UTF-8");
