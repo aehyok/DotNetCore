@@ -12,6 +12,7 @@ using aehyok.WebApi.ViewModel;
 using aehyok.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using aehyok.Core.Data.Entity;
 
 namespace aehyok.WebApi.Controllers
 {
@@ -23,6 +24,7 @@ namespace aehyok.WebApi.Controllers
     public class BlogController : BaseController
     {
         private static LogWriter Logger = new LogWriter();
+
         private readonly IRepository<Article, int> _blogArticleRepository;
 
         private readonly IRepository<Tag, int> _blogTagRepository;
@@ -30,6 +32,7 @@ namespace aehyok.WebApi.Controllers
         private readonly IRepository<ArticleTag, int> _articleTagRepository;
 
         private readonly IBlogContract _blogService;
+
 
         /// <summary>
         /// 构造函数 初始化注入

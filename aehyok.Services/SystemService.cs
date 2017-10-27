@@ -7,8 +7,15 @@ using aehyok.Model;
 using aehyok.Core.Data.Entity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
+using System.Linq;
+
+
+
 namespace aehyok.Services
 {
+    /// <summary>
+    /// 系统管理服务
+    /// </summary>
     public class SystemService : ISystemContract
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -23,15 +30,20 @@ namespace aehyok.Services
             _dbContext = dbContext;
         }
 
+        /// <summary>
+        /// 角色列表
+        /// </summary>
+        /// <returns></returns>
         public List<ApplicationRole> GetRoleList()
         {
-            var roleList = _roleManager.Roles;
+            var roleList = _roleManager.Roles.ToList();
             foreach (var role in roleList)
             {
-                //var userIds = _dbContext.UserRoleswhere.where.(item => item.RoleId == role.Id).Select(item => item.UserId).ToArray();
-                //role.Users = string.Join(',', _userManager.Users.Where(item => userIds.Contains(item.Id)).Select(item => item.UserName).ToArray());
+
+                var userIds = _dbContext.UserRoles.Where(item => item.RoleId == role.Id).Select(item => item.UserId).ToArray();
+                role.Users = string.Join(',', _userManager.Users.Where(item => userIds.Contains(item.Id)).Select(item => item.UserName).ToArray());
             }
-            return null ;
+            return roleList;
         }
     }
 }
