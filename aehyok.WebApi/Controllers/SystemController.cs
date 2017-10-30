@@ -19,8 +19,8 @@ namespace aehyok.WebApi.Controllers
     /// 系统管理
     /// </summary>
     [Produces("application/json")]
-    [Route("api/System")]
-    public class SystemController : Controller
+    [Route("api/[controller]")]
+    public class SystemController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
