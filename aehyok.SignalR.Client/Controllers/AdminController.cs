@@ -103,44 +103,26 @@ namespace aehyok.SignalR.Client.Controllers
             if (user != null)
             {
                 user.Email = email;
-                IdentityResult validEmail
-                    = null;// await _userManager.ValidateAsync(user); //UserManager.UserValidator.ValidateAsync(user);
-                if (!validEmail.Succeeded)
-                {
-                    AddErrorsFromResult(validEmail);
-                }
-                IdentityResult validPass = null;
+                //IdentityResult validEmail
+                //    =  await _userManager.(user); //UserManager.UserValidator.ValidateAsync(user);
+                //if (!validEmail.Succeeded)
+                //{
+                //    AddErrorsFromResult(validEmail);
+                //}
                 if (password != string.Empty)
                 {
-                    validPass
-                        = null;// await _userManager.PasswordValidators.ValidateAsync(password);
-                    if (validPass.Succeeded)
-                    {
-                        user.PasswordHash =
-                            _userManager.PasswordHasher.HashPassword(user,password);
-                    }
-                    else
-                    {
-                        AddErrorsFromResult(validPass);
-                    }
+
+                    user.PasswordHash =
+                        _userManager.PasswordHasher.HashPassword(user, password);
                 }
-                if ((validEmail.Succeeded && validPass == null) || (validEmail.Succeeded
-                        && password != string.Empty && validPass.Succeeded))
+                if (password != string.Empty)
                 {
                     IdentityResult result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
                         return RedirectToAction("Index");
                     }
-                    else
-                    {
-                        AddErrorsFromResult(result);
-                    }
                 }
-            }
-            else
-            {
-                ModelState.AddModelError("", "User Not Found");
             }
             return View(user);
         }
