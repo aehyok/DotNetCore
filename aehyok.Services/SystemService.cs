@@ -8,8 +8,7 @@ using aehyok.Core.Data.Entity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 using System.Linq;
-
-
+using aehyok.Core;
 
 namespace aehyok.Services
 {
@@ -18,15 +17,16 @@ namespace aehyok.Services
     /// </summary>
     public class SystemService : ISystemContract
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
+        //private readonly UserManager<ApplicationUser> _userManager;
+        //private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly CodeFirstDbContext _dbContext;
 
 
-        public SystemService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, CodeFirstDbContext dbContext)
+        public SystemService( 
+            CodeFirstDbContext dbContext)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
+            //_userManager = userManager;
+            //_roleManager = roleManager;
             _dbContext = dbContext;
         }
 
@@ -36,14 +36,19 @@ namespace aehyok.Services
         /// <returns></returns>
         public List<ApplicationRole> GetRoleList()
         {
-            var roleList = _roleManager.Roles.ToList();
+            var roleList = _dbContext.Roles.ToList();
             foreach (var role in roleList)
             {
-
                 var userIds = _dbContext.UserRoles.Where(item => item.RoleId == role.Id).Select(item => item.UserId).ToArray();
-                role.Users = string.Join(',', _userManager.Users.Where(item => userIds.Contains(item.Id)).Select(item => item.UserName).ToArray());
+                role.Users = string.Join(',', _dbContext.Users.Where(item => userIds.Contains(item.Id)).Select(item => item.UserName).ToArray());
             }
             return roleList;
+        }
+
+        public int GetRoleListCount()
+        {
+            var count = _dbContext.Roles.Count();
+            return count;
         }
     }
 }

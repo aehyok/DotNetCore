@@ -41,6 +41,7 @@ namespace aehyok.WebApi.Controllers
         /// <param name="blogTagRepository"></param>
         /// <param name="articleTagRepository"></param>
         /// <param name="blogService"></param>
+        /// <param name="systemService"></param>
         public BlogController(
             IRepository<Article, int> blogArticleRepository,
             IRepository<Tag, int> blogTagRepository,

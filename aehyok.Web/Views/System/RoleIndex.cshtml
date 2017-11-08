@@ -1,6 +1,7 @@
 ﻿
 @{
     ViewData["Title"] = "RoleIndex";
+    var type = ViewBag.Type as string;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
@@ -19,7 +20,7 @@
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
-                                @*<th scope="col" style="width:650px !important">Id </th>*@
+                                <th scope="col" style="width:650px !important">序号 </th>
                                 <th scope="col">Name</th>
                                 <th scope="col"> Users </th>
                                 <th scope="col">Operation</th>
@@ -28,8 +29,8 @@
                         <tbody>
                             <tr v-for="(item,index) in RoleList">
                                 <td>{{index+1}}</td>
-                                <td>{{item.Name}}</td>
-                                <td>{{item.Users}}</td>
+                                <td>{{item.name}}</td>
+                                <td>{{item.users}}</td>
                                 <td>
                                     <button class="btn btn-primary btn-xs" v-on:click="edit(index,item)"><i class="icon-pencil"></i></button>
                                     <button class="btn btn-danger btn-xs" v-on:click="deleteRole(index,item)"><i class="icon-trash "></i></button>
@@ -45,7 +46,7 @@
 </div>
 
 <script>
-    var url = "http://localhost:5001/api/System/Role";
+    var url = "http://localhost:5001" + "/api/System/"+"Role/";
     window.onload = function ()
     {
         var vue = new Vue({
@@ -70,8 +71,8 @@
                 newTodo: { id: null, Name: '', Task: false }//新建默认数据
             },
             mounted() {
-                this.getData(url);//通过this.getData的URL取得API数据
-                //this.showPage(1, null, true);
+                //this.getData(url);//通过this.getData的URL取得API数据
+                this.showPage(1, null, true);
             },
             computed: {
                 remaining: function () {
@@ -79,12 +80,77 @@
                 }
             },//这里我们声明了一个计算属性 remaining,通过返回this.num的值做为未完成总数
             methods: {//VUE事件处理器
-                getData(url) {
-                    this.$http.get(url).then((response) => {
-                        this.RoleList = response.data;
+                getRoleData(url, pageCurrent, pageSize) {
+                    var tempUrl = url + pageCurrent + "/" + pageSize;
+                    this.$http.get(tempUrl).then((response) => {
+                        this.RoleList = response.data.roleList;
+                        this.totalCount = response.data.count;
+                        this.pageCount = Math.ceil(this.totalCount / this.pageSize);
+                        this.showPages = this.pageCount - 4;   //要显示的分页数
                     });
                 },//this.getData取得数据库数据，并取得未完成事件总数
+                showPage: function (pageIndex, $event, forceRefresh) {
+                    console.log('当前页数为' + pageIndex);
+                    this.getRoleData(url, pageIndex, this.pageSize);
+                    if (pageIndex > 0) {
+                        if (pageIndex > this.pageCount) {
+                            pageIndex = this.pageCount;
+                        }
 
+                        //判断数据是否需要更新
+                        var currentPageCount = Math.ceil(this.totalCount / this.pageSize);
+                        if (currentPageCount != this.pageCount) {
+                            pageIndex = 1;
+                            this.pageCount = currentPageCount;
+                        }
+                        else if (this.pageCurrent == pageIndex && currentPageCount == this.pageCount && typeof (forceRefresh) == "undefined") {
+                            console.log("not refresh");
+                            return;
+                        }
+
+                        //处理分页点中样式
+                        var buttons = $("#pager").find("span");
+                        for (var i = 0; i < buttons.length; i++) {
+                            if (buttons.eq(i).html() != pageIndex) {
+                                buttons.eq(i).removeClass("active");
+                            }
+                            else {
+                                buttons.eq(i).addClass("active");
+                            }
+                        }
+
+                        ////测试数据 随机生成的
+                        //var newPageInfo = [];
+                        //for (var i = 0; i < this.pagesize; i++) {
+                        //    newPageInfo[newPageInfo.length] = {
+                        //        name: "test" + (i + (pageIndex - 1) * 20),
+                        //        age: (i + (pageIndex - 1) * 20)
+                        //    };
+                        //}
+                        this.pageCurrent = pageIndex;
+                        //this.arrayData = newPageInfo;
+
+                        //计算分页按钮数据
+                        if (this.pageCount > this.showPages) {
+                            if (pageIndex <= (this.showPages - 1) / 2) {
+                                this.showPagesStart = 1;
+                                this.showPageEnd = this.showPages - 1;
+                                console.log("showPage1")
+                            }
+                            else if (pageIndex >= this.pageCount - (this.showPages - 3) / 2) {
+                                this.showPagesStart = this.pageCount - this.showPages + 2;
+                                this.showPageEnd = this.pageCount;
+                                console.log("showPage2")
+                            }
+                            else {
+                                console.log("showPage3")
+                                this.showPagesStart = pageIndex - (this.showPages - 3) / 2;
+                                this.showPageEnd = pageIndex + (this.showPages - 3) / 2;
+                            }
+                        }
+                        console.log("showPagesStart:" + this.showPagesStart + ",showPageEnd:" + this.showPageEnd + ",pageIndex:" + pageIndex);
+                    }
+                },//分页方法
                 edit(index, item) {
                     var url = "../Blog/AddTag?menuId=BlogAddTag&type=header&id=" + item.id;
                     window.open(url, "_self", "", false);

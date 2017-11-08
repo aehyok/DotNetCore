@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using aehyok.Core.Data.Entity;
 using aehyok.Contracts;
+using aehyok.WebApi.ViewModel;
 
 namespace aehyok.WebApi.Controllers
 {
@@ -22,17 +23,13 @@ namespace aehyok.WebApi.Controllers
     [Route("api/[controller]")]
     public class SystemController : BaseController
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
-
         private readonly ISystemContract _systemService;
+        
         /// <summary>
         /// 构造函数
         /// </summary>
-        public SystemController(UserManager<ApplicationUser> userManager,RoleManager<ApplicationRole> roleManager, ISystemContract systemService)
+        public SystemController(ISystemContract systemService)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
             _systemService = systemService;
         }
 
@@ -41,11 +38,16 @@ namespace aehyok.WebApi.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]    
-        [Route("Role")]
-        public dynamic RoleList()
+        [Route("Role/{pageIndex:int}/{pageSize:int}")]
+        public RoleModel RoleList(int pageIndex, int pageSize)
         {
             var roleList = _systemService.GetRoleList();
-            return roleList;
+            RoleModel model = new RoleModel()
+            {
+                RoleList = roleList,
+                Count = _systemService.GetRoleListCount()
+            };
+            return model;
         }
     }
 }
