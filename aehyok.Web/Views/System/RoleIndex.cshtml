@@ -52,8 +52,8 @@
         var vue = new Vue({
             el: "#TagList",
             data: {
-                RoleList: [],//空的初始化数据
-
+                //空的初始化数据
+                RoleList: [],
                 //总项目数
                 totalCount: 200,
                 //分页数
@@ -67,11 +67,9 @@
                 //开始显示的分页按钮
                 showPagesStart: 1,
                 //结束显示的分页按钮
-                showPageEnd: 100,
-                newTodo: { id: null, Name: '', Task: false }//新建默认数据
+                showPageEnd: 100
             },
             mounted() {
-                //this.getData(url);//通过this.getData的URL取得API数据
                 this.showPage(1, null, true);
             },
             computed: {
@@ -118,18 +116,7 @@
                                 buttons.eq(i).addClass("active");
                             }
                         }
-
-                        ////测试数据 随机生成的
-                        //var newPageInfo = [];
-                        //for (var i = 0; i < this.pagesize; i++) {
-                        //    newPageInfo[newPageInfo.length] = {
-                        //        name: "test" + (i + (pageIndex - 1) * 20),
-                        //        age: (i + (pageIndex - 1) * 20)
-                        //    };
-                        //}
                         this.pageCurrent = pageIndex;
-                        //this.arrayData = newPageInfo;
-
                         //计算分页按钮数据
                         if (this.pageCount > this.showPages) {
                             if (pageIndex <= (this.showPages - 1) / 2) {
@@ -155,15 +142,6 @@
                     var url = "../Blog/AddTag?menuId=BlogAddTag&type=header&id=" + item.id;
                     window.open(url, "_self", "", false);
                     console.log("index" + index);
-                },
-                
-                delete(index, item) {
-                    //var tempUrl =  item.id;
-                    ////this.$http.delete(tempUrl).then((response) => {
-                    ////    toastr.success("删除成功！");
-                    ////    this.getTagData(tagListUrl, this.pageCurrent, this.pagesize);
-                    ////});
-                    ////console.log("index" + index);
                 }
                 
             },//完成任务或者撤销任务
