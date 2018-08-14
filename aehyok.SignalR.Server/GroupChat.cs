@@ -41,7 +41,7 @@ namespace aehyok.SignalR.Server
             var roomList = from a in Db.Rooms
                        select new { a.RoomName };
             //Clients.Client(this.Context.ConnectionId).getRoomlist(JsonConvert.SerializeObject(itme.ToList()));
-            await Clients.Client(this.Context.ConnectionId).InvokeAsync("GetRoomlist",(JsonConvert.SerializeObject(roomList.ToList())));
+            await Clients.Client(this.Context.ConnectionId).SendAsync("GetRoomlist",(JsonConvert.SerializeObject(roomList.ToList())));
         }
 
         public async Task OnConnectionedAfter(string userName)
@@ -60,7 +60,7 @@ namespace aehyok.SignalR.Server
             var itme = from a in Db.Rooms
                        select new { a.RoomName };
             string jsondata = JsonConvert.SerializeObject(itme.ToList());
-            await Clients.All.InvokeAsync("GetRoomlist",jsondata);
+            await Clients.All.SendAsync("GetRoomlist",jsondata);
         }
 
         /// <summary>
@@ -80,12 +80,12 @@ namespace aehyok.SignalR.Server
                 //将房间加入列表
                 Db.Rooms.Add(cr);
                 await AddToRoom(roomName);
-                await Clients.Client(Context.ConnectionId).InvokeAsync("ShowMessage","房间创建完成!");
+                await Clients.Client(Context.ConnectionId).SendAsync("ShowMessage","房间创建完成!");
                 await GetRoomList();
             }
             else
             {
-                await Clients.Client(Context.ConnectionId).InvokeAsync("ShowMessage","房间名重复!");
+                await Clients.Client(Context.ConnectionId).SendAsync("ShowMessage","房间名重复!");
             }
         }
 
@@ -106,7 +106,7 @@ namespace aehyok.SignalR.Server
                 Content = message,
                 SendTime = DateTime.Now.ToString()
             };
-            Clients.Group(room).InvokeAsync("ReceiveMessage", obj);
+            Clients.Group(room).SendAsync("ReceiveMessage", obj);
         }
 
         /// <summary>
@@ -129,13 +129,13 @@ namespace aehyok.SignalR.Server
                     var user = Db.Users.Find(a => a.ConnectionId == Context.ConnectionId);
                     user.Rooms.Add(room);
                     room.Users.Add(user);
-                    await Groups.AddAsync(Context.ConnectionId, roomName);
+                    await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
                     //调用此连接用户的本地JS(显示房间)
-                    await Clients.Client(Context.ConnectionId).InvokeAsync("AddRoom",roomName);
+                    await Clients.Client(Context.ConnectionId).SendAsync("AddRoom",roomName);
                 }
                 else
                 {
-                    await Clients.Client(Context.ConnectionId).InvokeAsync("ShowMessage",roomName);
+                    await Clients.Client(Context.ConnectionId).SendAsync("ShowMessage",roomName);
                 }
             }
         }
@@ -184,9 +184,9 @@ namespace aehyok.SignalR.Server
                 {
                     Db.Rooms.Remove(room);
                 }
-                await Groups.RemoveAsync(Context.ConnectionId, roomName);
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
                 //提示客户端
-                await Clients.Client(Context.ConnectionId).InvokeAsync("removeRoom",("退出成功!"));
+                await Clients.Client(Context.ConnectionId).SendAsync("removeRoom",("退出成功!"));
             }
         }
     }

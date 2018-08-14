@@ -2,7 +2,8 @@
     ViewBag.Title = "Index";
 }
 <link href="../theme/assets/apps/css/inbox.min.css" rel="stylesheet" type="text/css" />
-<script src="~/signalr-client.min.js"></script>
+<script src="~/lib/signalr/signalr.js"></script>
+
 <script type="text/javascript">
     var chat;
     var roomcount = 0;
@@ -10,16 +11,21 @@
     $(function () {
         //建立链接
         let hubUrl = 'http://localhost:5004/GroupChat';
-        let httpConnection = new signalR.HttpConnection(hubUrl);
-        hubConnection = new signalR.HubConnection(httpConnection);
+        //let httpConnection = new signalR.HttpConnection(hubUrl);
+        //hubConnection = new signalR.HubConnection(httpConnection);
+
+        hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl(hubUrl)
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
 
         //进行握手
-        hubConnection.start();
+        hubConnection.start().catch(err => console.error(err.toString()));
 
         //（监听服务端消息）进入页面后与Signalr进行握手建立连接
         $('#CreatRoom').click(function () {
             if (roomcount < 15) {
-                hubConnection.invoke('CreateRoom', $("#RoomName").val());
+                hubConnection.invoke('CreateRoom', $("#RoomName").val()).catch(err => console.error(err.toString()));
                 roomcount++;
             } else {
                 alert("聊天窗口只允许有15个");
@@ -41,7 +47,7 @@
                 }
 
                 var userName = $("#UserIdentityName").html();
-                hubConnection.invoke('OnConnectionedAfter', userName);
+                hubConnection.invoke('OnConnectionedAfter', userName).catch(err => console.error(err.toString()));
             }
         });
 
@@ -64,7 +70,7 @@
         });
 
         //（监听服务端消息）接收处理消息
-        hubConnection.on('ReceiveMessage',data => {
+        hubConnection.on('ReceiveMessage', data => {
             var userName = data.UserName;
             var content = data.Content;
             var time = data.SendTime;
@@ -90,13 +96,13 @@
     });
 
     function AddRoom(roomName) {
-        hubConnection.invoke('addToRoom', roomName);
+        hubConnection.invoke('addToRoom', roomName).catch(err => console.error(err.toString()));
     }
 
     //点击发送按钮并调用服务进行推送消息（此处注意SendMessage方法定义在Dashboard.js中）
     function SendMessage(message) {
         var roomName = $("#BtnSubmitMessage").attr("data-id");
-        hubConnection.invoke('SendMessage', roomName, message);
+        hubConnection.invoke('SendMessage', roomName, message).catch(err => console.error(err.toString()));
     }
 
     function RemoveRoom(btn) {
@@ -128,7 +134,7 @@
         </div>
     </div>
     <div class="col-md-10">
-        <div class="row" >
+        <div class="row">
             <div class="col-md-12 col-sm-12">
                 <div class="portlet light ">
                     <div class="portlet-title">
@@ -139,8 +145,7 @@
                     </div>
                     <div class="portlet-body" id="chats">
                         <div class="scroller" style="height: 385px;" data-always-visible="1" data-rail-visible="0">
-                            <ul class="chats">
-                            </ul>
+                            <ul class="chats"></ul>
                         </div>
                         <div class="chat-form">
                             <div class="input-cont">

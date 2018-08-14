@@ -52,7 +52,7 @@ namespace aehyok.SignalR.Server
             {
                 Context.ConnectionId
             };
-            await Clients.Client(Context.ConnectionId).InvokeAsync("OnConnectionedMe", $"{Context.ConnectionId}");
+            await Clients.Client(Context.ConnectionId).SendAsync("OnConnectionedMe", $"{Context.ConnectionId}");
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace aehyok.SignalR.Server
             {
                 Context.ConnectionId
             };
-            await Clients.All.InvokeAsync("OnConnectionedExcept", UserList);
+            await Clients.All.SendAsync("OnConnectionedExcept", UserList);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace aehyok.SignalR.Server
             {
                 UserList.Remove(user);
             }
-            await Clients.All.InvokeAsync("OnDisconneted", $"{Context.ConnectionId}");
+            await Clients.All.SendAsync("OnDisconneted", $"{Context.ConnectionId}");
         }
 
         /// <summary>
@@ -108,8 +108,8 @@ namespace aehyok.SignalR.Server
             if (user != null)
             {
                 //给指定用户发送,把自己的ID传过去
-                await Clients.Client(context.ReceiveConnectionId).InvokeAsync("ReceiveMessage", context);  //接收用户接收消息
-                await Clients.Client(Context.ConnectionId).InvokeAsync("ReceiveMessage", context);         //将消息发送给自己（此处也可以直接通过前台JS变更消息记录）
+                await Clients.Client(context.ReceiveConnectionId).SendAsync("ReceiveMessage", context);  //接收用户接收消息
+                await Clients.Client(Context.ConnectionId).SendAsync("ReceiveMessage", context);         //将消息发送给自己（此处也可以直接通过前台JS变更消息记录）
             }
         }
     }

@@ -7,7 +7,7 @@
 <div style="display: none;">
     <div class="row">
         <div style="float: left;">名称:</div>
-        <div style="float: left;" id="UserName">@User.Identity.Name</div>
+        <div style="float: left;" id="userName">@User.Identity.Name</div>
         <div>用户唯一编码:<p id="ConID"></p></div>
     </div>
 </div>
@@ -25,7 +25,7 @@
                             {
                                 <a href="javascript:void(0);">
                                     <img class="contact-pic\" src="../theme/assets/pages/media/users/avatar7.jpg">
-                                    <span class="contact-name\">@item.UserName</span>
+                                    <span class="contact-name\">@item.userName</span>
                                     <span class="contact-status bg-green"></span>
                                 </a>
                             }
@@ -67,7 +67,7 @@
         </div>
     </div>
 </div>
-<script src="~/signalr-client.min.js"></script>
+<script src="~/lib/signalr/signalr.js"></script>
 <script type="text/javascript">
     //聊天链接
     let hubConnection;
@@ -75,17 +75,20 @@
 
         //建立链接
         let hubUrl = 'http://localhost:5004/chat';
-        let httpConnection = new signalR.HttpConnection(hubUrl);
-        hubConnection = new signalR.HubConnection(httpConnection);
+        hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl(hubUrl)
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
 
         //进行握手
-        hubConnection.start();
+        hubConnection.start().catch(err => console.error(err.toString()));
 
         //（监听服务端消息）握手后的服务端回调Except
         hubConnection.on('OnConnectionedExcept', data => {
             $("#roomlist li").remove();
+
             for (var i = 0; i < data.length; i++) {
-                AddChatUser(data[i].ConnectionId, data[i].UserName);
+                AddChatUser(data[i].connectionId, data[i].userName);
             }
         });
 
@@ -93,10 +96,10 @@
         hubConnection.on('OnConnectionedMe', data => {
             var parameter = new Object();
             var userName = $("#UserIdentityName").html();
-            parameter.ConnectionId = data;
-            parameter.UserName = userName;
+            parameter.connectionId = data;
+            parameter.userName = userName;
             //链接建立后处理信息
-            hubConnection.invoke('OnConnectionedAfter', parameter);
+            hubConnection.invoke('OnConnectionedAfter', parameter).catch(err => console.error(err.toString()));
         });
 
         //（监听服务端消息）断开链接监听事件
@@ -106,9 +109,9 @@
 
         //（监听服务端消息）接收并显示消息
         hubConnection.on('ReceiveMessage', data => {
-            var userName = data.UserName;
-            var content = data.Content;
-            var time = ChangeDateFormat(data.SendTime);
+            var userName = data.userName;
+            var content = data.content;
+            var time = ChangeDateFormat(data.sendTime);
             var cont = $('#chats');
             var list = $('.chats', cont);
             var html = '<li class=\"in\"><img class=\"avatar\" alt=\"\" src=\"../theme/assets/layouts/layout2/img/avatar2.jpg\" />'
@@ -133,9 +136,9 @@
     function SendMessage(content) {
         var connectionId = $("#BtnSubmitMessage").attr("data-id");
         var parameter = new Object();
-        parameter.ReceiveConnectionId = connectionId;
-        parameter.Content = content;
-        hubConnection.invoke('SendMessage', parameter);
+        parameter.ReceiveconnectionId = connectionId;
+        parameter.content = content;
+        hubConnection.invoke('SendMessage', parameter).catch(err => console.error(err.toString()));
     }
 
     function AddChatUser(connectionId, userName) {
@@ -148,6 +151,7 @@
     //与指定联系人建立显示聊天窗口
     function AddRoom(connectionId, userName) {
         $("#ChatRoomName").html(userName);
+        debugger;
         $("#BtnSubmitMessage").attr("data-id", connectionId);
         var cont = $('#chats');
         var list = $('.chats', cont);
