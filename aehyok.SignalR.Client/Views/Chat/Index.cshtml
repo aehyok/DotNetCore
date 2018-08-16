@@ -40,8 +40,8 @@
                 var firstLi = "<li class=\"divider margin-bottom-5\"></li>";
                 $("#roomlist").append();
                 for (var i = 0; i < jsondata.length; i++) {
-                    var html = '<li><a href=\"javascript:void(0);\" onclick=\'AddRoom("' + jsondata[i].RoomName + '")\'><img class=\"contact-pic\" src=\"../theme/assets/pages/media/users/avatar7.jpg\">' +
-                        '<span class=\"contact-name\">' + jsondata[i].RoomName + '</span>' +
+                    var html = '<li><a href=\"javascript:void(0);\" onclick=\'AddRoom("' + jsondata[i].roomName + '")\'><img class=\"contact-pic\" src=\"../theme/assets/pages/media/users/avatar7.jpg\">' +
+                        '<span class=\"contact-name\">' + jsondata[i].roomName + '</span>' +
                         '<span class=\"contact-status bg-green\"></span></a></li>';
                     $("#roomlist").append(html);
                 }
@@ -71,9 +71,10 @@
 
         //（监听服务端消息）接收处理消息
         hubConnection.on('ReceiveMessage', data => {
-            var userName = data.UserName;
-            var content = data.Content;
-            var time = data.SendTime;
+            debugger;
+            var userName = data.userName;
+            var content = data.content;
+            var time = data.sendTime;
             var cont = $('#chats');
             var list = $('.chats', cont);
             var html = '<li class=\"in\"><img class=\"avatar\" alt=\"\" src=\"../theme/assets/layouts/layout2/img/avatar2.jpg\" />'
@@ -95,20 +96,20 @@
         });
     });
 
-    function AddRoom(roomName) {
-        hubConnection.invoke('addToRoom', roomName).catch(err => console.error(err.toString()));
+    function AddRoom(RoomName) {
+        hubConnection.invoke('addToRoom', RoomName).catch(err => console.error(err.toString()));
     }
 
     //点击发送按钮并调用服务进行推送消息（此处注意SendMessage方法定义在Dashboard.js中）
     function SendMessage(message) {
-        var roomName = $("#BtnSubmitMessage").attr("data-id");
-        hubConnection.invoke('SendMessage', roomName, message).catch(err => console.error(err.toString()));
+        var room = $("#BtnSubmitMessage").attr("data-id");
+        hubConnection.invoke('SendMessage', room, message).catch(err => console.error(err.toString()));
     }
 
     function RemoveRoom(btn) {
         var room = $(btn).parent();
-        var roomName = $(room).attr("roomName");
-        chat.server.removeFromRoom(roomName);
+        var RoomName = $(room).attr("RoomName");
+        chat.server.removeFromRoom(RoomName);
     }
 </script>
 
