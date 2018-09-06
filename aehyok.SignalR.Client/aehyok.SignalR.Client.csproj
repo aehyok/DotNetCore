@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <None Include="wwwroot\lib\signalr\signalr.js" />
-    <None Include="wwwroot\signalr-client.min.js" />
   </ItemGroup>
 
 </Project>

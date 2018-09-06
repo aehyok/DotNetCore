@@ -71,9 +71,9 @@ namespace aehyok.SignalR.Client.Controllers
         public async Task<ActionResult> Edit(string id)
         {
             AppRole role = await _roleManager.FindByIdAsync(id);
-            string[] memberIDs = _appIdentityDbContext.UserRoles.Where(item => item.RoleId == role.Id).Select(Item=>Item.UserId).ToArray(); //null; //role.Users?.Select(x => x.Id).ToArray(); ;
+            string[] memberIds = _appIdentityDbContext.UserRoles.Where(item => item.RoleId == role.Id).Select(Item=>Item.UserId).ToArray(); //null; //role.Users?.Select(x => x.Id).ToArray(); ;
             IEnumerable<AppUser> members
-                    = _userManager.Users.Where(x => memberIDs.Any(y => y == x.Id));
+                    = _userManager.Users.Where(x => memberIds.Any(y => y == x.Id));
             IEnumerable<AppUser> nonMembers = _userManager.Users.Except(members);
             return View(new RoleEditModel
             {
@@ -86,7 +86,6 @@ namespace aehyok.SignalR.Client.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit(RoleModificationModel model)
         {
-            IdentityResult result;
             if (ModelState.IsValid)
             {
                 foreach (string userId in model.IdsToAdd ?? new string[] { })

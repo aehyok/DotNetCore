@@ -44,6 +44,11 @@ namespace aehyok.SignalR.Server
             await Clients.Client(this.Context.ConnectionId).SendAsync("GetRoomlist",(JsonConvert.SerializeObject(roomList.ToList())));
         }
 
+        /// <summary>
+        /// 链接之后
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
         public async Task OnConnectionedAfter(string userName)
         {
             Logger.Info("OnConnectionedAfter");
