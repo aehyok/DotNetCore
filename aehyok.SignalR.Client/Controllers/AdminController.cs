@@ -11,6 +11,7 @@ using aehyok.Users.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace aehyok.SignalR.Client.Controllers
 {
@@ -20,18 +21,28 @@ namespace aehyok.SignalR.Client.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
 
+        private readonly ILogger _logger;
+
         public AdminController(
         UserManager<AppUser> userManager,
-        SignInManager<AppUser> signInManager)
+        SignInManager<AppUser> signInManager,ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _logger = loggerFactory.CreateLogger<AdminController>();
+
+            _logger.LogInformation("你访问了首页");
+            _logger.LogWarning("警告信息");
+            _logger.LogError("错误信息");
         }
 
 
 
         public ActionResult Index()
         {
+            _logger.LogInformation("你访问了首页");
+            _logger.LogWarning("警告信息");
+            _logger.LogError("错误信息");
             return View(_userManager.Users);
         }
 

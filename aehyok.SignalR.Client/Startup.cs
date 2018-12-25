@@ -13,14 +13,19 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NLog.Web;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
+using NLog;
 
 namespace aehyok.SignalR.Client
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration,IHostingEnvironment env)
         {
             Configuration = configuration;
+            env.ConfigureNLog("Nlog.config");
         }
 
         public IConfiguration Configuration { get; }
@@ -53,7 +58,7 @@ namespace aehyok.SignalR.Client
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -71,12 +76,17 @@ namespace aehyok.SignalR.Client
 
             app.UseAuthentication();
 
+            loggerFactory.AddNLog();
+            LogManager.Configuration.Variables["connectionString"] = Configuration.GetConnectionString("DefaultConnection");
+            LogManager.Configuration.Variables["configDir"] = Configuration.GetSection("LogFilesDir").Value;
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            
         }
     }
 }

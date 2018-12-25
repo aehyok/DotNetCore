@@ -3,6 +3,7 @@ using System.Collections.Generic;
 //using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using aehyok.SignalR.Client.Models;
 using aehyok.Users.Models;
 //using Microsoft.AspNet.Identity;
 //using Microsoft.AspNet.Identity.EntityFramework;
@@ -23,6 +24,16 @@ namespace aehyok.Users.Infrastructure
         {
             builder.Entity<AppRole>().HasMany(item => item.Menus);
             builder.Entity<AppMenu>().HasMany(item => item.Roles);
+
+            builder.Entity<ApplicationLog>(m =>
+            {
+                m.HasKey(c => c.Id);
+                m.Property(c => c.Application).IsRequired().HasMaxLength(50);
+                m.Property(c => c.Level).IsRequired().HasMaxLength(50);
+                m.Property(c => c.Message).IsRequired();
+                m.Property(c => c.Logger).HasMaxLength(250);
+            });
+
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
